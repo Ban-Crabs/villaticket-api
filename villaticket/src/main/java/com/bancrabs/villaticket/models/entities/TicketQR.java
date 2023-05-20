@@ -37,4 +37,9 @@ public class TicketQR {
     @JoinColumn(name = "qr_id", nullable = true)
     private QR qr;
 
+    TicketQR(Timestamp exchangeTime, Ticket ticket, QR qr) {
+        this.exchangeTime = exchangeTime;
+        this.ticket = ticket;
+        this.qr = qr;
+    }
 }
