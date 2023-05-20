@@ -18,23 +18,23 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "attendance")
-public class Attendance {
+@Table(name = "ticket_qr")
+public class TicketQR {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private UUID id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Column(name = "exchange_time", nullable = false)
+    private Timestamp exchangeTime;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "event_id", nullable = false)
-    private Event event;
+    @JoinColumn(name = "ticket_id", nullable = true)
+    private Ticket ticket;
 
-    @Column(name = "timestamp", nullable = false)
-    private Timestamp timestamp;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "qr_id", nullable = true)
+    private QR qr;
 
 }

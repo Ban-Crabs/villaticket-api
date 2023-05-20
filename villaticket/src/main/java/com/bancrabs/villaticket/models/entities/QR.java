@@ -5,12 +5,9 @@ import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,23 +15,22 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "attendance")
-public class Attendance {
+@Table(name = "qr")
+public class QR {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private UUID id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Column(name = "code", nullable = false)
+    private String code;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "event_id", nullable = false)
-    private Event event;
+    @Column(name = "creation_time", nullable = false)
+    private Timestamp creationTime;
 
-    @Column(name = "timestamp", nullable = false)
-    private Timestamp timestamp;
-
+    QR(String code, Timestamp creationTime) {
+        this.code = code;
+        this.creationTime = creationTime;
+    }
 }

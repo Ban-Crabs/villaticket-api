@@ -1,6 +1,5 @@
 package com.bancrabs.villaticket.models.entities;
 
-import java.sql.Timestamp;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
@@ -18,23 +17,23 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "attendance")
-public class Attendance {
+@Table(name = "transfer")
+public class Transfer {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private UUID id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Column(name = "result", nullable = true)
+    private Boolean result;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "event_id", nullable = false)
-    private Event event;
+    @JoinColumn(name = "sender_id", nullable = false)
+    private User sender;
 
-    @Column(name = "timestamp", nullable = false)
-    private Timestamp timestamp;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "receiver_id", nullable = false)
+    private User receiver;
 
 }

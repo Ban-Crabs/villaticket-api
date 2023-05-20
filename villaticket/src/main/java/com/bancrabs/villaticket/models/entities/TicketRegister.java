@@ -1,6 +1,5 @@
 package com.bancrabs.villaticket.models.entities;
 
-import java.sql.Timestamp;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
@@ -18,8 +17,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "attendance")
-public class Attendance {
+@Table(name = "ticket_registry")
+public class TicketRegister {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,14 +26,15 @@ public class Attendance {
     private UUID id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "ticket_id", nullable = false)
+    private Ticket ticket;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "event_id", nullable = false)
-    private Event event;
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
 
-    @Column(name = "timestamp", nullable = false)
-    private Timestamp timestamp;
-
+    TicketRegister(Ticket ticket, Order order) {
+        this.ticket = ticket;
+        this.order = order;
+    }
 }

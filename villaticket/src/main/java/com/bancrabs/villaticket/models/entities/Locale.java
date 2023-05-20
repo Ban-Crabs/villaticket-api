@@ -16,8 +16,9 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @Entity
-@Table(name = "type")
-public class Type {
+@Table(name = "locale")
+public class Locale {
+    
     @Id
     @Column(name = "id", nullable = false)
     private String id;
@@ -27,5 +28,5 @@ public class Type {
 
     @OneToMany(fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<Event> events;
+    private List<Tier> tiers;
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -22,7 +23,7 @@ public class Sponsor {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "event_id", nullable = true)
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "event_id", nullable = true)
     private Event event;
 }
