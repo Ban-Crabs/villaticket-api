@@ -1,6 +1,5 @@
 package com.bancrabs.villaticket.models.entities;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
@@ -8,6 +7,7 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -18,7 +18,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Null;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -36,11 +35,11 @@ public class Event {
     @Column(name = "title", nullable = false)
     private String title;
 
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @Column(name = "type_id", nullable = true)
-    @ManyToOne(fetch = FetchType.EAGER)
     private Type type;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "location_id", nullable = true)
     private Location location;
 

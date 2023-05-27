@@ -26,15 +26,15 @@ public class TicketQR {
     @Column(name = "id", nullable = false)
     private UUID id;
 
-    @Column(name = "exchange_time", nullable = false)
+    @Column(name = "exchange_time", nullable = true)
     private Timestamp exchangeTime;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "ticket_id", nullable = true)
+    @JoinColumn(name = "ticket_id", nullable = false)
     private Ticket ticket;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "qr_id", nullable = true)
+    @JoinColumn(name = "qr_id", nullable = false)
     private QR qr;
 
     TicketQR(Timestamp exchangeTime, Ticket ticket, QR qr) {
