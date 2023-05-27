@@ -1,5 +1,6 @@
 package com.bancrabs.villaticket.models.entities;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
@@ -17,6 +18,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Null;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -25,7 +27,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "event")
 public class Event {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
@@ -72,4 +74,26 @@ public class Event {
     @OneToMany(fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Attendance> attendances;
+
+    public Event(String title, Type type, Location location, Date date, Timestamp startTime, Timestamp endTime, String status, Boolean isVisible){
+        this.title = title;
+        this.type = type;
+        this.location = location;
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.status = status;
+        this.isVisible = isVisible;
+    }
+
+    public Event(String title, Type type, Location location, Date date, Timestamp startTime, String status, Boolean isVisible){
+        this.title = title;
+        this.type = type;
+        this.location = location;
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = null;
+        this.status = status;
+        this.isVisible = isVisible;
+    }
 }

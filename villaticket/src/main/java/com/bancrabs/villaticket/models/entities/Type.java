@@ -22,7 +22,7 @@ public class Type {
     @Column(name = "id", nullable = false)
     private String id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", unique = true, nullable = false)
     private String name;
 
     @OneToMany(fetch = FetchType.LAZY)
