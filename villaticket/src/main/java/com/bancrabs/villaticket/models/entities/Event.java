@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "event")
+@Table(name = "event", schema = "public")
 public class Event {
 
     @Id
@@ -32,7 +32,7 @@ public class Event {
     @Column(name = "id", nullable = false)
     private UUID id;
 
-    @Column(name = "title", nullable = false)
+    @Column(name = "title", nullable = false, unique = true)
     private String title;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

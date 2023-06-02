@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "ticket_registry")
+@Table(name = "ticket_registry", schema = "public")
 public class TicketRegister {
     
     @Id

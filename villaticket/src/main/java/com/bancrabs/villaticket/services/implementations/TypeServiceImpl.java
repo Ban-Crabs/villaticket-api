@@ -10,7 +10,7 @@ import com.bancrabs.villaticket.services.TypeService;
 public class TypeServiceImpl implements TypeService{
 
     @Override
-    public void saveType(SaveTypeDTO data) {
+    public Boolean saveType(SaveTypeDTO data) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'saveType'");
     }

@@ -17,9 +17,26 @@ public class EventServiceImpl implements EventService {
     private EventRepository eventRepository;
 
     @Override
-    public void saveEvent(SaveEventDTO data, Type type, Location location) {
-        Event toSave = new Event(data.getTitle(), type, location, data.getDate(), data.getStartTime(), data.getEndTime(), data.getStatus(), true);
-        eventRepository.save(toSave);
+    public Boolean saveEvent(SaveEventDTO data, Type type, Location location) {
+        try{
+            Event toSave = eventRepository.findByTitle(data.getTitle());
+            if(toSave == null){
+                toSave = new Event(data.getTitle(), type, location, data.getDate(), data.getStartTime(), data.getEndTime(), data.getStatus(), true);
+            }else{
+                toSave.setTitle(data.getTitle());
+                toSave.setType(type);
+                toSave.setLocation(location);
+                toSave.setDate(data.getDate());
+                toSave.setStartTime(data.getStartTime());
+                toSave.setEndTime(data.getEndTime());
+                toSave.setStatus(data.getStatus());
+                toSave.setIsVisible(true);
+            }
+            eventRepository.save(toSave);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
     
 }

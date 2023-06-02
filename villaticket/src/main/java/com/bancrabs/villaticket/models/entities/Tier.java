@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "tier")
+@Table(name = "tier", schema = "public")
 public class Tier {
     
     @Id

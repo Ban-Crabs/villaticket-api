@@ -13,19 +13,19 @@ import com.bancrabs.villaticket.services.UserService;
 public class UserServiceImpl implements UserService{
 
     @Override
-    public void saveUser(SaveUserDTO data) {
+    public Boolean saveUser(SaveUserDTO data) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'saveUser'");
     }
 
     @Override
-    public void deleteById(UUID id) {
+    public Boolean deleteById(UUID id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'deleteById'");
     }
 
     @Override
-    public void deleteById(String id) {
+    public Boolean deleteById(String id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'deleteById'");
     }

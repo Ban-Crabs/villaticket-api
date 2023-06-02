@@ -14,7 +14,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @Entity
-@Table(name = "category")
+@Table(name = "category", schema = "public")
 public class Category {
     
     @Id

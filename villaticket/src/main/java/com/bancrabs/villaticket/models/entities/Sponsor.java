@@ -14,7 +14,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @Entity
-@Table(name = "sponsor")
+@Table(name = "sponsor", schema = "public")
 public class Sponsor {
     
     @Id

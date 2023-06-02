@@ -16,7 +16,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @Entity
-@Table(name = "type")
+@Table(name = "type", schema = "public")
 public class Type {
     @Id
     @Column(name = "id", nullable = false)

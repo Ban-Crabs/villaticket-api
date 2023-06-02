@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "ticket_qr")
+@Table(name = "ticket_qr", schema = "public")
 public class TicketQR {
     
     @Id

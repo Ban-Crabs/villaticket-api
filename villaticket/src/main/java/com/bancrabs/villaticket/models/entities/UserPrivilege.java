@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "user_privileges")
+@Table(name = "user_privileges", schema = "public")
 public class UserPrivilege {
     
     @Id

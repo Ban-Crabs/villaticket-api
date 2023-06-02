@@ -16,7 +16,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @Entity
-@Table(name = "location")
+@Table(name = "location", schema = "public")
 public class Location {
     
     @Id

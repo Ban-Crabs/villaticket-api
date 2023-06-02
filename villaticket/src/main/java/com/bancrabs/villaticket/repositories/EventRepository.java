@@ -14,7 +14,7 @@ public interface EventRepository extends ListCrudRepository<Event, UUID>{
     List<Event> findAllByOrderByDateDesc();
     List<Event> findByEndTimeIsNotNull();
     List<Event> findByEndTimeIsNull();
-    List<Event> findByTitle(String title);
+    Event findByTitle(String title);
     List<Event> findByTitleContainingIgnoreCase(String title);
     List<Event> findByTypeID(String typeID);
     List<Event> findByLocationID(String locationID);
