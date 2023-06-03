@@ -1,5 +1,7 @@
 package com.bancrabs.villaticket.services.implementations;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +11,10 @@ import com.bancrabs.villaticket.models.entities.Location;
 import com.bancrabs.villaticket.models.entities.Type;
 import com.bancrabs.villaticket.repositories.EventRepository;
 import com.bancrabs.villaticket.services.EventService;
+import com.bancrabs.villaticket.services.LocationService;
+import com.bancrabs.villaticket.services.TypeService;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class EventServiceImpl implements EventService {
@@ -16,8 +22,15 @@ public class EventServiceImpl implements EventService {
     @Autowired
     private EventRepository eventRepository;
 
+    @Autowired
+    private TypeService typeService;
+
+    @Autowired
+    private LocationService locationService;
+
     @Override
-    public Boolean saveEvent(SaveEventDTO data, Type type, Location location) {
+    @Transactional(rollbackOn = Exception.class)
+    public Boolean saveEvent(SaveEventDTO data, Type type, Location location) throws Exception{
         try{
             Event toSave = eventRepository.findByTitle(data.getTitle());
             if(toSave == null){
@@ -37,6 +50,43 @@ public class EventServiceImpl implements EventService {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    @Override
+    public List<Event> findAll() {
+        return eventRepository.findAll();
+    }
+
+    @Override
+    public List<Event> findAllUpcomingEvents() {
+        return eventRepository.findByEndTimeIsNull();
+    }
+
+    @Override
+    public List<Event> findAllPastEvents() {
+        return eventRepository.findByEndTimeIsNotNull();
+    }
+
+    @Override
+    public List<Event> findAllVisibleEvents() {
+        return eventRepository.findByVisibilityIsTrue();
+    }
+
+    @Override
+    public List<Event> findAllInvisibleEvents() {
+        return eventRepository.findByVisibilityIsFalse();
+    }
+
+    @Override
+    public List<Event> findAllEventsByType(String typeID) {
+        Type type = typeService.findByNameOrId(typeID);
+        return eventRepository.findByTypeId(type.getId());
+    }
+
+    @Override
+    public List<Event> findAllEventsByLocation(String locationID) {
+        Location location = locationService.findByIdOrName(locationID);
+        return eventRepository.findByLocationId(location.getId());
     }
     
 }

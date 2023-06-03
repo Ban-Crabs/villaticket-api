@@ -7,9 +7,8 @@ import com.bancrabs.villaticket.models.dtos.SaveUserDTO;
 import com.bancrabs.villaticket.models.entities.User;
 
 public interface UserService {
-    Boolean saveUser(SaveUserDTO data);
-    Boolean deleteById(UUID id);
-    Boolean deleteById(String id);
+    Boolean register(SaveUserDTO data) throws Exception;
+    Boolean deleteById(String id) throws Exception;
     User findById(UUID id);
     User findById(String id);
     List<User> findAll();

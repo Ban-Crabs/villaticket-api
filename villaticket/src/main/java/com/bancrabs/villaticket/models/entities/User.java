@@ -43,7 +43,7 @@ public class User {
     @JsonIgnore
     private List<Attendance> attendances;
 
-    User(String unStr, String pwStr, String emStr) {
+    public User(String unStr, String pwStr, String emStr) {
         this.username = unStr;
         this.password = pwStr;
         this.email = emStr;

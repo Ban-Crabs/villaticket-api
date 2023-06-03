@@ -8,7 +8,7 @@ import org.springframework.data.repository.ListCrudRepository;
 import com.bancrabs.villaticket.models.entities.User;
 
 public interface UserRepository extends ListCrudRepository<User, UUID> {
-    User findByEmailOrUsername(String identifier);
+    User findByUsernameOrEmail(String username, String email);
     List<User> findAllByOrderByUsernameAsc();
     List<User> findAllByOrderByUsernameDesc();
     List<User> findByEmailOrUsernameContainsAllIgnoringCase(String queryString);

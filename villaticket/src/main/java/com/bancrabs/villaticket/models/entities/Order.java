@@ -36,7 +36,7 @@ public class Order {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    Order(Date purchaseDate, String purchaseMethod, User user) {
+    public Order(Date purchaseDate, String purchaseMethod, User user) {
         this.purchaseDate = purchaseDate;
         this.purchaseMethod = purchaseMethod;
         this.user = user;

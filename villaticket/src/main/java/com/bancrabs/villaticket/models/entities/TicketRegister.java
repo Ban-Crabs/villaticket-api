@@ -33,7 +33,7 @@ public class TicketRegister {
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
-    TicketRegister(Ticket ticket, Order order) {
+    public TicketRegister(Ticket ticket, Order order) {
         this.ticket = ticket;
         this.order = order;
     }

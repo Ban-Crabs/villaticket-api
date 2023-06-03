@@ -10,11 +10,11 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "type", schema = "public")
 public class Type {
@@ -24,6 +24,11 @@ public class Type {
 
     @Column(name = "name", unique = true, nullable = false)
     private String name;
+
+    public Type(String code, String name) {
+        this.id = code;
+        this.name = name;
+    }
 
     @OneToMany(fetch = FetchType.LAZY)
     @JsonIgnore

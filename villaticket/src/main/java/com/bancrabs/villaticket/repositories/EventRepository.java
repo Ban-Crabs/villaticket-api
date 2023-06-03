@@ -10,12 +10,12 @@ import com.bancrabs.villaticket.models.entities.Event;
 public interface EventRepository extends ListCrudRepository<Event, UUID>{
     List<Event> findByVisibilityIsTrue();
     List<Event> findByVisibilityIsFalse();
-    List<Event> findAllByOrderByDateAsc();
-    List<Event> findAllByOrderByDateDesc();
+    List<Event> findAllOrderByDateAsc();
+    List<Event> findAllOrderByDateDesc();
     List<Event> findByEndTimeIsNotNull();
     List<Event> findByEndTimeIsNull();
     Event findByTitle(String title);
     List<Event> findByTitleContainingIgnoreCase(String title);
-    List<Event> findByTypeID(String typeID);
-    List<Event> findByLocationID(String locationID);
+    List<Event> findByTypeId(String typeID);
+    List<Event> findByLocationId(String locationID);
 }

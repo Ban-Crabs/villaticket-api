@@ -37,7 +37,7 @@ public class TicketTransfer {
     @JoinColumn(name = "transfer_id", nullable = false)
     private Transfer transfer;
 
-    TicketTransfer(Timestamp transferTime, QR qr, Transfer transfer) {
+    public TicketTransfer(Timestamp transferTime, QR qr, Transfer transfer) {
         this.transferTime = transferTime;
         this.qr = qr;
         this.transfer = transfer;

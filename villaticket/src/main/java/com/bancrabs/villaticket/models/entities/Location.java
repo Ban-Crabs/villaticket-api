@@ -10,11 +10,11 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "location", schema = "public")
 public class Location {
@@ -32,4 +32,16 @@ public class Location {
     @OneToMany(fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Event> events;
+
+    public Location(String id, String name){
+        this.id = id;
+        this.name = name;
+        this.isAvailable = true;
+    }
+
+    public Location(String id, String name, Boolean isAvailable){
+        this.id = id;
+        this.name = name;
+        this.isAvailable = isAvailable;
+    }
 }

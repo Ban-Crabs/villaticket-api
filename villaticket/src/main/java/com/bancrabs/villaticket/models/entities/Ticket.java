@@ -34,7 +34,7 @@ public class Ticket {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    Ticket(Tier tier, User user) {
+    public Ticket(Tier tier, User user) {
         this.tier = tier;
         this.user = user;
     }

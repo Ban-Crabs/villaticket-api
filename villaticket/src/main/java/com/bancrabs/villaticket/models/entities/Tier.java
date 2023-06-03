@@ -39,7 +39,7 @@ public class Tier {
     @JoinColumn(name = "locale_id", nullable = false)
     private Locale locale;
 
-    Tier(String name, Float price, Integer quantity, Locale locale) {
+    public Tier(String name, Float price, Integer quantity, Locale locale) {
         this.name = name;
         this.price = price;
         this.quantity = quantity;

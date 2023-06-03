@@ -29,7 +29,7 @@ public class QR {
     @Column(name = "creation_time", nullable = false)
     private Timestamp creationTime;
 
-    QR(String code, Timestamp creationTime) {
+    public QR(String code, Timestamp creationTime) {
         this.code = code;
         this.creationTime = creationTime;
     }
