@@ -3,7 +3,7 @@ package com.bancrabs.villaticket.services;
 import java.util.List;
 import java.util.UUID;
 
-import com.bancrabs.villaticket.models.dtos.SaveTransferDTO;
+import com.bancrabs.villaticket.models.dtos.save.SaveTransferDTO;
 import com.bancrabs.villaticket.models.entities.Transfer;
 
 public interface TransferService {

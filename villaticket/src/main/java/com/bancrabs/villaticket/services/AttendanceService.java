@@ -3,7 +3,7 @@ package com.bancrabs.villaticket.services;
 import java.util.List;
 import java.util.UUID;
 
-import com.bancrabs.villaticket.models.dtos.RecordAttendanceDTO;
+import com.bancrabs.villaticket.models.dtos.save.RecordAttendanceDTO;
 import com.bancrabs.villaticket.models.entities.Attendance;
 
 public interface AttendanceService {

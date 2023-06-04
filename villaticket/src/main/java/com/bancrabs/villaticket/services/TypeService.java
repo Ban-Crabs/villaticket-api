@@ -1,6 +1,6 @@
 package com.bancrabs.villaticket.services;
 
-import com.bancrabs.villaticket.models.dtos.SaveTypeDTO;
+import com.bancrabs.villaticket.models.dtos.save.SaveTypeDTO;
 import com.bancrabs.villaticket.models.entities.Type;
 
 public interface TypeService {

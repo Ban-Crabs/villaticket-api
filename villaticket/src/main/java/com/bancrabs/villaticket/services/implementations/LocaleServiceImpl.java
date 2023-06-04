@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bancrabs.villaticket.models.dtos.SaveLocaleDTO;
+import com.bancrabs.villaticket.models.dtos.save.SaveLocaleDTO;
 import com.bancrabs.villaticket.models.entities.Locale;
 import com.bancrabs.villaticket.repositories.LocaleRepository;
 import com.bancrabs.villaticket.services.LocaleService;

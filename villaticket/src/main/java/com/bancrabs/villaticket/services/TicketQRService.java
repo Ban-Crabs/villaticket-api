@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 
-import com.bancrabs.villaticket.models.dtos.RegisterTicketQRDTO;
+import com.bancrabs.villaticket.models.dtos.save.RegisterTicketQRDTO;
 import com.bancrabs.villaticket.models.entities.TicketQR;
 
 public interface TicketQRService {

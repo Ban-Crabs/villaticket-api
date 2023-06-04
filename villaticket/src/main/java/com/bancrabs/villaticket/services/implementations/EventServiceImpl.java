@@ -6,7 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bancrabs.villaticket.models.dtos.SaveEventDTO;
+import com.bancrabs.villaticket.models.dtos.save.SaveEventDTO;
 import com.bancrabs.villaticket.models.entities.Event;
 import com.bancrabs.villaticket.models.entities.Location;
 import com.bancrabs.villaticket.models.entities.Type;
@@ -38,18 +38,38 @@ public class EventServiceImpl implements EventService {
                 toSave = new Event(data.getTitle(), type, location, data.getDate(), data.getStartTime(), data.getEndTime(), data.getStatus(), false);
             }
             else{
-                toSave.setTitle(data.getTitle());
-                toSave.setType(type);
-                toSave.setLocation(location);
-                toSave.setDate(data.getDate());
-                toSave.setStartTime(data.getStartTime());
-                toSave.setEndTime(data.getEndTime());
-                toSave.setStatus(data.getStatus());
-                toSave.setIsVisible(data.getIsVisible());
+                throw new Exception("Event already exists");
             }
             eventRepository.save(toSave);
             return true;
         } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+
+    @Override
+    @Transactional(rollbackOn = Exception.class)
+    public Boolean updateEvent(UUID eventId, SaveEventDTO data, Type type, Location location) throws Exception {
+        try{
+            Event toUpdate = eventRepository.findById(eventId).orElse(null);
+            if(toUpdate != null){
+                toUpdate.setTitle(data.getTitle());
+                toUpdate.setType(type);
+                toUpdate.setLocation(location);
+                toUpdate.setDate(data.getDate());
+                toUpdate.setStartTime(data.getStartTime());
+                toUpdate.setEndTime(data.getEndTime());
+                toUpdate.setStatus(data.getStatus());
+                toUpdate.setIsVisible(data.getIsVisible());
+                eventRepository.save(toUpdate);
+                return true;
+            }
+            else{
+                throw new Exception("Event not found");
+            }
+        }
+        catch(Exception e){
             System.out.println(e.getMessage());
             return false;
         }

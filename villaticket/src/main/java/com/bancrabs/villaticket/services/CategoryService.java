@@ -3,7 +3,7 @@ package com.bancrabs.villaticket.services;
 import java.util.List;
 import java.util.UUID;
 
-import com.bancrabs.villaticket.models.dtos.SaveGenericDTO;
+import com.bancrabs.villaticket.models.dtos.save.SaveGenericDTO;
 import com.bancrabs.villaticket.models.entities.Category;
 
 public interface CategoryService {

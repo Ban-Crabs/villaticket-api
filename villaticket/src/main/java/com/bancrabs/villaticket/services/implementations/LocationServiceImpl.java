@@ -3,7 +3,7 @@ package com.bancrabs.villaticket.services.implementations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bancrabs.villaticket.models.dtos.SaveLocationDTO;
+import com.bancrabs.villaticket.models.dtos.save.SaveLocationDTO;
 import com.bancrabs.villaticket.models.entities.Location;
 import com.bancrabs.villaticket.repositories.LocationRepository;
 import com.bancrabs.villaticket.services.LocationService;

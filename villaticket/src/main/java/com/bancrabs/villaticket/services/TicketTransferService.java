@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 
-import com.bancrabs.villaticket.models.dtos.SaveTicketTransferDTO;
+import com.bancrabs.villaticket.models.dtos.save.SaveTicketTransferDTO;
 import com.bancrabs.villaticket.models.entities.TicketTransfer;
 
 public interface TicketTransferService {

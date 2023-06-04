@@ -1,6 +1,6 @@
 package com.bancrabs.villaticket.services;
 
-import com.bancrabs.villaticket.models.dtos.SaveLocationDTO;
+import com.bancrabs.villaticket.models.dtos.save.SaveLocationDTO;
 import com.bancrabs.villaticket.models.entities.Location;
 
 public interface LocationService {

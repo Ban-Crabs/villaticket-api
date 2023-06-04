@@ -3,7 +3,7 @@ package com.bancrabs.villaticket.services;
 import java.util.List;
 import java.util.UUID;
 
-import com.bancrabs.villaticket.models.dtos.RegisterTicketDTO;
+import com.bancrabs.villaticket.models.dtos.save.RegisterTicketDTO;
 import com.bancrabs.villaticket.models.entities.TicketRegister;
 
 public interface TicketRegisterService {

@@ -1,4 +1,4 @@
-package com.bancrabs.villaticket.models.dtos;
+package com.bancrabs.villaticket.models.dtos.save;
 
 import lombok.Data;
 import jakarta.validation.constraints.Email;

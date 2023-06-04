@@ -7,7 +7,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bancrabs.villaticket.models.dtos.RegisterTicketQRDTO;
+import com.bancrabs.villaticket.models.dtos.save.RegisterTicketQRDTO;
 import com.bancrabs.villaticket.models.entities.QR;
 import com.bancrabs.villaticket.models.entities.Ticket;
 import com.bancrabs.villaticket.models.entities.TicketQR;

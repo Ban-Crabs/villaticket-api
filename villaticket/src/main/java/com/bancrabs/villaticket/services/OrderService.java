@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import com.bancrabs.villaticket.models.dtos.RegisterOrderDTO;
+import com.bancrabs.villaticket.models.dtos.save.RegisterOrderDTO;
 import com.bancrabs.villaticket.models.entities.Order;
 
 public interface OrderService {

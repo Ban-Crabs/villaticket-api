@@ -7,7 +7,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bancrabs.villaticket.models.dtos.SaveTicketTransferDTO;
+import com.bancrabs.villaticket.models.dtos.save.SaveTicketTransferDTO;
 import com.bancrabs.villaticket.models.entities.QR;
 import com.bancrabs.villaticket.models.entities.TicketTransfer;
 import com.bancrabs.villaticket.models.entities.Transfer;
@@ -64,8 +64,17 @@ public class TicketTransferServiceImpl implements TicketTransferService {
     @Override
     @Transactional(rollbackOn = Exception.class)
     public Boolean delete(UUID id) throws Exception {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+        try {
+            TicketTransfer ticketTransfer = ticketTransferRepository.findById(id).orElse(null);
+            if (ticketTransfer == null) {
+                throw new Exception("TicketTransfer not found");
+            }
+            ticketTransferRepository.delete(ticketTransfer);
+            return true;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
     }
 
     @Override

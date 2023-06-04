@@ -3,7 +3,7 @@ package com.bancrabs.villaticket.services.implementations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bancrabs.villaticket.models.dtos.SaveTypeDTO;
+import com.bancrabs.villaticket.models.dtos.save.SaveTypeDTO;
 import com.bancrabs.villaticket.models.entities.Type;
 import com.bancrabs.villaticket.repositories.TypeRepository;
 import com.bancrabs.villaticket.services.TypeService;
