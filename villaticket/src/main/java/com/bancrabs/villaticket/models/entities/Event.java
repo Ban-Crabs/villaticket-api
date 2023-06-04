@@ -20,6 +20,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString.Exclude;
 
 @Data
 @NoArgsConstructor
@@ -36,7 +37,7 @@ public class Event {
     private String title;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @Column(name = "type_id", nullable = true)
+    @JoinColumn(name = "type_id", nullable = true)
     private Type type;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -60,18 +61,22 @@ public class Event {
 
     @OneToMany(fetch = FetchType.LAZY)
     @JsonIgnore
+    @Exclude
     private List<Sponsor> sponsors;
 
     @OneToMany(fetch = FetchType.LAZY)
     @JsonIgnore
+    @Exclude
     private List<Category> categories;
 
     @OneToMany(fetch = FetchType.LAZY)
     @JsonIgnore
+    @Exclude
     private List<Image> images;
 
     @OneToMany(fetch = FetchType.LAZY)
     @JsonIgnore
+    @Exclude
     private List<Attendance> attendances;
 
     public Event(String title, Type type, Location location, Date date, Timestamp startTime, Timestamp endTime, String status, Boolean isVisible){

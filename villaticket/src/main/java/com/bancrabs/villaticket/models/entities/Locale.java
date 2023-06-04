@@ -12,6 +12,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString.Exclude;
 
 @Data
 @NoArgsConstructor
@@ -33,5 +34,6 @@ public class Locale {
 
     @OneToMany(fetch = FetchType.LAZY)
     @JsonIgnore
+    @Exclude
     private List<Tier> tiers;
 }

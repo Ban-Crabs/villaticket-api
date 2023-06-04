@@ -50,6 +50,8 @@ public class TicketQRServiceImpl implements TicketQRService{
             if(toCompare - toVerify > 600000 || toCompare - toVerify < 0){
                 throw new Exception("QR expired");
             }
+            ticket.setResult(true);
+            ticketService.save(ticket);
             ticketQRRepository.save(new TicketQR(timestamp, ticket, qr));
             return true;
         }

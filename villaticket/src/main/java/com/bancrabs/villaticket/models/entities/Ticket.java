@@ -34,8 +34,18 @@ public class Ticket {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Column(name = "result", nullable = true)
+    Boolean result;
+
     public Ticket(Tier tier, User user) {
         this.tier = tier;
         this.user = user;
+        this.result = null;
+    }
+
+    public Ticket(Tier tier, User user, Boolean result) {
+        this.tier = tier;
+        this.user = user;
+        this.result = result;
     }
 }

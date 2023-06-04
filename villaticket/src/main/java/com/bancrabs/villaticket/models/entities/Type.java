@@ -12,6 +12,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString.Exclude;
 
 @Data
 @NoArgsConstructor
@@ -32,5 +33,6 @@ public class Type {
 
     @OneToMany(fetch = FetchType.LAZY)
     @JsonIgnore
+    @Exclude
     private List<Event> events;
 }

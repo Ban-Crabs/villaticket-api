@@ -84,5 +84,17 @@ public class TicketServiceImpl implements TicketService{
     public Ticket findByUserId(UUID userId) {
         return ticketRepository.findByUserId(userId);
     }
+
+    @Override
+    public Boolean save(Ticket ticket) {
+        try{
+            ticketRepository.save(ticket);
+            return true;
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
     
 }
