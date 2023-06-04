@@ -10,7 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,16 +29,22 @@ public class TicketQR {
     @Column(name = "exchange_time", nullable = true)
     private Timestamp exchangeTime;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ticket_id", nullable = false)
     private Ticket ticket;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "qr_id", nullable = false)
     private QR qr;
 
     public TicketQR(Timestamp exchangeTime, Ticket ticket, QR qr) {
         this.exchangeTime = exchangeTime;
+        this.ticket = ticket;
+        this.qr = qr;
+    }
+
+    public TicketQR(Ticket ticket, QR qr) {
+        this.exchangeTime = null;
         this.ticket = ticket;
         this.qr = qr;
     }

@@ -1,13 +1,18 @@
-package com.bancrabs.villaticket.repositories;
+package com.bancrabs.villaticket.services;
 
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.data.repository.ListCrudRepository;
-
+import com.bancrabs.villaticket.models.dtos.SaveTransferDTO;
 import com.bancrabs.villaticket.models.entities.Transfer;
 
-public interface TransferRepository extends ListCrudRepository<Transfer, UUID>{
+public interface TransferService {
+    Boolean save(SaveTransferDTO data) throws Exception;
+    Boolean save(Transfer data) throws Exception;
+    Boolean delete(UUID id) throws Exception;
+
+    Transfer findById(UUID id);
+    List<Transfer> findAll();
     List<Transfer> findBySenderId(UUID senderId);
     List<Transfer> findByReceiverId(UUID receiverId);
     List<Transfer> findBySenderIdAndReceiverId(UUID senderId, UUID receiverId);

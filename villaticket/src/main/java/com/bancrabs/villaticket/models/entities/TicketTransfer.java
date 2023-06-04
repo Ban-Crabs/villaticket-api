@@ -42,4 +42,10 @@ public class TicketTransfer {
         this.qr = qr;
         this.transfer = transfer;
     }
+
+    public TicketTransfer(Transfer transfer, QR qr){
+        this.transferTime = new Timestamp(System.currentTimeMillis());
+        this.transfer = transfer;
+        this.qr = qr;
+    }
 }

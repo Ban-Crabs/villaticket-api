@@ -18,6 +18,8 @@ import com.bancrabs.villaticket.services.UserService;
 @Service
 public class TicketServiceImpl implements TicketService{
 
+    //TODO: Verify if the ticket has been exchanged before allowing changes
+
     @Autowired
     private TicketRepository ticketRepository;
 

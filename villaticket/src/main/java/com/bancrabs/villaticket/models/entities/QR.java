@@ -33,4 +33,9 @@ public class QR {
         this.code = code;
         this.creationTime = creationTime;
     }
+
+    public QR(String code) {
+        this.code = code;
+        this.creationTime = new Timestamp(System.currentTimeMillis());
+    }
 }

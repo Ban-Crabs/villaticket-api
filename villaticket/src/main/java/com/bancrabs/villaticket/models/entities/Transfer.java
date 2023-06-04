@@ -36,4 +36,10 @@ public class Transfer {
     @JoinColumn(name = "receiver_id", nullable = false)
     private User receiver;
 
+    public Transfer(User sender, User receiver){
+        result = null;
+        this.sender = sender;
+        this.receiver = receiver;
+    }
+
 }
