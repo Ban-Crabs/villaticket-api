@@ -1,5 +1,7 @@
 package com.bancrabs.villaticket.repositories;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,8 +16,8 @@ public interface EventRepository extends ListCrudRepository<Event, UUID>{
     List<Event> findAllOrderByDateDesc();
     List<Event> findByEndTimeIsNotNull();
     List<Event> findByEndTimeIsNull();
-    Event findByTitle(String title);
     List<Event> findByTitleContainingIgnoreCase(String title);
     List<Event> findByTypeId(String typeID);
     List<Event> findByLocationId(String locationID);
+    Event findByTitleAndDateAndStartTime(String title, Date date, Timestamp startTime);
 }

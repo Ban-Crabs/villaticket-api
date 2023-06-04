@@ -1,12 +1,14 @@
 package com.bancrabs.villaticket.services.implementations;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.bancrabs.villaticket.models.dtos.SaveLocationDTO;
 import com.bancrabs.villaticket.models.entities.Location;
 import com.bancrabs.villaticket.repositories.LocationRepository;
 import com.bancrabs.villaticket.services.LocationService;
 
+@Service
 public class LocationServiceImpl implements LocationService {
 
     @Autowired
@@ -17,8 +19,7 @@ public class LocationServiceImpl implements LocationService {
         try {
             Location check = locationRepository.findByIdOrName(data.getId(), data.getName());
             if (check == null) {
-                check = new Location(data.getId(), data.getName(), data.getIsAvailable());
-                locationRepository.save(check);
+                locationRepository.save(new Location(data.getId(), data.getName(), data.getIsAvailable()));
             } else {
                 check.setId(data.getId());
                 check.setName(data.getName());
@@ -37,7 +38,7 @@ public class LocationServiceImpl implements LocationService {
         try {
             Location toDelete = locationRepository.findByIdOrName(id, id);
             if (toDelete == null) {
-                return false;
+                throw new Exception("Location not found");
             }
             locationRepository.delete(toDelete);
             return true;
@@ -52,7 +53,7 @@ public class LocationServiceImpl implements LocationService {
         try{
             Location toUpdate = locationRepository.findByIdOrName(id, id);
             if (toUpdate == null) {
-                return false;
+                throw new Exception("Location not found");
             }
             toUpdate.setIsAvailable(true);
             locationRepository.save(toUpdate);
@@ -69,7 +70,7 @@ public class LocationServiceImpl implements LocationService {
         try{
             Location toUpdate = locationRepository.findByIdOrName(id, id);
             if (toUpdate == null) {
-                return false;
+                throw new Exception("Location not found");
             }
             toUpdate.setIsAvailable(false);
             locationRepository.save(toUpdate);

@@ -22,8 +22,7 @@ public class TypeServiceImpl implements TypeService{
         try{
             Type check = typeRepository.findByNameOrId(data.getName(), data.getCode());
             if(check == null){
-                check = new Type(data.getCode(), data.getName());
-                typeRepository.save(check);
+                typeRepository.save(new Type(data.getCode(), data.getName()));
                 return true;
             }
             else{
@@ -50,7 +49,7 @@ public class TypeServiceImpl implements TypeService{
         try{
             Type toDelete = typeRepository.findByNameOrId(identifier, identifier);
             if(toDelete == null){
-                return false;
+                throw new Exception("Type not found");
             }
             typeRepository.delete(toDelete);
             return true;

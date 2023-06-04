@@ -33,10 +33,11 @@ public class EventServiceImpl implements EventService {
     @Transactional(rollbackOn = Exception.class)
     public Boolean saveEvent(SaveEventDTO data, Type type, Location location) throws Exception{
         try{
-            Event toSave = eventRepository.findByTitle(data.getTitle());
+            Event toSave = eventRepository.findByTitleAndDateAndStartTime(data.getTitle(), data.getDate(), data.getStartTime());
             if(toSave == null){
                 toSave = new Event(data.getTitle(), type, location, data.getDate(), data.getStartTime(), data.getEndTime(), data.getStatus(), false);
-            }else{
+            }
+            else{
                 toSave.setTitle(data.getTitle());
                 toSave.setType(type);
                 toSave.setLocation(location);
@@ -82,12 +83,20 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<Event> findAllEventsByType(String typeID) {
         Type type = typeService.findByNameOrId(typeID);
+        if(type == null){
+            System.out.println("Type not found");
+            return null;
+        }
         return eventRepository.findByTypeId(type.getId());
     }
 
     @Override
     public List<Event> findAllEventsByLocation(String locationID) {
         Location location = locationService.findByIdOrName(locationID);
+        if(location == null){
+            System.out.println("Location not found");
+            return null;
+        }
         return eventRepository.findByLocationId(location.getId());
     }
 

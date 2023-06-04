@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.bancrabs.villaticket.models.dtos.SaveImageDTO;
 import com.bancrabs.villaticket.models.entities.Event;
@@ -14,6 +15,7 @@ import com.bancrabs.villaticket.services.ImageService;
 
 import jakarta.transaction.Transactional;
 
+@Service
 public class ImageServiceImpl implements ImageService{
 
     @Autowired
@@ -26,12 +28,11 @@ public class ImageServiceImpl implements ImageService{
     @Transactional(rollbackOn = Exception.class)
     public Boolean save(SaveImageDTO data) throws Exception {
         try{
-            Image check = imageRepository.findById(data.getId()).orElse(null);
             Event related = eventService.findById(data.getEventId());
             if(related == null){
                 throw new Exception("Event not found");
             }
-
+            Image check = imageRepository.findById(data.getId()).orElse(null);
             if(check == null){
                 imageRepository.save(new Image(data.getId(), data.getUrl(), related));
             }

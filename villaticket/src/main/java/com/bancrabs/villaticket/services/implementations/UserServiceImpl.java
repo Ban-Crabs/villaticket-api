@@ -25,12 +25,11 @@ public class UserServiceImpl implements UserService{
         try{
             User check = userRepository.findByUsernameOrEmail(data.getUsername(), data.getEmail());
             if(check == null){
-                check = new User(data.getUsername(), data.getEmail(), data.getPassword());
-                userRepository.save(check);
+                userRepository.save(new User(data.getUsername(), data.getEmail(), data.getPassword()));
                 return true;
             }
             else{
-                return false;
+                throw new Exception("User already exists");
             }
         }
         catch(Exception e){
@@ -45,7 +44,7 @@ public class UserServiceImpl implements UserService{
         try{
             User toDelete = userRepository.findByUsernameOrEmail(id, id);
             if(toDelete == null){
-                return false;
+                throw new Exception("User not found");
             }
             userRepository.delete(toDelete);
             return true;

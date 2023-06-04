@@ -38,4 +38,10 @@ public class Attendance {
     @Column(name = "timestamp", nullable = false)
     private Timestamp timestamp;
 
+    public Attendance(User user, Event event){
+        this.user = user;
+        this.event = event;
+        this.timestamp = new Timestamp(System.currentTimeMillis());
+    }
+
 }

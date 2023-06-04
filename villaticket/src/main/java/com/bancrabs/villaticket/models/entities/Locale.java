@@ -10,11 +10,11 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "locale", schema = "public")
 public class Locale {
@@ -25,6 +25,11 @@ public class Locale {
 
     @Column(name = "name", nullable = false)
     private String name;
+
+    public Locale(String id, String name){
+        this.id = id;
+        this.name = name;
+    }
 
     @OneToMany(fetch = FetchType.LAZY)
     @JsonIgnore

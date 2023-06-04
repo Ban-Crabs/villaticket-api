@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.bancrabs.villaticket.models.dtos.SavePrivilegeDTO;
 import com.bancrabs.villaticket.models.entities.User;
@@ -14,6 +15,7 @@ import com.bancrabs.villaticket.services.UserService;
 
 import jakarta.transaction.Transactional;
 
+@Service
 public class UserPrivilegeServiceImpl implements UserPrivilegeService{
 
     @Autowired
@@ -26,11 +28,11 @@ public class UserPrivilegeServiceImpl implements UserPrivilegeService{
     @Transactional(rollbackOn = Exception.class)
     public Boolean save(SavePrivilegeDTO data) throws Exception {
         try{
-            UserPrivilege check = userPrivilegeRepository.findByNameAndUserId(data.getName(), data.getUserId());
             User related = userService.findById(data.getUserId());
             if(related == null){
                 throw new Exception("User not found");
             }
+            UserPrivilege check = userPrivilegeRepository.findByNameAndUserId(data.getName(), data.getUserId());
             if(check == null){
                 userPrivilegeRepository.save(new UserPrivilege(data.getName(), related));
             }

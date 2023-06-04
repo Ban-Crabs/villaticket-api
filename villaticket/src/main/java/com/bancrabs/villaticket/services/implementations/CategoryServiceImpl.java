@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.bancrabs.villaticket.models.dtos.SaveGenericDTO;
 import com.bancrabs.villaticket.models.entities.Category;
@@ -14,6 +15,7 @@ import com.bancrabs.villaticket.services.EventService;
 
 import jakarta.transaction.Transactional;
 
+@Service
 public class CategoryServiceImpl implements CategoryService{
 
     @Autowired
@@ -26,11 +28,11 @@ public class CategoryServiceImpl implements CategoryService{
     @Transactional(rollbackOn = Exception.class)
     public Boolean save(SaveGenericDTO data) throws Exception {
         try{
-            Category check = categoryRepository.findById(data.getCode()).orElse(null);
             Event related = eventService.findById(data.getEventId());
             if(related == null){
                 throw new Exception("Event not found");
             }
+            Category check = categoryRepository.findById(data.getCode()).orElse(null);
             if(check == null){
                 categoryRepository.save(new Category(data.getCode(), data.getName(), related));
             }
