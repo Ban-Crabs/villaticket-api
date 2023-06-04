@@ -18,7 +18,7 @@ public class TypeServiceImpl implements TypeService{
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public Boolean saveType(SaveTypeDTO data) throws Exception{
+    public Boolean save(SaveTypeDTO data) throws Exception{
         try{
             Type check = typeRepository.findByNameOrId(data.getName(), data.getCode());
             if(check == null){
@@ -34,6 +34,7 @@ public class TypeServiceImpl implements TypeService{
             }
         }
         catch(Exception e){
+            System.out.println(e.getMessage());
             return false;
         }
     }
@@ -55,6 +56,7 @@ public class TypeServiceImpl implements TypeService{
             return true;
         }
         catch(Exception e){
+            System.out.println(e.getMessage());
             return false;
         }
     }

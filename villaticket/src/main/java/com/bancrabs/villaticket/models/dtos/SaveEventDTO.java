@@ -16,4 +16,5 @@ public class SaveEventDTO {
     @Nullable
     private Timestamp endTime;
     private String status;
+    private Boolean isVisible;
 }

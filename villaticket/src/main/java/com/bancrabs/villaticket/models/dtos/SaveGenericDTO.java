@@ -4,30 +4,23 @@ import java.util.UUID;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class SaveLocationDTO {
+public class SaveGenericDTO {
+    
+    @NotEmpty
+    @Pattern(regexp = "[A-Z]{3}[0-9]{2}")
+    private String code;
 
     @NotEmpty
-    @Pattern(regexp = "[A-Z]{3}[0-9]{6}")
-    private String id;
-
-    @NotEmpty
+    @Size(min = 3, max = 50)
     private String name;
 
     @NotEmpty
     @org.hibernate.validator.constraints.UUID
     private UUID eventId;
-
-    private Boolean isAvailable;
-
-    public SaveLocationDTO(String id, String name, UUID eventId){
-        this.id = id;
-        this.name = name;
-        this.eventId = eventId;
-        this.isAvailable = true;
-    }
 }

@@ -6,7 +6,6 @@ import com.bancrabs.villaticket.models.entities.Location;
 public interface LocationService {
     Boolean saveLocation(SaveLocationDTO data) throws Exception;
     Boolean deleteLocation(String id) throws Exception;
-    Boolean updateLocation(SaveLocationDTO data) throws Exception;
     Boolean setAvailable(String id) throws Exception;
     Boolean setUnavailable(String id) throws Exception;
 

@@ -1,6 +1,7 @@
 package com.bancrabs.villaticket.services.implementations;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,7 @@ public class EventServiceImpl implements EventService {
         try{
             Event toSave = eventRepository.findByTitle(data.getTitle());
             if(toSave == null){
-                toSave = new Event(data.getTitle(), type, location, data.getDate(), data.getStartTime(), data.getEndTime(), data.getStatus(), true);
+                toSave = new Event(data.getTitle(), type, location, data.getDate(), data.getStartTime(), data.getEndTime(), data.getStatus(), false);
             }else{
                 toSave.setTitle(data.getTitle());
                 toSave.setType(type);
@@ -43,11 +44,12 @@ public class EventServiceImpl implements EventService {
                 toSave.setStartTime(data.getStartTime());
                 toSave.setEndTime(data.getEndTime());
                 toSave.setStatus(data.getStatus());
-                toSave.setIsVisible(true);
+                toSave.setIsVisible(data.getIsVisible());
             }
             eventRepository.save(toSave);
             return true;
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             return false;
         }
     }
@@ -87,6 +89,50 @@ public class EventServiceImpl implements EventService {
     public List<Event> findAllEventsByLocation(String locationID) {
         Location location = locationService.findByIdOrName(locationID);
         return eventRepository.findByLocationId(location.getId());
+    }
+
+    @Override
+    public Event findById(UUID id) {
+        return eventRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    @Transactional(rollbackOn = Exception.class)
+    public Boolean deleteEvent(UUID eventId) throws Exception {
+        try{
+            Event toDelete = eventRepository.findById(eventId).orElse(null);
+            if(toDelete != null){
+                eventRepository.delete(toDelete);
+                return true;
+            }
+            else{
+                throw new Exception("Event not found");
+            }
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+
+    @Override
+    @Transactional(rollbackOn = Exception.class)
+    public Boolean toggleVisibility(UUID eventId) throws Exception {
+        try{
+            Event toToggle = eventRepository.findById(eventId).orElse(null);
+            if(toToggle != null){
+                toToggle.setIsVisible(!toToggle.getIsVisible());
+                eventRepository.save(toToggle);
+                return true;
+            }
+            else{
+                throw new Exception("Event not found");
+            }
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+            return false;
+        }
     }
     
 }

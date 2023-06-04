@@ -34,6 +34,7 @@ public class UserServiceImpl implements UserService{
             }
         }
         catch(Exception e){
+            System.out.println(e.getMessage());
             return false;
         }
     }
@@ -50,6 +51,7 @@ public class UserServiceImpl implements UserService{
             return true;
         }
         catch(Exception e){
+            System.out.println(e.getMessage());
             return false;
         }
     }

@@ -8,7 +8,9 @@ import org.springframework.data.repository.ListCrudRepository;
 import com.bancrabs.villaticket.models.entities.UserPrivilege;
 
 public interface UserPrivilegeRepository extends ListCrudRepository<UserPrivilege, UUID>{
-    List<UserPrivilege> findByUserId(String userId);
+    UserPrivilege findByNameAndUserId(String name, UUID userId);
+    List<UserPrivilege> findByUserId(UUID userId);
+    List<UserPrivilege> findByName(String name);
     List<UserPrivilege> findByNameByOrderByIdAsc(String name);
     List<UserPrivilege> findByNameByOrderByIdDesc(String name);
 }

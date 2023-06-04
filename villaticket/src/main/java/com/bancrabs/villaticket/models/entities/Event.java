@@ -32,7 +32,7 @@ public class Event {
     @Column(name = "id", nullable = false)
     private UUID id;
 
-    @Column(name = "title", nullable = false, unique = true)
+    @Column(name = "title", nullable = false)
     private String title;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
