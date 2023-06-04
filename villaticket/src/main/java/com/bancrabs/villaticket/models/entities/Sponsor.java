@@ -1,5 +1,6 @@
 package com.bancrabs.villaticket.models.entities;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -13,7 +14,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @Entity
-@Table(name = "sponsor")
+@Table(name = "sponsor", schema = "public")
 public class Sponsor {
     
     @Id
@@ -23,7 +24,7 @@ public class Sponsor {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "event_id", nullable = true)
     private Event event;
 }

@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "ticket_qr")
+@Table(name = "ticket_qr", schema = "public")
 public class TicketQR {
     
     @Id
@@ -26,19 +26,25 @@ public class TicketQR {
     @Column(name = "id", nullable = false)
     private UUID id;
 
-    @Column(name = "exchange_time", nullable = false)
+    @Column(name = "exchange_time", nullable = true)
     private Timestamp exchangeTime;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "ticket_id", nullable = true)
+    @JoinColumn(name = "ticket_id", nullable = false)
     private Ticket ticket;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "qr_id", nullable = true)
+    @JoinColumn(name = "qr_id", nullable = false)
     private QR qr;
 
-    TicketQR(Timestamp exchangeTime, Ticket ticket, QR qr) {
+    public TicketQR(Timestamp exchangeTime, Ticket ticket, QR qr) {
         this.exchangeTime = exchangeTime;
+        this.ticket = ticket;
+        this.qr = qr;
+    }
+
+    public TicketQR(Ticket ticket, QR qr) {
+        this.exchangeTime = null;
         this.ticket = ticket;
         this.qr = qr;
     }

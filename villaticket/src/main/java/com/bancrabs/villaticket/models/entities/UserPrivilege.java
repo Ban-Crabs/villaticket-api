@@ -1,32 +1,39 @@
 package com.bancrabs.villaticket.models.entities;
 
-import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table(name = "user_privileges")
+@Table(name = "user_privileges", schema = "public")
 public class UserPrivilege {
     
     @Id
     @Column(name = "id", nullable = false)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
     
     @Column(name = "name", nullable = false)
     private String name;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JsonIgnore
-    private List<User> users;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    public UserPrivilege(String name, User user) {
+        this.name = name;
+        this.user = user;
+    }
 }

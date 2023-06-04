@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "ticket_transfer")
+@Table(name = "ticket_transfer", schema = "public")
 public class TicketTransfer {
     
     @Id
@@ -26,20 +26,26 @@ public class TicketTransfer {
     @Column(name = "id", nullable = false)
     private UUID id;
 
-    @Column(name = "transfer_time", nullable = false)
+    @Column(name = "transfer_time", nullable = true)
     private Timestamp transferTime;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "qr_id", nullable = true)
+    @JoinColumn(name = "qr_id", nullable = false)
     private QR qr;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "transfer_id", nullable = true)
+    @JoinColumn(name = "transfer_id", nullable = false)
     private Transfer transfer;
 
-    TicketTransfer(Timestamp transferTime, QR qr, Transfer transfer) {
+    public TicketTransfer(Timestamp transferTime, QR qr, Transfer transfer) {
         this.transferTime = transferTime;
         this.qr = qr;
         this.transfer = transfer;
+    }
+
+    public TicketTransfer(Transfer transfer, QR qr){
+        this.transferTime = new Timestamp(System.currentTimeMillis());
+        this.transfer = transfer;
+        this.qr = qr;
     }
 }

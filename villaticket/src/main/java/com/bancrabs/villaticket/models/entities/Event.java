@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -19,13 +20,14 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString.Exclude;
 
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "event")
+@Table(name = "event", schema = "public")
 public class Event {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
@@ -34,11 +36,11 @@ public class Event {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "type_id", nullable = true)
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "type_id", nullable = true)
     private Type type;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "location_id", nullable = true)
     private Location location;
 
@@ -59,17 +61,43 @@ public class Event {
 
     @OneToMany(fetch = FetchType.LAZY)
     @JsonIgnore
+    @Exclude
     private List<Sponsor> sponsors;
 
     @OneToMany(fetch = FetchType.LAZY)
     @JsonIgnore
+    @Exclude
     private List<Category> categories;
 
     @OneToMany(fetch = FetchType.LAZY)
     @JsonIgnore
+    @Exclude
     private List<Image> images;
 
     @OneToMany(fetch = FetchType.LAZY)
     @JsonIgnore
+    @Exclude
     private List<Attendance> attendances;
+
+    public Event(String title, Type type, Location location, Date date, Timestamp startTime, Timestamp endTime, String status, Boolean isVisible){
+        this.title = title;
+        this.type = type;
+        this.location = location;
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.status = status;
+        this.isVisible = isVisible;
+    }
+
+    public Event(String title, Type type, Location location, Date date, Timestamp startTime, String status, Boolean isVisible){
+        this.title = title;
+        this.type = type;
+        this.location = location;
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = null;
+        this.status = status;
+        this.isVisible = isVisible;
+    }
 }

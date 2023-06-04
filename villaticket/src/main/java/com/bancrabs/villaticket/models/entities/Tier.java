@@ -2,6 +2,7 @@ package com.bancrabs.villaticket.models.entities;
 
 import java.util.UUID;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -17,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "tier")
+@Table(name = "tier", schema = "public")
 public class Tier {
     
     @Id
@@ -34,11 +35,11 @@ public class Tier {
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "locale_id", nullable = false)
     private Locale locale;
 
-    Tier(String name, Float price, Integer quantity, Locale locale) {
+    public Tier(String name, Float price, Integer quantity, Locale locale) {
         this.name = name;
         this.price = price;
         this.quantity = quantity;

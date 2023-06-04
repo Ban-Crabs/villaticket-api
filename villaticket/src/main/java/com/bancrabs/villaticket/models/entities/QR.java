@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "qr")
+@Table(name = "qr", schema = "public")
 public class QR {
     
     @Id
@@ -29,8 +29,13 @@ public class QR {
     @Column(name = "creation_time", nullable = false)
     private Timestamp creationTime;
 
-    QR(String code, Timestamp creationTime) {
+    public QR(String code, Timestamp creationTime) {
         this.code = code;
         this.creationTime = creationTime;
+    }
+
+    public QR(String code) {
+        this.code = code;
+        this.creationTime = new Timestamp(System.currentTimeMillis());
     }
 }

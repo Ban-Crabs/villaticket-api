@@ -1,5 +1,6 @@
 package com.bancrabs.villaticket.models.entities;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -13,7 +14,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @Entity
-@Table(name = "image")
+@Table(name = "image", schema = "public")
 public class Image {
     
     @Id
@@ -23,7 +24,7 @@ public class Image {
     @Column(name = "url", nullable = true)
     private String url;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "event_id", nullable = true)
     private Event event;
 

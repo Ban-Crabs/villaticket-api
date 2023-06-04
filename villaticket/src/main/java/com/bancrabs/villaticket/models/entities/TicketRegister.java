@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "ticket_registry")
+@Table(name = "ticket_registry", schema = "public")
 public class TicketRegister {
     
     @Id
@@ -33,7 +33,7 @@ public class TicketRegister {
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
-    TicketRegister(Ticket ticket, Order order) {
+    public TicketRegister(Ticket ticket, Order order) {
         this.ticket = ticket;
         this.order = order;
     }

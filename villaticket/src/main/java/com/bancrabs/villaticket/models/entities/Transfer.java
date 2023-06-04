@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "transfer")
+@Table(name = "transfer", schema = "public")
 public class Transfer {
     
     @Id
@@ -35,5 +35,11 @@ public class Transfer {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "receiver_id", nullable = false)
     private User receiver;
+
+    public Transfer(User sender, User receiver){
+        result = null;
+        this.sender = sender;
+        this.receiver = receiver;
+    }
 
 }

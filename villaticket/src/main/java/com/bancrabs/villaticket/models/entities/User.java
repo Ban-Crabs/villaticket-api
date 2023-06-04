@@ -15,11 +15,12 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString.Exclude;
 
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "user")
+@Table(name = "user", schema = "public")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,18 +33,20 @@ public class User {
     @Column(name = "password" , nullable = false)
     private String password;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.LAZY)
     @JsonIgnore
+    @Exclude
     private List<UserPrivilege> privileges;
 
     @OneToMany(fetch = FetchType.LAZY)
     @JsonIgnore
+    @Exclude
     private List<Attendance> attendances;
 
-    User(String unStr, String pwStr, String emStr) {
+    public User(String unStr, String pwStr, String emStr) {
         this.username = unStr;
         this.password = pwStr;
         this.email = emStr;
