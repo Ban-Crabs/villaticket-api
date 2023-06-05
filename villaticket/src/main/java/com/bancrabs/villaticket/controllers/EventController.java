@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bancrabs.villaticket.models.dtos.save.SaveEventDTO;
 import com.bancrabs.villaticket.models.dtos.save.SaveGenericDTO;
 import com.bancrabs.villaticket.models.entities.Event;
-import com.bancrabs.villaticket.models.entities.Location;
-import com.bancrabs.villaticket.models.entities.Type;
 import com.bancrabs.villaticket.services.CategoryService;
 import com.bancrabs.villaticket.services.EventService;
 import com.bancrabs.villaticket.services.ImageService;
@@ -76,19 +74,20 @@ public class EventController {
             if(result.hasErrors()){
                 return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
             }
-            Type type = typeService.findByNameOrId(data.getTypeID());
-            if(type == null){
-                return new ResponseEntity<>("Type not found", HttpStatus.NOT_FOUND);
-            }
-            Location location = locationService.findByIdOrName(data.getLocationID());
-            if(location == null){
-                return new ResponseEntity<>("Location not found", HttpStatus.NOT_FOUND);
-            }
-            eventService.saveEvent(data, type, location);
+            eventService.saveEvent(data);
             return new ResponseEntity<>("Created", HttpStatus.CREATED);
         }
         catch(Exception e){
-            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            switch(e.getMessage()){
+                case "Type not found":
+                    return new ResponseEntity<>("Type not found", HttpStatus.NOT_FOUND);
+                case "Location not found":
+                    return new ResponseEntity<>("Location not found", HttpStatus.NOT_FOUND);
+                case "Event already exists":
+                    return new ResponseEntity<>("Event already exists", HttpStatus.CONFLICT);
+                default:
+                    return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
     }
 
@@ -108,19 +107,20 @@ public class EventController {
             if(result.hasErrors()){
                 return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
             }
-            Type type = typeService.findByNameOrId(data.getTypeID());
-            if(type == null){
-                return new ResponseEntity<>("Type not found", HttpStatus.NOT_FOUND);
-            }
-            Location location = locationService.findByIdOrName(data.getLocationID());
-            if(location == null){
-                return new ResponseEntity<>("Location not found", HttpStatus.NOT_FOUND);
-            }
-            eventService.updateEvent(id, data, type, location);
+            eventService.updateEvent(id, data);
             return new ResponseEntity<>("Updated", HttpStatus.OK);
         }
         catch(Exception e){
-            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            switch(e.getMessage()){
+                case "Type not found":
+                    return new ResponseEntity<>("Type not found", HttpStatus.NOT_FOUND);
+                case "Location not found":
+                    return new ResponseEntity<>("Location not found", HttpStatus.NOT_FOUND);
+                case "Event not found":
+                    return new ResponseEntity<>("Event not found", HttpStatus.NOT_FOUND);
+                default:
+                    return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
     }
 

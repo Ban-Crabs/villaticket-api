@@ -5,12 +5,10 @@ import java.util.UUID;
 
 import com.bancrabs.villaticket.models.dtos.save.SaveEventDTO;
 import com.bancrabs.villaticket.models.entities.Event;
-import com.bancrabs.villaticket.models.entities.Location;
-import com.bancrabs.villaticket.models.entities.Type;
 
 public interface EventService {
-    Boolean saveEvent(SaveEventDTO data, Type type, Location location) throws Exception;
-    Boolean updateEvent(UUID eventId, SaveEventDTO data, Type type, Location location) throws Exception;
+    Boolean saveEvent(SaveEventDTO data) throws Exception;
+    Boolean updateEvent(UUID eventId, SaveEventDTO data) throws Exception;
     Boolean deleteEvent(UUID eventId) throws Exception;
     Boolean toggleVisibility(UUID eventId) throws Exception;
 

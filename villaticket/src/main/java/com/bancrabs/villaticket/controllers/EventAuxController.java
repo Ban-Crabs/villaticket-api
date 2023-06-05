@@ -39,8 +39,12 @@ public class EventAuxController {
     @PostMapping("/type")
     public ResponseEntity<?> createType(@ModelAttribute @Valid SaveTypeDTO data){
         try{
-            typeService.save(data);
-            return new ResponseEntity<>("Created", HttpStatus.CREATED);
+            if(typeService.save(data)){
+                return new ResponseEntity<>("Created", HttpStatus.CREATED);
+            }
+            else{
+                return new ResponseEntity<>("Error", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
         catch(Exception e){
             return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -50,8 +54,12 @@ public class EventAuxController {
     @PostMapping("/location")
     public ResponseEntity<?> createLocation(@ModelAttribute @Valid SaveLocationDTO data){
         try{
-            locationService.save(data);
-            return new ResponseEntity<>("Created", HttpStatus.CREATED);
+            if(locationService.save(data)){
+                return new ResponseEntity<>("Created", HttpStatus.CREATED);
+            }
+            else{
+                return new ResponseEntity<>("Error", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
         catch(Exception e){
             return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -61,8 +69,12 @@ public class EventAuxController {
     @PostMapping("/image")
     public ResponseEntity<?> createImage(@ModelAttribute @Valid SaveImageDTO data){
         try{
-            imageService.save(data);
-            return new ResponseEntity<>("Created", HttpStatus.CREATED);
+            if(imageService.save(data)){
+                return new ResponseEntity<>("Created", HttpStatus.CREATED);
+            }
+            else{
+                return new ResponseEntity<>("Error", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
         catch(Exception e){
             return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -72,8 +84,12 @@ public class EventAuxController {
     @PostMapping("/category")
     public ResponseEntity<?> createCategory(@ModelAttribute @Valid SaveGenericDTO data){
         try{
-            categoryService.save(data);
-            return new ResponseEntity<>("Created", HttpStatus.OK);
+            if(categoryService.save(data)){
+                return new ResponseEntity<>("Created", HttpStatus.CREATED);
+            }
+            else{
+                return new ResponseEntity<>("Error", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
         catch(Exception e){
             return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);

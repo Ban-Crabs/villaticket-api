@@ -31,8 +31,16 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public Boolean saveEvent(SaveEventDTO data, Type type, Location location) throws Exception{
+    public Boolean saveEvent(SaveEventDTO data) throws Exception{
         try{
+            Type type = typeService.findByNameOrId(data.getTypeID());
+            if(type == null){
+                throw new Exception("Type not found");
+            }
+            Location location = locationService.findByIdOrName(data.getLocationID());
+            if(location == null){
+                throw new Exception("Location not found");
+            }
             Event toSave = eventRepository.findByTitleAndDateAndStartTime(data.getTitle(), data.getDate(), data.getStartTime());
             if(toSave == null){
                 toSave = new Event(data.getTitle(), type, location, data.getDate(), data.getStartTime(), data.getEndTime(), data.getStatus(), data.getIsVisible());
@@ -51,15 +59,22 @@ public class EventServiceImpl implements EventService {
             eventRepository.save(toSave);
             return true;
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return false;
+            throw e;
         }
     }
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public Boolean updateEvent(UUID eventId, SaveEventDTO data, Type type, Location location) throws Exception {
+    public Boolean updateEvent(UUID eventId, SaveEventDTO data) throws Exception {
         try{
+            Type type = typeService.findByNameOrId(data.getTypeID());
+            if(type == null){
+                throw new Exception("Type not found");
+            }
+            Location location = locationService.findByIdOrName(data.getLocationID());
+            if(location == null){
+                throw new Exception("Location not found");
+            }
             Event toUpdate = eventRepository.findById(eventId).orElse(null);
             if(toUpdate != null){
                 toUpdate.setTitle(data.getTitle());
@@ -78,8 +93,7 @@ public class EventServiceImpl implements EventService {
             }
         }
         catch(Exception e){
-            System.out.println(e.getMessage());
-            return false;
+            throw e;
         }
     }
 

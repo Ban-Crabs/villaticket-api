@@ -40,6 +40,10 @@ public class TicketServiceImpl implements TicketService{
             if(relatedUser == null){
                 throw new Exception("User not found");
             }
+            List<Ticket> tickets = findByTierId(relatedTier.getId());
+            if(tickets.size() >= relatedTier.getQuantity()){
+                return false;
+            }
             ticketRepository.save(new Ticket(relatedTier, relatedUser));
             return true;
         }

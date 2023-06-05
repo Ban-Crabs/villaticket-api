@@ -1,7 +1,6 @@
 package com.bancrabs.villaticket.controllers;
 
 import java.sql.Timestamp;
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +22,6 @@ import com.bancrabs.villaticket.models.dtos.save.SaveTicketTransferDTO;
 import com.bancrabs.villaticket.models.dtos.save.SaveTierDTO;
 import com.bancrabs.villaticket.models.dtos.save.SaveTransferDTO;
 import com.bancrabs.villaticket.models.dtos.save.VerifyTransferDTO;
-import com.bancrabs.villaticket.models.entities.Ticket;
-import com.bancrabs.villaticket.models.entities.Tier;
 import com.bancrabs.villaticket.services.OrderService;
 import com.bancrabs.villaticket.services.TicketQRService;
 import com.bancrabs.villaticket.services.TicketRegisterService;
@@ -68,13 +65,12 @@ public class TicketController {
             if(result.hasErrors()){
                 return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
             }
-            Tier tier = tierService.findById(data.getTierId());
-            List<Ticket> tickets = ticketService.findByTierId(tier.getId());
-            if(tickets.size() >= tier.getQuantity()){
+            if(ticketService.save(data)){
+                return new ResponseEntity<>("Created", HttpStatus.CREATED);
+            }
+            else{
                 return new ResponseEntity<>("Tier sold out", HttpStatus.CONFLICT);
             }
-            ticketService.save(data);
-            return new ResponseEntity<>("Created", HttpStatus.CREATED);
         }
         catch(Exception e){
             return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -93,7 +89,7 @@ public class TicketController {
                 return new ResponseEntity<>("Created", HttpStatus.CREATED);
             }
             else{
-                return new ResponseEntity<>("Order not found", HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>("Couldn't place order", HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
         catch(Exception e){

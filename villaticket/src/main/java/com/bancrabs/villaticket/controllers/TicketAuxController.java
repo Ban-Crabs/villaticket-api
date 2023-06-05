@@ -52,8 +52,12 @@ public class TicketAuxController {
             if(result.hasErrors()){
                 return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
             }
-            localeService.save(data);
-            return new ResponseEntity<>("Created", HttpStatus.CREATED);
+            if(localeService.save(data)){
+                return new ResponseEntity<>("Created", HttpStatus.CREATED);
+            }
+            else{
+                return new ResponseEntity<>("Error", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
         catch(Exception e){
             return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);

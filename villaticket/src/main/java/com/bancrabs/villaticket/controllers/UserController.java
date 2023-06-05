@@ -22,7 +22,6 @@ import com.bancrabs.villaticket.models.dtos.save.RecordAttendanceDTO;
 import com.bancrabs.villaticket.models.dtos.save.SavePrivilegeDTO;
 import com.bancrabs.villaticket.models.dtos.save.SaveUserDTO;
 import com.bancrabs.villaticket.models.entities.User;
-import com.bancrabs.villaticket.models.entities.UserPrivilege;
 import com.bancrabs.villaticket.services.AttendanceService;
 import com.bancrabs.villaticket.services.UserPrivilegeService;
 import com.bancrabs.villaticket.services.UserService;
@@ -149,14 +148,14 @@ public class UserController {
     //TODO: Ask if the id given here should be the user's UUID
 
     @PostMapping("/privilege")
-    public ResponseEntity<?> addPrivilege(@RequestParam("userId") String id, @RequestParam("privCode") String privilege){
+    public ResponseEntity<?> addPrivilege(@RequestParam("userId") String id, @RequestParam("privName") String privName){
         try{
             User user = userService.findById(id);
             if(user == null){
                 return new ResponseEntity<>("Not found", HttpStatus.NOT_FOUND);
             }
 
-            if(userPrivilegeService.save(new SavePrivilegeDTO(privilege, user.getId()))){
+            if(userPrivilegeService.save(new SavePrivilegeDTO(privName, user.getId()))){
                 return new ResponseEntity<>("Created", HttpStatus.CREATED);
             }
             else{
@@ -171,16 +170,7 @@ public class UserController {
     @GetMapping("/{id}/privilege")
     public ResponseEntity<?> getPrivileges(@PathParam("id") String id){
         try{
-            User user = userService.findById(id);
-            if(user == null){
-                return new ResponseEntity<>("Not found", HttpStatus.NOT_FOUND);
-            }
-            List<UserPrivilege> privileges = userPrivilegeService.findByUserId(user.getId());
-            List<String> priv = new ArrayList<>();
-            privileges.forEach(p->{
-                priv.add(p.getName());
-            });
-            return new ResponseEntity<>(priv, HttpStatus.OK);
+            return new ResponseEntity<>(userPrivilegeService.findByUserId(id), HttpStatus.OK);
         }
         catch(Exception e){
             return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
