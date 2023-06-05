@@ -28,18 +28,18 @@ public class OrderServiceImpl implements OrderService{
     //TODO: Ask if the order should have a 'valid' field
 
     @Override
-    public Boolean save(RegisterOrderDTO data) throws Exception {
+    public UUID save(RegisterOrderDTO data) throws Exception {
         try{
             User user = userService.findById(data.getUserId());
             if(user == null){
                 throw new Exception("User not found");
             }
-            orderRepository.save(new Order(data.getPurchaseDate(), data.getPurchaseMethod(), user));
-            return true;
+            Order order = orderRepository.save(new Order(data.getPurchaseDate(), data.getPurchaseMethod(), user));
+            return order.getId();
         }
         catch(Exception e){
             System.out.println(e.getMessage());
-            return false;
+            return null;
         }
     }
 

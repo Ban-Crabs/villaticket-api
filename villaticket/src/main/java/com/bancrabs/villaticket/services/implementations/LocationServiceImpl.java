@@ -17,7 +17,7 @@ public class LocationServiceImpl implements LocationService {
     private LocationRepository locationRepository;
 
     @Override
-    public Boolean saveLocation(SaveLocationDTO data) throws Exception {
+    public Boolean save(SaveLocationDTO data) throws Exception {
         try {
             Location check = locationRepository.findByIdOrName(data.getId(), data.getName());
             if (check == null) {

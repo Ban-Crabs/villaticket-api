@@ -1,6 +1,5 @@
 package com.bancrabs.villaticket.services.implementations;
 
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 
@@ -8,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bancrabs.villaticket.models.dtos.save.SaveTicketTransferDTO;
+import com.bancrabs.villaticket.models.dtos.save.VerifyTransferDTO;
 import com.bancrabs.villaticket.models.entities.QR;
 import com.bancrabs.villaticket.models.entities.TicketTransfer;
 import com.bancrabs.villaticket.models.entities.Transfer;
@@ -15,6 +15,7 @@ import com.bancrabs.villaticket.repositories.TicketTransferRepository;
 import com.bancrabs.villaticket.services.QRService;
 import com.bancrabs.villaticket.services.TicketTransferService;
 import com.bancrabs.villaticket.services.TransferService;
+import com.bancrabs.villaticket.services.UserService;
 
 import jakarta.transaction.Transactional;
 
@@ -25,6 +26,9 @@ public class TicketTransferServiceImpl implements TicketTransferService {
     private TicketTransferRepository ticketTransferRepository;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private TransferService transferService;
 
     @Autowired
@@ -32,7 +36,7 @@ public class TicketTransferServiceImpl implements TicketTransferService {
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public Boolean verify(Timestamp timestamp, SaveTicketTransferDTO data) throws Exception {
+    public Boolean verify(VerifyTransferDTO req, SaveTicketTransferDTO data) throws Exception {
         try {
             Transfer transfer = transferService.findById(data.getTransferId());
             if (transfer == null) {
@@ -47,17 +51,22 @@ public class TicketTransferServiceImpl implements TicketTransferService {
                 throw new Exception("TicketTransfer already exists");
             }
             Integer toVerify = (int) qr.getCreationTime().getTime();
-            Integer toCompare = (int) timestamp.getTime();
+            Integer toCompare = (int) req.getTimestamp().getTime();
             if (toCompare - toVerify > 600000 || toCompare - toVerify < 0) {
-                throw new Exception("QR expired");
+                transfer.setResult(false);
+                transfer.setReceiver(null);
+                transferService.save(transfer);
+                return false;
             }
-            transfer.setResult(true);
-            transferService.save(transfer);
-            ticketTransferRepository.save(new TicketTransfer(timestamp, qr, transfer));
-            return true;
+            else{
+                transfer.setResult(true);
+                transfer.setReceiver(userService.findById(req.getReceiverId()));
+                transferService.save(transfer);
+                ticketTransferRepository.save(new TicketTransfer(req.getTimestamp(), qr, transfer));
+                return true;
+            }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return false;
+            throw e;
         }
     }
 

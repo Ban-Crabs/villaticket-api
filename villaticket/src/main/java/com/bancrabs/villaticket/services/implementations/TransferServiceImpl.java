@@ -32,11 +32,16 @@ public class TransferServiceImpl implements TransferService{
             if(sender == null){
                 throw new Exception("Sender not found");
             }
-            User receiver = userService.findById(data.getReceiverId());
-            if(receiver == null){
-                throw new Exception("Receiver not found");
+            if(data.getReceiverId() != null){
+                User receiver = userService.findById(data.getReceiverId());
+                if(receiver == null){
+                    throw new Exception("Receiver not found");
+                }
+                transferRepository.save(new Transfer(sender, receiver));
             }
-            transferRepository.save(new Transfer(sender, receiver));
+            else{
+                transferRepository.save(new Transfer(sender));
+            }
             return true;
         }
         catch(Exception e){

@@ -50,6 +50,16 @@ public class EventController {
     @Autowired
     private CategoryService categoryService;
 
+    @GetMapping("/visible")
+    public ResponseEntity<?> getAllVisible(){
+        try{
+            return new ResponseEntity<>(eventService.findAllVisibleEvents(), HttpStatus.OK);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/")
     public ResponseEntity<?> getAll(){
         try{

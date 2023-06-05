@@ -96,5 +96,31 @@ public class TicketServiceImpl implements TicketService{
             return false;
         }
     }
+
+    @Override
+    public Boolean update(UUID id, CreateTicketDTO data) {
+        try{
+            Ticket toUpdate = ticketRepository.findById(id).orElse(null);
+            if(toUpdate == null){
+                throw new Exception("Ticket not found");
+            }
+            Tier relatedTier = tierService.findById(data.getTierId());
+            if(relatedTier == null){
+                throw new Exception("Tier not found");
+            }
+            User relatedUser = userService.findById(data.getUserId());
+            if(relatedUser == null){
+                throw new Exception("User not found");
+            }
+            toUpdate.setTier(relatedTier);
+            toUpdate.setUser(relatedUser);
+            ticketRepository.save(toUpdate);
+            return true;
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
     
 }

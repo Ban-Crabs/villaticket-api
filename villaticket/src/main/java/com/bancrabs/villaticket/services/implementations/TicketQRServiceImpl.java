@@ -48,16 +48,19 @@ public class TicketQRServiceImpl implements TicketQRService{
             Integer toVerify = (int) qr.getCreationTime().getTime();
             Integer toCompare = (int) timestamp.getTime();
             if(toCompare - toVerify > 600000 || toCompare - toVerify < 0){
-                throw new Exception("QR expired");
+                ticket.setResult(false);
+                ticketService.save(ticket);
+                return false;
             }
-            ticket.setResult(true);
-            ticketService.save(ticket);
-            ticketQRRepository.save(new TicketQR(timestamp, ticket, qr));
-            return true;
+            else{
+                ticket.setResult(true);
+                ticketService.save(ticket);
+                ticketQRRepository.save(new TicketQR(timestamp, ticket, qr));
+                return true;
+            }
         }
         catch(Exception e){
-            System.out.println(e.getMessage());
-            return false;
+            throw e;
         }
     }
 
