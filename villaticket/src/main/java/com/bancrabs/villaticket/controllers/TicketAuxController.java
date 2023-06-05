@@ -85,10 +85,10 @@ public class TicketAuxController {
     }
 
     @PostMapping("/qr/transfer")
-    public ResponseEntity<?> createTransferQR(@RequestParam("ticketId") UUID ticketId){
+    public ResponseEntity<?> createTransferQR(@RequestParam("transferId") UUID transferId){
         try{
             //TODO: Generate new random qr code
-            Transfer transfer = transferService.findById(ticketId);
+            Transfer transfer = transferService.findById(transferId);
             if(transfer == null){
                 return new ResponseEntity<>("Transfer not found", HttpStatus.NOT_FOUND);
             }
@@ -96,7 +96,7 @@ public class TicketAuxController {
             if(newQR == null){
                 return new ResponseEntity<>("QR not created", HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            return new ResponseEntity<>(new QRResponseDTO(ticketId, newQR.getId()), HttpStatus.CREATED);
+            return new ResponseEntity<>(new QRResponseDTO(transferId, newQR.getId()), HttpStatus.CREATED);
         }
         catch(Exception e){
             return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);

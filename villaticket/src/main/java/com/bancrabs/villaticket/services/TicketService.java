@@ -14,6 +14,6 @@ public interface TicketService {
 
     List<Ticket> findAll();
     Ticket findById(UUID id);
-    Ticket findByTierId(UUID tierId);
+    List<Ticket> findByTierId(UUID tierId);
     Ticket findByUserId(UUID userId);
 }

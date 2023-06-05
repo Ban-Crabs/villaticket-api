@@ -1,7 +1,5 @@
 package com.bancrabs.villaticket.models.dtos.save;
 
-import java.util.UUID;
-
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
@@ -19,15 +17,11 @@ public class SaveLocationDTO {
     private String name;
 
     @NotEmpty
-    @org.hibernate.validator.constraints.UUID
-    private UUID eventId;
-
     private Boolean isAvailable;
 
-    public SaveLocationDTO(String id, String name, UUID eventId){
+    public SaveLocationDTO(String id, String name){
         this.id = id;
         this.name = name;
-        this.eventId = eventId;
         this.isAvailable = true;
     }
 }

@@ -35,11 +35,19 @@ public class EventServiceImpl implements EventService {
         try{
             Event toSave = eventRepository.findByTitleAndDateAndStartTime(data.getTitle(), data.getDate(), data.getStartTime());
             if(toSave == null){
-                toSave = new Event(data.getTitle(), type, location, data.getDate(), data.getStartTime(), data.getEndTime(), data.getStatus(), false);
+                toSave = new Event(data.getTitle(), type, location, data.getDate(), data.getStartTime(), data.getEndTime(), data.getStatus(), data.getIsVisible());
             }
             else{
                 throw new Exception("Event already exists");
             }
+            toSave.setTitle(data.getTitle());
+            toSave.setType(type);
+            toSave.setLocation(location);
+            toSave.setDate(data.getDate());
+            toSave.setStartTime(data.getStartTime());
+            toSave.setEndTime(data.getEndTime());
+            toSave.setStatus(data.getStatus());
+            toSave.setIsVisible(data.getIsVisible());
             eventRepository.save(toSave);
             return true;
         } catch (Exception e) {

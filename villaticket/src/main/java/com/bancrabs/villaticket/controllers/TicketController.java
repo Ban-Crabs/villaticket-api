@@ -1,6 +1,7 @@
 package com.bancrabs.villaticket.controllers;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,11 @@ import com.bancrabs.villaticket.models.dtos.save.RegisterOrderDTO;
 import com.bancrabs.villaticket.models.dtos.save.RegisterTicketDTO;
 import com.bancrabs.villaticket.models.dtos.save.RegisterTicketQRDTO;
 import com.bancrabs.villaticket.models.dtos.save.SaveTicketTransferDTO;
+import com.bancrabs.villaticket.models.dtos.save.SaveTierDTO;
 import com.bancrabs.villaticket.models.dtos.save.SaveTransferDTO;
 import com.bancrabs.villaticket.models.dtos.save.VerifyTransferDTO;
+import com.bancrabs.villaticket.models.entities.Ticket;
+import com.bancrabs.villaticket.models.entities.Tier;
 import com.bancrabs.villaticket.services.OrderService;
 import com.bancrabs.villaticket.services.TicketQRService;
 import com.bancrabs.villaticket.services.TicketRegisterService;
@@ -63,6 +67,11 @@ public class TicketController {
         try{
             if(result.hasErrors()){
                 return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
+            }
+            Tier tier = tierService.findById(data.getTierId());
+            List<Ticket> tickets = ticketService.findByTierId(tier.getId());
+            if(tickets.size() >= tier.getQuantity()){
+                return new ResponseEntity<>("Tier sold out", HttpStatus.CONFLICT);
             }
             ticketService.save(data);
             return new ResponseEntity<>("Created", HttpStatus.CREATED);
@@ -147,6 +156,20 @@ public class TicketController {
         }
     }
 
+    @PostMapping("/tier")
+    public ResponseEntity<?> createTier(@ModelAttribute @Valid SaveTierDTO data, BindingResult result){
+        try{
+            if(result.hasErrors()){
+                return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
+            }
+            tierService.save(data);
+            return new ResponseEntity<>("Created", HttpStatus.CREATED);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PostMapping("/transfer")
     public ResponseEntity<?> transferTicket(@ModelAttribute @Valid SaveTransferDTO data, BindingResult result){
         try{
@@ -180,7 +203,11 @@ public class TicketController {
                     return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
                 case "QR not found":
                     return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
-                case "TicketTransfer already exists":
+                case "Ticket already transferred":
+                    return new ResponseEntity<>(e, HttpStatus.CONFLICT);
+                case "Ticket transfer reserved for another user":
+                    return new ResponseEntity<>(e, HttpStatus.CONFLICT);
+                case "Ticket already received":
                     return new ResponseEntity<>(e, HttpStatus.CONFLICT);
                 default:
                     return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);

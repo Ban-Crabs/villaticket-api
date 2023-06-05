@@ -76,7 +76,7 @@ public class TicketServiceImpl implements TicketService{
     }
 
     @Override
-    public Ticket findByTierId(UUID tierId) {
+    public List<Ticket> findByTierId(UUID tierId) {
         return ticketRepository.findByTierId(tierId);
     }
 

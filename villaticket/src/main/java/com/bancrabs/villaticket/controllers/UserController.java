@@ -168,7 +168,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/privilege/{id}")
+    @GetMapping("/{id}/privilege")
     public ResponseEntity<?> getPrivileges(@PathParam("id") String id){
         try{
             User user = userService.findById(id);
@@ -212,7 +212,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/attendance/{id}")
+    @GetMapping("/{id}/attendance")
     public ResponseEntity<?> getAttendance(@PathParam("id") String id){
         try{
             User user = userService.findById(id);

@@ -48,7 +48,32 @@ public class TicketTransferServiceImpl implements TicketTransferService {
             }
             TicketTransfer check = ticketTransferRepository.findByTransferIdAndQrId(data.getTransferId(), data.getQrId());
             if (check != null) {
-                throw new Exception("TicketTransfer already exists");
+                if(check.getTransfer().getReceiver() != null && check.getTransferTime() != null){
+                    throw new Exception("Ticket already transferred");
+                }
+                else if(check.getTransfer().getReceiver() != null && check.getTransferTime() == null){
+                    if(check.getTransfer().getReceiver().getId() == req.getReceiverId()){
+                        Integer toVerify = (int) qr.getCreationTime().getTime();
+                        Integer toCompare = (int) req.getTimestamp().getTime();
+                        if (toCompare - toVerify > 600000 || toCompare - toVerify < 0) {
+                            transfer.setResult(false);
+                            transferService.save(transfer);
+                            return false;
+                        }
+                        else{
+                            transfer.setResult(true);
+                            transferService.save(transfer);
+                            ticketTransferRepository.save(new TicketTransfer(req.getTimestamp(), qr, transfer));
+                            return true;
+                        }
+                    }
+                    else{
+                        throw new Exception("Ticket transfer reserved for another user");
+                    }
+                }
+                else{
+                    throw new Exception("Ticket already received");
+                }
             }
             Integer toVerify = (int) qr.getCreationTime().getTime();
             Integer toCompare = (int) req.getTimestamp().getTime();
