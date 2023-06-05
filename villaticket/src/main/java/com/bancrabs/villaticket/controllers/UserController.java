@@ -168,7 +168,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/privilege/{id}}")
+    @GetMapping("/privilege/{id}")
     public ResponseEntity<?> getPrivileges(@PathParam("id") String id){
         try{
             User user = userService.findById(id);

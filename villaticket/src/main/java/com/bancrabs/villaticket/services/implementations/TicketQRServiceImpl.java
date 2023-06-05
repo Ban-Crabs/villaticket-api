@@ -90,5 +90,4 @@ public class TicketQRServiceImpl implements TicketQRService{
     public List<TicketQR> findByTicketId(UUID ticketId) {
         return ticketQRRepository.findByTicketId(ticketId);
     }
-    
 }
