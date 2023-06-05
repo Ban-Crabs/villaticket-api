@@ -1,5 +1,7 @@
 package com.bancrabs.villaticket.services.implementations;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -85,6 +87,11 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public Location findByIdOrName(String id) {
         return locationRepository.findByIdOrName(id, id);
+    }
+
+    @Override
+    public List<Location> findAll() {
+        return locationRepository.findAll();
     }
 
 }

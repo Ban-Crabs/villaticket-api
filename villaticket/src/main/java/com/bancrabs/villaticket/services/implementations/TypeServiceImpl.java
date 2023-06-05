@@ -1,5 +1,7 @@
 package com.bancrabs.villaticket.services.implementations;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -58,6 +60,11 @@ public class TypeServiceImpl implements TypeService{
             System.out.println(e.getMessage());
             return false;
         }
+    }
+
+    @Override
+    public List<Type> findAll() {
+        return typeRepository.findAll();
     }
     
 }

@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bancrabs.villaticket.models.dtos.LoginDTO;
@@ -149,7 +149,7 @@ public class UserController {
     //TODO: Ask if the id given here should be the user's UUID
 
     @PostMapping("/privilege")
-    public ResponseEntity<?> addPrivilege(@RequestAttribute("userId") String id, @RequestAttribute("privCode") String privilege){
+    public ResponseEntity<?> addPrivilege(@RequestParam("userId") String id, @RequestParam("privCode") String privilege){
         try{
             User user = userService.findById(id);
             if(user == null){
@@ -198,7 +198,7 @@ public class UserController {
     }
 
     @PostMapping("/attendance")
-    public ResponseEntity<?> attendEvent(@RequestAttribute("userId") String id, @RequestAttribute("eventId") UUID eventId){
+    public ResponseEntity<?> attendEvent(@RequestParam("userId") String id, @RequestParam("eventId") UUID eventId){
         try{
             if(attendanceService.save(new RecordAttendanceDTO(id, eventId))){
                 return new ResponseEntity<>("Created", HttpStatus.CREATED);
