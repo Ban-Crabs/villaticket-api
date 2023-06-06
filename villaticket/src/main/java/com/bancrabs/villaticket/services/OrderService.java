@@ -4,11 +4,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import com.bancrabs.villaticket.models.dtos.RegisterOrderDTO;
+import com.bancrabs.villaticket.models.dtos.save.RegisterOrderDTO;
 import com.bancrabs.villaticket.models.entities.Order;
 
 public interface OrderService {
-    Boolean save(RegisterOrderDTO data) throws Exception;
+    UUID save(RegisterOrderDTO data) throws Exception;
 
     List<Order> findAll();
     List<Order> findByUserId(UUID userId);

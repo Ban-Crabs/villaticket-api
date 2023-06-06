@@ -1,18 +1,20 @@
-package com.bancrabs.villaticket.models.dtos;
+package com.bancrabs.villaticket.models.dtos.save;
 
 import java.util.UUID;
 
 import jakarta.validation.constraints.NotEmpty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-public class CreateTicketDTO {
-    
-    @NotEmpty
-    @org.hibernate.validator.constraints.UUID
-    private UUID tierId;
+@AllArgsConstructor
+public class RegisterTicketQRDTO {
 
     @NotEmpty
     @org.hibernate.validator.constraints.UUID
-    private UUID userId;
+    private UUID ticketId;
+
+    @NotEmpty
+    @org.hibernate.validator.constraints.UUID
+    private UUID qrId;
 }

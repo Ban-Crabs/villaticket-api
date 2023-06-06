@@ -1,6 +1,6 @@
 package com.bancrabs.villaticket.models.entities;
 
-import java.util.Date;
+import java.sql.Timestamp;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
@@ -27,7 +27,7 @@ public class Order {
     private UUID id;
 
     @Column(name = "purchase_date", nullable = false)
-    private Date purchaseDate;
+    private Timestamp purchaseDate;
 
     @Column(name = "purchase_method", nullable = false)
     private String purchaseMethod;
@@ -36,7 +36,7 @@ public class Order {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public Order(Date purchaseDate, String purchaseMethod, User user) {
+    public Order(Timestamp purchaseDate, String purchaseMethod, User user) {
         this.purchaseDate = purchaseDate;
         this.purchaseMethod = purchaseMethod;
         this.user = user;

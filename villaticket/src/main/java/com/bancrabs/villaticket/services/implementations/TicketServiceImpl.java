@@ -6,7 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bancrabs.villaticket.models.dtos.CreateTicketDTO;
+import com.bancrabs.villaticket.models.dtos.save.CreateTicketDTO;
 import com.bancrabs.villaticket.models.entities.Ticket;
 import com.bancrabs.villaticket.models.entities.Tier;
 import com.bancrabs.villaticket.models.entities.User;
@@ -39,6 +39,10 @@ public class TicketServiceImpl implements TicketService{
             User relatedUser = userService.findById(data.getUserId());
             if(relatedUser == null){
                 throw new Exception("User not found");
+            }
+            List<Ticket> tickets = findByTierId(relatedTier.getId());
+            if(tickets.size() >= relatedTier.getQuantity()){
+                return false;
             }
             ticketRepository.save(new Ticket(relatedTier, relatedUser));
             return true;
@@ -76,7 +80,7 @@ public class TicketServiceImpl implements TicketService{
     }
 
     @Override
-    public Ticket findByTierId(UUID tierId) {
+    public List<Ticket> findByTierId(UUID tierId) {
         return ticketRepository.findByTierId(tierId);
     }
 
@@ -89,6 +93,32 @@ public class TicketServiceImpl implements TicketService{
     public Boolean save(Ticket ticket) {
         try{
             ticketRepository.save(ticket);
+            return true;
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+
+    @Override
+    public Boolean update(UUID id, CreateTicketDTO data) {
+        try{
+            Ticket toUpdate = ticketRepository.findById(id).orElse(null);
+            if(toUpdate == null){
+                throw new Exception("Ticket not found");
+            }
+            Tier relatedTier = tierService.findById(data.getTierId());
+            if(relatedTier == null){
+                throw new Exception("Tier not found");
+            }
+            User relatedUser = userService.findById(data.getUserId());
+            if(relatedUser == null){
+                throw new Exception("User not found");
+            }
+            toUpdate.setTier(relatedTier);
+            toUpdate.setUser(relatedUser);
+            ticketRepository.save(toUpdate);
             return true;
         }
         catch(Exception e){

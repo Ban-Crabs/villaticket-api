@@ -7,5 +7,5 @@ import org.springframework.data.repository.ListCrudRepository;
 import com.bancrabs.villaticket.models.entities.QR;
 
 public interface QRRepository extends ListCrudRepository<QR, UUID>{
-    
+    QR findByCode(String code);
 }

@@ -6,7 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bancrabs.villaticket.models.dtos.SaveEventDTO;
+import com.bancrabs.villaticket.models.dtos.save.SaveEventDTO;
 import com.bancrabs.villaticket.models.entities.Event;
 import com.bancrabs.villaticket.models.entities.Location;
 import com.bancrabs.villaticket.models.entities.Type;
@@ -31,27 +31,69 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public Boolean saveEvent(SaveEventDTO data, Type type, Location location) throws Exception{
+    public Boolean saveEvent(SaveEventDTO data) throws Exception{
         try{
+            Type type = typeService.findByNameOrId(data.getTypeID());
+            if(type == null){
+                throw new Exception("Type not found");
+            }
+            Location location = locationService.findByIdOrName(data.getLocationID());
+            if(location == null){
+                throw new Exception("Location not found");
+            }
             Event toSave = eventRepository.findByTitleAndDateAndStartTime(data.getTitle(), data.getDate(), data.getStartTime());
             if(toSave == null){
-                toSave = new Event(data.getTitle(), type, location, data.getDate(), data.getStartTime(), data.getEndTime(), data.getStatus(), false);
+                toSave = new Event(data.getTitle(), type, location, data.getDate(), data.getStartTime(), data.getEndTime(), data.getStatus(), data.getIsVisible());
             }
             else{
-                toSave.setTitle(data.getTitle());
-                toSave.setType(type);
-                toSave.setLocation(location);
-                toSave.setDate(data.getDate());
-                toSave.setStartTime(data.getStartTime());
-                toSave.setEndTime(data.getEndTime());
-                toSave.setStatus(data.getStatus());
-                toSave.setIsVisible(data.getIsVisible());
+                throw new Exception("Event already exists");
             }
+            toSave.setTitle(data.getTitle());
+            toSave.setType(type);
+            toSave.setLocation(location);
+            toSave.setDate(data.getDate());
+            toSave.setStartTime(data.getStartTime());
+            toSave.setEndTime(data.getEndTime());
+            toSave.setStatus(data.getStatus());
+            toSave.setIsVisible(data.getIsVisible());
             eventRepository.save(toSave);
             return true;
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return false;
+            throw e;
+        }
+    }
+
+    @Override
+    @Transactional(rollbackOn = Exception.class)
+    public Boolean updateEvent(UUID eventId, SaveEventDTO data) throws Exception {
+        try{
+            Type type = typeService.findByNameOrId(data.getTypeID());
+            if(type == null){
+                throw new Exception("Type not found");
+            }
+            Location location = locationService.findByIdOrName(data.getLocationID());
+            if(location == null){
+                throw new Exception("Location not found");
+            }
+            Event toUpdate = eventRepository.findById(eventId).orElse(null);
+            if(toUpdate != null){
+                toUpdate.setTitle(data.getTitle());
+                toUpdate.setType(type);
+                toUpdate.setLocation(location);
+                toUpdate.setDate(data.getDate());
+                toUpdate.setStartTime(data.getStartTime());
+                toUpdate.setEndTime(data.getEndTime());
+                toUpdate.setStatus(data.getStatus());
+                toUpdate.setIsVisible(data.getIsVisible());
+                eventRepository.save(toUpdate);
+                return true;
+            }
+            else{
+                throw new Exception("Event not found");
+            }
+        }
+        catch(Exception e){
+            throw e;
         }
     }
 

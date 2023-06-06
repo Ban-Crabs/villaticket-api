@@ -1,9 +1,11 @@
 package com.bancrabs.villaticket.services.implementations;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bancrabs.villaticket.models.dtos.SaveLocationDTO;
+import com.bancrabs.villaticket.models.dtos.save.SaveLocationDTO;
 import com.bancrabs.villaticket.models.entities.Location;
 import com.bancrabs.villaticket.repositories.LocationRepository;
 import com.bancrabs.villaticket.services.LocationService;
@@ -15,7 +17,7 @@ public class LocationServiceImpl implements LocationService {
     private LocationRepository locationRepository;
 
     @Override
-    public Boolean saveLocation(SaveLocationDTO data) throws Exception {
+    public Boolean save(SaveLocationDTO data) throws Exception {
         try {
             Location check = locationRepository.findByIdOrName(data.getId(), data.getName());
             if (check == null) {
@@ -85,6 +87,11 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public Location findByIdOrName(String id) {
         return locationRepository.findByIdOrName(id, id);
+    }
+
+    @Override
+    public List<Location> findAll() {
+        return locationRepository.findAll();
     }
 
 }

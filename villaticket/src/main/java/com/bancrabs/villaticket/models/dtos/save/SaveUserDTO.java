@@ -1,11 +1,13 @@
-package com.bancrabs.villaticket.models.dtos;
+package com.bancrabs.villaticket.models.dtos.save;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
 @Data
+@AllArgsConstructor
 public class SaveUserDTO {
 
     @NotEmpty

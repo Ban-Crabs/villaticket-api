@@ -1,0 +1,109 @@
+package com.bancrabs.villaticket.controllers;
+
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.bancrabs.villaticket.models.dtos.response.QRResponseDTO;
+import com.bancrabs.villaticket.models.dtos.save.SaveLocaleDTO;
+import com.bancrabs.villaticket.models.entities.QR;
+import com.bancrabs.villaticket.models.entities.Ticket;
+import com.bancrabs.villaticket.models.entities.Transfer;
+import com.bancrabs.villaticket.services.LocaleService;
+import com.bancrabs.villaticket.services.QRService;
+import com.bancrabs.villaticket.services.TicketService;
+import com.bancrabs.villaticket.services.TransferService;
+
+import jakarta.validation.Valid;
+
+@RestController
+@RequestMapping("/api/ticketaux")
+public class TicketAuxController {
+    
+    @Autowired
+    private LocaleService localeService;
+
+    @Autowired
+    private QRService qrService;
+
+    @Autowired
+    private TicketService ticketService;
+
+    @Autowired
+    private TransferService transferService;
+
+    @GetMapping("/locale")
+    public ResponseEntity<?> getAllLocales(){
+        return new ResponseEntity<>(localeService.findAll(), HttpStatus.OK);
+    }
+
+    @PostMapping("/locale")
+    public ResponseEntity<?> createLocale(@ModelAttribute @Valid SaveLocaleDTO data, BindingResult result){
+        try{
+            if(result.hasErrors()){
+                return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
+            }
+            if(localeService.save(data)){
+                return new ResponseEntity<>("Created", HttpStatus.CREATED);
+            }
+            else{
+                return new ResponseEntity<>("Error", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+        catch(Exception e){
+            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/qr")
+    public ResponseEntity<?> getAllQR(){
+        return new ResponseEntity<>(qrService.findAll(), HttpStatus.OK);
+    }
+
+    @PostMapping("/qr/ticket")
+    public ResponseEntity<?> createTicketQR(@RequestParam("ticketId") UUID ticketId){
+        try{
+            //TODO: Generate new random qr code
+            Ticket ticket = ticketService.findById(ticketId);
+            if(ticket == null){
+                return new ResponseEntity<>("Ticket not found", HttpStatus.NOT_FOUND);
+            }
+            QR newQR = qrService.save("code");
+            if(newQR == null){
+                return new ResponseEntity<>("QR not created", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            return new ResponseEntity<>(new QRResponseDTO(ticketId, newQR.getId()), HttpStatus.CREATED);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/qr/transfer")
+    public ResponseEntity<?> createTransferQR(@RequestParam("transferId") UUID transferId){
+        try{
+            //TODO: Generate new random qr code
+            Transfer transfer = transferService.findById(transferId);
+            if(transfer == null){
+                return new ResponseEntity<>("Transfer not found", HttpStatus.NOT_FOUND);
+            }
+            QR newQR = qrService.save("code");
+            if(newQR == null){
+                return new ResponseEntity<>("QR not created", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            return new ResponseEntity<>(new QRResponseDTO(transferId, newQR.getId()), HttpStatus.CREATED);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+}

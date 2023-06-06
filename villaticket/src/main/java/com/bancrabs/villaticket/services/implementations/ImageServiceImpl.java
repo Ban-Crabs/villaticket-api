@@ -6,7 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bancrabs.villaticket.models.dtos.SaveImageDTO;
+import com.bancrabs.villaticket.models.dtos.save.SaveImageDTO;
 import com.bancrabs.villaticket.models.entities.Event;
 import com.bancrabs.villaticket.models.entities.Image;
 import com.bancrabs.villaticket.repositories.ImageRepository;

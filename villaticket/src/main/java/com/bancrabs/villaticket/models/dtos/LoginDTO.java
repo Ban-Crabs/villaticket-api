@@ -1,18 +1,16 @@
 package com.bancrabs.villaticket.models.dtos;
 
-import java.util.UUID;
-
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class SavePrivilegeDTO {
+public class LoginDTO {
+    
     @NotEmpty
-    private String name;
-
+    private String id;
+    
     @NotEmpty
-    @org.hibernate.validator.constraints.UUID
-    private UUID userId;
+    private String password;
 }

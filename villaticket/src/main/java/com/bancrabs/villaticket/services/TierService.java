@@ -3,7 +3,7 @@ package com.bancrabs.villaticket.services;
 import java.util.List;
 import java.util.UUID;
 
-import com.bancrabs.villaticket.models.dtos.SaveTierDTO;
+import com.bancrabs.villaticket.models.dtos.save.SaveTierDTO;
 import com.bancrabs.villaticket.models.entities.Tier;
 
 public interface TierService {

@@ -1,12 +1,14 @@
 package com.bancrabs.villaticket.services.implementations;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bancrabs.villaticket.models.dtos.SavePrivilegeDTO;
+import com.bancrabs.villaticket.models.dtos.response.UserPrivilegeResponseDTO;
+import com.bancrabs.villaticket.models.dtos.save.SavePrivilegeDTO;
 import com.bancrabs.villaticket.models.entities.User;
 import com.bancrabs.villaticket.models.entities.UserPrivilege;
 import com.bancrabs.villaticket.repositories.UserPrivilegeRepository;
@@ -74,8 +76,22 @@ public class UserPrivilegeServiceImpl implements UserPrivilegeService{
     }
 
     @Override
-    public List<UserPrivilege> findByUserId(UUID userId) {
-        return userPrivilegeRepository.findByUserId(userId);
+    public List<UserPrivilegeResponseDTO> findByUserId(String userId) {
+        User user = userService.findById(userId);
+        if(user == null){
+            return null;
+        }
+        List<UserPrivilege> privileges = userPrivilegeRepository.findByUserId(user.getId());
+        if(privileges != null){
+            List<UserPrivilegeResponseDTO> response = new ArrayList<>();
+            privileges.forEach(privilege -> {
+                response.add(new UserPrivilegeResponseDTO(privilege.getName(), userId));
+            });
+            return response;
+        }
+        else{
+            return null;
+        }
     }
 
     @Override

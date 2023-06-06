@@ -1,10 +1,12 @@
-package com.bancrabs.villaticket.models.dtos;
+package com.bancrabs.villaticket.models.dtos.save;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class SaveLocaleDTO {
     
     @NotEmpty

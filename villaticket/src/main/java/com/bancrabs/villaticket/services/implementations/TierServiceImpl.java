@@ -6,7 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bancrabs.villaticket.models.dtos.SaveTierDTO;
+import com.bancrabs.villaticket.models.dtos.save.SaveTierDTO;
 import com.bancrabs.villaticket.models.entities.Locale;
 import com.bancrabs.villaticket.models.entities.Tier;
 import com.bancrabs.villaticket.repositories.TierRepository;

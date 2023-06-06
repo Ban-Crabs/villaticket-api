@@ -20,14 +20,13 @@ public class QRServiceImpl implements QRService{
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public Boolean save(String code) throws Exception {
+    public QR save(String code) throws Exception {
         try{
-            qrRepository.save(new QR(code));
-            return true;
+            return qrRepository.save(new QR(code));
         }
         catch(Exception e){
             System.out.println(e.getMessage());
-            return false;
+            return null;
         }
     }
 
@@ -52,5 +51,10 @@ public class QRServiceImpl implements QRService{
     @Override
     public QR findById(UUID id) {
         return qrRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public QR findByCode(String code) {
+        return qrRepository.findByCode(code);
     } 
 }
