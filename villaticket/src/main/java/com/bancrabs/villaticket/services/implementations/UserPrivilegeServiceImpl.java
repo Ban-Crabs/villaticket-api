@@ -39,15 +39,12 @@ public class UserPrivilegeServiceImpl implements UserPrivilegeService{
                 userPrivilegeRepository.save(new UserPrivilege(data.getName(), related));
             }
             else{
-                check.setName(data.getName());
-                check.setUser(related);
-                userPrivilegeRepository.save(check);
+                throw new Exception("Privilege already exists");
             }
             return true;
         }
         catch(Exception e){
-            System.out.println(e.getMessage());
-            return false;
+            throw e;
         }
     }
 

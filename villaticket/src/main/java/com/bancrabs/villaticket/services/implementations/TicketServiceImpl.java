@@ -18,8 +18,6 @@ import com.bancrabs.villaticket.services.UserService;
 @Service
 public class TicketServiceImpl implements TicketService{
 
-    //TODO: Verify if the ticket has been exchanged before allowing changes
-
     @Autowired
     private TicketRepository ticketRepository;
 
@@ -48,8 +46,7 @@ public class TicketServiceImpl implements TicketService{
             return true;
         }
         catch(Exception e){
-            System.out.println(e.getMessage());
-            return false;
+            throw e;
         }
     }
 
@@ -64,8 +61,7 @@ public class TicketServiceImpl implements TicketService{
             return true;
         }
         catch(Exception e){
-            System.out.println(e.getMessage());
-            return false;
+            throw e;
         }
     }
 
@@ -102,11 +98,14 @@ public class TicketServiceImpl implements TicketService{
     }
 
     @Override
-    public Boolean update(UUID id, CreateTicketDTO data) {
+    public Boolean update(UUID id, CreateTicketDTO data) throws Exception {
         try{
             Ticket toUpdate = ticketRepository.findById(id).orElse(null);
             if(toUpdate == null){
                 throw new Exception("Ticket not found");
+            }
+            if(toUpdate.getResult()){
+                throw new Exception("Ticket already redeemed");
             }
             Tier relatedTier = tierService.findById(data.getTierId());
             if(relatedTier == null){
@@ -122,8 +121,7 @@ public class TicketServiceImpl implements TicketService{
             return true;
         }
         catch(Exception e){
-            System.out.println(e.getMessage());
-            return false;
+            throw e;
         }
     }
     

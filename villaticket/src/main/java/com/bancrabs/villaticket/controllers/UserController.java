@@ -57,7 +57,14 @@ public class UserController {
             }
         }
         catch(Exception e){
-            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            switch(e.getMessage()){
+                case "User not found":
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+                case "Wrong password":
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+                default:
+                    return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
     }
 
@@ -72,11 +79,16 @@ public class UserController {
                 return new ResponseEntity<>("Created", HttpStatus.CREATED);
             }
             else{
-                return new ResponseEntity<>("Conflict", HttpStatus.CONFLICT);
+                return new ResponseEntity<>("Error", HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
         catch(Exception e){
-            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            switch(e.getMessage()){
+                case "User already exists":
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+                default:
+                    return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
     }
 
@@ -87,11 +99,16 @@ public class UserController {
                 return new ResponseEntity<>("Deleted", HttpStatus.OK);
             }
             else{
-                return new ResponseEntity<>("Not found", HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>("Error", HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
         catch(Exception e){
-            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            switch(e.getMessage()){
+                case "User not found":
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+                default:
+                    return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
     }
 
@@ -106,11 +123,16 @@ public class UserController {
                 return new ResponseEntity<>("Updated", HttpStatus.OK);
             }
             else{
-                return new ResponseEntity<>("Not found", HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>("Error", HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
         catch(Exception e){
-            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            switch(e.getMessage()){
+                case "User not found":
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+                default:
+                    return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
     }
 
@@ -157,11 +179,18 @@ public class UserController {
                 return new ResponseEntity<>("Created", HttpStatus.CREATED);
             }
             else{
-                return new ResponseEntity<>("Conflict", HttpStatus.CONFLICT);
+                return new ResponseEntity<>("Error", HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
         catch(Exception e){
-            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            switch(e.getMessage()){
+                case "User not found":
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+                case "Privilege already exists":
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+                default:
+                    return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
     }
 
@@ -196,7 +225,14 @@ public class UserController {
             }
         }
         catch(Exception e){
-            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            switch(e.getMessage()){
+                case "User not found":
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+                case "Event not found":
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+                default:
+                    return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
     }
 

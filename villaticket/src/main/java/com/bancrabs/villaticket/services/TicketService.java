@@ -10,7 +10,7 @@ public interface TicketService {
     Boolean save(CreateTicketDTO data) throws Exception;
     Boolean save(Ticket ticket);
     Boolean delete(UUID id) throws Exception;
-    Boolean update(UUID id, CreateTicketDTO data);
+    Boolean update(UUID id, CreateTicketDTO data) throws Exception;
 
     List<Ticket> findAll();
     Ticket findById(UUID id);

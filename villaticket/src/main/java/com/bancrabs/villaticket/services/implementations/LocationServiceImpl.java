@@ -30,8 +30,7 @@ public class LocationServiceImpl implements LocationService {
             }
             return true;
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return false;
+            throw e;
         }
     }
 
@@ -45,8 +44,7 @@ public class LocationServiceImpl implements LocationService {
             locationRepository.delete(toDelete);
             return true;
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return false;
+            throw e;
         }
     }
 
@@ -62,8 +60,7 @@ public class LocationServiceImpl implements LocationService {
             return true;
         }
         catch(Exception e){
-            System.out.println(e.getMessage());
-            return false;
+            throw e;
         }
     }
 
@@ -79,8 +76,7 @@ public class LocationServiceImpl implements LocationService {
             return true;
         }
         catch(Exception e){
-            System.out.println(e.getMessage());
-            return false;
+            throw e;
         }
     }
 

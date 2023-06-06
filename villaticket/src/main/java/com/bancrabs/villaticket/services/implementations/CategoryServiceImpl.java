@@ -45,8 +45,7 @@ public class CategoryServiceImpl implements CategoryService{
             return true;
         }
         catch(Exception e){
-            System.out.println(e.getMessage());
-            return false;
+            throw e;
         }
     }
 
@@ -64,8 +63,7 @@ public class CategoryServiceImpl implements CategoryService{
             }
         }
         catch(Exception e){
-            System.out.println(e.getMessage());
-            return false;
+            throw e;
         }
     }
 

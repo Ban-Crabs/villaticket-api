@@ -74,7 +74,14 @@ public class TicketController {
             }
         }
         catch(Exception e){
-            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            switch(e.getMessage()){
+                case "Tier not found":
+                    return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
+                case "User not found":
+                    return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
+                default:
+                    return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
     }
 
@@ -94,7 +101,12 @@ public class TicketController {
             }
         }
         catch(Exception e){
-            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            switch(e.getMessage()){
+                case "User not found":
+                    return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
+                default:
+                    return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
     }
 
@@ -128,7 +140,18 @@ public class TicketController {
             return new ResponseEntity<>("Updated", HttpStatus.OK);
         }
         catch(Exception e){
-            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            switch(e.getMessage()){
+                case "Ticket not found":
+                    return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
+                case "Tier not found":
+                    return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
+                case "User not found":
+                    return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
+                case "Ticket already redeemed":
+                    return new ResponseEntity<>(e, HttpStatus.CONFLICT);
+                default:
+                    return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
     }
 
@@ -139,7 +162,12 @@ public class TicketController {
             return new ResponseEntity<>("Deleted", HttpStatus.OK);
         }
         catch(Exception e){
-            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            switch(e.getMessage()){
+                case "Ticket not found":
+                    return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
+                default:
+                    return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
     }
 
@@ -163,7 +191,12 @@ public class TicketController {
             return new ResponseEntity<>("Created", HttpStatus.CREATED);
         }
         catch(Exception e){
-            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            switch(e.getMessage()){
+                case "Locale not found":
+                    return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
+                default:
+                    return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
     }
 

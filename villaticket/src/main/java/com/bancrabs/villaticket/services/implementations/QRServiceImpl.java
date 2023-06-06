@@ -25,8 +25,7 @@ public class QRServiceImpl implements QRService{
             return qrRepository.save(new QR(code));
         }
         catch(Exception e){
-            System.out.println(e.getMessage());
-            return null;
+            throw e;
         }
     }
 
@@ -38,8 +37,7 @@ public class QRServiceImpl implements QRService{
             return true;
         }
         catch(Exception e){
-            System.out.println(e.getMessage());
-            return false;
+            throw e;
         }
     }
 

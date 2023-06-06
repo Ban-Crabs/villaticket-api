@@ -207,7 +207,12 @@ public class EventController {
             return new ResponseEntity<>("Created", HttpStatus.CREATED);
         }
         catch(Exception e){
-            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            switch(e.getMessage()){
+                case "Event not found":
+                    return new ResponseEntity<>("Event not found", HttpStatus.NOT_FOUND);
+                default:
+                    return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
     }
 
