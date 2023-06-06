@@ -18,4 +18,8 @@ public class SaveTransferDTO {
     @Nullable
     @org.hibernate.validator.constraints.UUID
     private UUID receiverId;
+
+    @NotEmpty
+    @org.hibernate.validator.constraints.UUID
+    private UUID ticketId;
 }

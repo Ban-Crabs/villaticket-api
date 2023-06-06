@@ -145,8 +145,6 @@ public class UserController {
         }
     }
 
-    //TODO: Ask if the id given here should be the user's UUID
-
     @PostMapping("/privilege")
     public ResponseEntity<?> addPrivilege(@RequestParam("userId") String id, @RequestParam("privName") String privName){
         try{

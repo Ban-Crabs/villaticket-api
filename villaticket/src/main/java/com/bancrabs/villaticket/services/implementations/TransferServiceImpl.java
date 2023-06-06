@@ -7,9 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bancrabs.villaticket.models.dtos.save.SaveTransferDTO;
+import com.bancrabs.villaticket.models.entities.Ticket;
 import com.bancrabs.villaticket.models.entities.Transfer;
 import com.bancrabs.villaticket.models.entities.User;
 import com.bancrabs.villaticket.repositories.TransferRepository;
+import com.bancrabs.villaticket.services.TicketService;
 import com.bancrabs.villaticket.services.TransferService;
 import com.bancrabs.villaticket.services.UserService;
 
@@ -24,6 +26,9 @@ public class TransferServiceImpl implements TransferService{
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private TicketService ticketService;
+
     @Override
     @Transactional(rollbackOn = Exception.class)
     public Boolean save(SaveTransferDTO data) throws Exception {
@@ -32,21 +37,27 @@ public class TransferServiceImpl implements TransferService{
             if(sender == null){
                 throw new Exception("Sender not found");
             }
+            Ticket ticket = ticketService.findById(data.getTicketId());
+            if(ticket == null){
+                throw new Exception("Ticket not found");
+            }
+            if(ticket.getResult()){
+                throw new Exception("Ticket already redeemed");
+            }
             if(data.getReceiverId() != null){
                 User receiver = userService.findById(data.getReceiverId());
                 if(receiver == null){
                     throw new Exception("Receiver not found");
                 }
-                transferRepository.save(new Transfer(sender, receiver));
+                transferRepository.save(new Transfer(sender, receiver, ticket));
             }
             else{
-                transferRepository.save(new Transfer(sender));
+                transferRepository.save(new Transfer(sender, ticket));
             }
             return true;
         }
         catch(Exception e){
-            System.out.println(e.getMessage());
-            return false;
+            throw e;
         }
     }
 

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bancrabs.villaticket.models.dtos.response.VerifyDTO;
 import com.bancrabs.villaticket.models.dtos.save.CreateTicketDTO;
 import com.bancrabs.villaticket.models.dtos.save.RegisterOrderDTO;
 import com.bancrabs.villaticket.models.dtos.save.RegisterTicketDTO;
@@ -176,7 +177,18 @@ public class TicketController {
             return new ResponseEntity<>("Created", HttpStatus.CREATED);
         }
         catch(Exception e){
-            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            switch(e.getMessage()){
+                case "Ticket not found":
+                    return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
+                case "Sender not found":
+                    return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
+                case "Receiver not found":
+                    return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
+                case "Ticket already redeemed":
+                    return new ResponseEntity<>(e, HttpStatus.CONFLICT);
+                default:
+                    return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
     }
 
@@ -186,11 +198,23 @@ public class TicketController {
             if(result.hasErrors()){
                 return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
             }
-            if(ticketTransferService.verify(req, data)){
+            VerifyDTO res = ticketTransferService.verify(req, data);
+            if(res.getResult()){
                 return new ResponseEntity<>("Verified", HttpStatus.OK);
             }
             else{
-                return new ResponseEntity<>("Qr expired", HttpStatus.UNAUTHORIZED);
+                switch(res.getMessage()){
+                    case "Transfer already completed":
+                        return new ResponseEntity<>(res.getMessage(), HttpStatus.CONFLICT);
+                    case "Transfer reserved for another user":
+                        return new ResponseEntity<>(res.getMessage(), HttpStatus.CONFLICT);
+                    case "Transfer already attempted with this QR":
+                        return new ResponseEntity<>(res.getMessage(), HttpStatus.CONFLICT);    
+                    case "QR expired":
+                        return new ResponseEntity<>(res.getMessage(), HttpStatus.BAD_REQUEST);
+                    default:
+                        return new ResponseEntity<>(res.getMessage(), HttpStatus.BAD_REQUEST);
+                }
             }
         }
         catch(Exception e){
@@ -199,12 +223,6 @@ public class TicketController {
                     return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
                 case "QR not found":
                     return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
-                case "Ticket already transferred":
-                    return new ResponseEntity<>(e, HttpStatus.CONFLICT);
-                case "Ticket transfer reserved for another user":
-                    return new ResponseEntity<>(e, HttpStatus.CONFLICT);
-                case "Ticket already received":
-                    return new ResponseEntity<>(e, HttpStatus.CONFLICT);
                 default:
                     return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -217,11 +235,21 @@ public class TicketController {
             if(result.hasErrors()){
                 return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
             }
-            if(ticketQRService.verify(timestamp, data)){
+            VerifyDTO res = ticketQRService.verify(timestamp, data);
+            if(res.getResult()){
                 return new ResponseEntity<>("Redeemed", HttpStatus.OK);
             }
             else{
-                return new ResponseEntity<>("QR expired", HttpStatus.UNAUTHORIZED);
+                switch(res.getMessage()){
+                    case "Ticket already redeemed":
+                        return new ResponseEntity<>(res.getMessage(), HttpStatus.CONFLICT);
+                    case "Ticket redeem has already been attempted with this QR":
+                        return new ResponseEntity<>(res.getMessage(), HttpStatus.CONFLICT);
+                    case "QR expired":
+                        return new ResponseEntity<>(res.getMessage(), HttpStatus.BAD_REQUEST);
+                    default:
+                        return new ResponseEntity<>(res.getMessage(), HttpStatus.BAD_REQUEST);
+                }
             }
         }
         catch(Exception e){
@@ -230,8 +258,6 @@ public class TicketController {
                     return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
                 case "QR not found":
                     return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
-                case "TicketQR already exists":
-                    return new ResponseEntity<>(e, HttpStatus.CONFLICT);
                 default:
                     return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
             }

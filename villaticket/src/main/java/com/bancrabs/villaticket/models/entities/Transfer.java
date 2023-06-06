@@ -36,13 +36,17 @@ public class Transfer {
     @JoinColumn(name = "receiver_id", nullable = true)
     private User receiver;
 
-    public Transfer(User sender, User receiver){
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "ticket_id", nullable = true)
+    private Ticket ticket;
+
+    public Transfer(User sender, User receiver, Ticket ticket) {
         result = null;
         this.sender = sender;
         this.receiver = receiver;
     }
 
-    public Transfer(User sender) {
+    public Transfer(User sender, Ticket ticket) {
         result = null;
         this.sender = sender;
         this.receiver = null;

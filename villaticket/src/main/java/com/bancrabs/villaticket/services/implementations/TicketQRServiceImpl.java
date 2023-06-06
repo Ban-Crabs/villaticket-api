@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bancrabs.villaticket.models.dtos.response.VerifyDTO;
 import com.bancrabs.villaticket.models.dtos.save.RegisterTicketQRDTO;
 import com.bancrabs.villaticket.models.entities.QR;
 import com.bancrabs.villaticket.models.entities.Ticket;
@@ -31,7 +32,7 @@ public class TicketQRServiceImpl implements TicketQRService{
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public Boolean verify(Timestamp timestamp, RegisterTicketQRDTO data) throws Exception {
+    public VerifyDTO verify(Timestamp timestamp, RegisterTicketQRDTO data) throws Exception {
         try{
             Ticket ticket = ticketService.findById(data.getTicketId());
             if(ticket == null){
@@ -41,22 +42,28 @@ public class TicketQRServiceImpl implements TicketQRService{
             if(qr == null){
                 throw new Exception("QR not found");
             }
+            if(ticket.getResult()){
+                ticketQRRepository.save(new TicketQR(timestamp, ticket, qr));
+                return new VerifyDTO(false, "Ticket already redeemed");
+            }
             TicketQR check = ticketQRRepository.findByTicketIdAndQrId(data.getTicketId(), data.getQrId());
-            if(check != null){
-                throw new Exception("TicketQR already exists");
+            if(check != null && ticket.getResult() != null){
+                ticketQRRepository.save(new TicketQR(timestamp, ticket, qr));
+                return new VerifyDTO(false, "Ticket redeem has already been attempted with this QR");
             }
             Integer toVerify = (int) qr.getCreationTime().getTime();
             Integer toCompare = (int) timestamp.getTime();
-            if(toCompare - toVerify > 600000 || toCompare - toVerify < 0){
+            if(toCompare - toVerify > 600000 || toCompare - toVerify <= 0){
                 ticket.setResult(false);
                 ticketService.save(ticket);
-                return false;
+                ticketQRRepository.save(new TicketQR(timestamp, ticket, qr));
+                return new VerifyDTO(false, "QR expired");
             }
             else{
                 ticket.setResult(true);
                 ticketService.save(ticket);
                 ticketQRRepository.save(new TicketQR(timestamp, ticket, qr));
-                return true;
+                return new VerifyDTO(true, "Ticket redeemed");
             }
         }
         catch(Exception e){

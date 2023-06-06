@@ -1,6 +1,6 @@
 package com.bancrabs.villaticket.models.dtos.save;
 
-import java.util.Date;
+import java.sql.Timestamp;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,7 +10,7 @@ import lombok.Data;
 public class RegisterOrderDTO {
 
     @NotEmpty
-    private Date purchaseDate;
+    private Timestamp purchaseDate;
     
     @NotEmpty
     private String purchaseMethod;

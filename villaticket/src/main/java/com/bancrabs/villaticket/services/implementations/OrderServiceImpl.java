@@ -23,9 +23,6 @@ public class OrderServiceImpl implements OrderService{
     @Autowired
     private UserService userService;
 
-    //TODO: Ask if the order date should be a timestamp or a date
-    //TODO: Ask if the user/date combination should be unique
-    //TODO: Ask if the order should have a 'valid' field
 
     @Override
     public UUID save(RegisterOrderDTO data) throws Exception {
