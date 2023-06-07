@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import com.bancrabs.villaticket.models.dtos.LoginDTO;
 import com.bancrabs.villaticket.models.dtos.save.SaveUserDTO;
+import com.bancrabs.villaticket.models.entities.Token;
 import com.bancrabs.villaticket.models.entities.User;
 
 public interface UserService {
@@ -15,4 +16,9 @@ public interface UserService {
     User findById(UUID id);
     User findById(String id);
     List<User> findAll();
+
+    Token registerToken(User user) throws Exception;
+	Boolean isTokenValid(User user, String token);
+	void cleanTokens(User user) throws Exception;
+    User findUserAuthenticated();
 }

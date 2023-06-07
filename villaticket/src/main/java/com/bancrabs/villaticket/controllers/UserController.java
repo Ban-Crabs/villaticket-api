@@ -17,10 +17,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bancrabs.villaticket.models.dtos.LoginDTO;
+import com.bancrabs.villaticket.models.dtos.response.TokenDTO;
 import com.bancrabs.villaticket.models.dtos.response.UserResponseDTO;
 import com.bancrabs.villaticket.models.dtos.save.RecordAttendanceDTO;
 import com.bancrabs.villaticket.models.dtos.save.SavePrivilegeDTO;
 import com.bancrabs.villaticket.models.dtos.save.SaveUserDTO;
+import com.bancrabs.villaticket.models.entities.Token;
 import com.bancrabs.villaticket.models.entities.User;
 import com.bancrabs.villaticket.services.AttendanceService;
 import com.bancrabs.villaticket.services.UserPrivilegeService;
@@ -50,7 +52,14 @@ public class UserController {
             }
 
             if(userService.login(data)){
-                return new ResponseEntity<>("Token", HttpStatus.OK);
+                User user = userService.findById(data.getId());
+                try {
+                    Token token = userService.registerToken(user);
+                    return new ResponseEntity<>(new TokenDTO(token), HttpStatus.OK);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                }
             }
             else{
                 return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);

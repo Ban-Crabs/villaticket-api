@@ -4,14 +4,18 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.bancrabs.villaticket.models.dtos.LoginDTO;
 import com.bancrabs.villaticket.models.dtos.save.SaveUserDTO;
+import com.bancrabs.villaticket.models.entities.Token;
 import com.bancrabs.villaticket.models.entities.User;
+import com.bancrabs.villaticket.repositories.TokenRepository;
 import com.bancrabs.villaticket.repositories.UserRepository;
 import com.bancrabs.villaticket.services.UserService;
+import com.bancrabs.villaticket.utils.JWTTools;
 
 import jakarta.transaction.Transactional;
 
@@ -23,6 +27,12 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private TokenRepository tokenRepository;
+
+    @Autowired
+    private JWTTools jwtTools;
 
     @Override
     @Transactional(rollbackOn = Exception.class)
@@ -114,4 +124,57 @@ public class UserServiceImpl implements UserService{
         }
     }
 
+    @Override
+	@Transactional(rollbackOn = Exception.class)
+	public Token registerToken(User user) throws Exception {
+		cleanTokens(user);
+		
+		String tokenString = jwtTools.generateToken(user);
+		Token token = new Token(tokenString, user);
+		
+		tokenRepository.save(token);
+		
+		return token;
+	}
+
+    @Override
+	public Boolean isTokenValid(User user, String token) {
+		try {
+			cleanTokens(user);
+			List<Token> tokens = tokenRepository.findByUserAndActive(user, true);
+			
+			tokens.stream()
+				.filter(tk -> tk.getContent().equals(token))
+				.findAny()
+				.orElseThrow(() -> new Exception());
+			
+			return true;
+		} catch (Exception e) {
+			return false;
+		}		
+	}
+
+    @Override
+	@Transactional(rollbackOn = Exception.class)
+	public void cleanTokens(User user) throws Exception {
+		List<Token> tokens = tokenRepository.findByUserAndActive(user, true);
+		
+		tokens.forEach(token -> {
+			if(!jwtTools.verifyToken(token.getContent())) {
+				token.setActive(false);
+				tokenRepository.save(token);
+			}
+		});
+		
+	}
+
+    @Override
+    public User findUserAuthenticated() {
+        String username = SecurityContextHolder
+			.getContext()
+			.getAuthentication()
+			.getName();
+		
+		return userRepository.findByUsernameOrEmail(username, username);
+    }
 }

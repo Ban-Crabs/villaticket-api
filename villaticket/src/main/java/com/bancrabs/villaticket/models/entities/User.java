@@ -1,7 +1,11 @@
 package com.bancrabs.villaticket.models.entities;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -21,7 +25,7 @@ import lombok.ToString.Exclude;
 @NoArgsConstructor
 @Entity
 @Table(name = "user", schema = "public")
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
@@ -36,6 +40,9 @@ public class User {
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
+    @Column(name = "active", insertable = false)
+    private Boolean active;
+
     @OneToMany(fetch = FetchType.LAZY)
     @JsonIgnore
     @Exclude
@@ -45,6 +52,36 @@ public class User {
     @JsonIgnore
     @Exclude
     private List<Attendance> attendances;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+	@JsonIgnore
+  @Exclude
+	private List<Token> tokens;
+
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return null;
+  }
+
+  @Override
+  public boolean isAccountNonExpired() {
+    return false;
+  }
+
+  @Override
+  public boolean isAccountNonLocked() {
+    return false;
+  }
+
+  @Override
+  public boolean isCredentialsNonExpired() {
+    return false;
+  }
+
+  @Override
+  public boolean isEnabled() {
+    return this.active;
+  }
 
     public User(String unStr, String pwStr, String emStr) {
         this.username = unStr;
