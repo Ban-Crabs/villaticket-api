@@ -69,8 +69,7 @@ public class TransferServiceImpl implements TransferService{
             return true;
         }
         catch(Exception e){
-            System.out.println(e.getMessage());
-            return false;
+            throw e;
         }
     }
 
@@ -82,8 +81,7 @@ public class TransferServiceImpl implements TransferService{
             return true;
         }
         catch(Exception e){
-            System.out.println(e.getMessage());
-            return false;
+            throw e;
         }
     }
 

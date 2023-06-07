@@ -45,8 +45,7 @@ public class ImageServiceImpl implements ImageService{
             return true;
         }
         catch(Exception e){
-            System.out.println(e.getMessage());
-            return false;
+            throw e;
         }
     }
 
@@ -64,8 +63,7 @@ public class ImageServiceImpl implements ImageService{
             }
         }
         catch(Exception e){
-            System.out.println(e.getMessage());
-            return false;
+            throw e;
         }
     }
 

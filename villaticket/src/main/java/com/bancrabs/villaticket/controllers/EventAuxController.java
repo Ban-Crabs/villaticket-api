@@ -77,7 +77,12 @@ public class EventAuxController {
             }
         }
         catch(Exception e){
-            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            switch(e.getMessage()){
+                case "Event not found":
+                    return new ResponseEntity<>("Event not found", HttpStatus.NOT_FOUND);
+                default:
+                    return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
     }
 
@@ -92,7 +97,12 @@ public class EventAuxController {
             }
         }
         catch(Exception e){
-            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            switch(e.getMessage()){
+                case "Event not found":
+                    return new ResponseEntity<>("Event not found", HttpStatus.NOT_FOUND);
+                default:
+                    return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
     }
 

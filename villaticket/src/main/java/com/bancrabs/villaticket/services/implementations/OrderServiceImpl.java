@@ -35,8 +35,7 @@ public class OrderServiceImpl implements OrderService{
             return order.getId();
         }
         catch(Exception e){
-            System.out.println(e.getMessage());
-            return null;
+            throw e;
         }
     }
 

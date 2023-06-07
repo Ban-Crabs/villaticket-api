@@ -1,5 +1,7 @@
 package com.bancrabs.villaticket;
 
+import java.security.SecureRandom;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +17,6 @@ public class VillaticketApplication {
 
 	@Bean
 	public PasswordEncoder passwordEncoder(){
-		return new BCryptPasswordEncoder();
+		return new BCryptPasswordEncoder(5, new SecureRandom());
 	}
 }
