@@ -1,5 +1,6 @@
 package com.bancrabs.villaticket.models.dtos.save;
 
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
@@ -16,12 +17,7 @@ public class SaveLocationDTO {
     @NotEmpty
     private String name;
 
-    @NotEmpty
+    @Nullable
     private Boolean isAvailable;
 
-    public SaveLocationDTO(String id, String name){
-        this.id = id;
-        this.name = name;
-        this.isAvailable = true;
-    }
 }

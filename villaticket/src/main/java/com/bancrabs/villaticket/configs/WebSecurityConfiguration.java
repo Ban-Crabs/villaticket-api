@@ -38,7 +38,7 @@ public class WebSecurityConfiguration {
 
 		// Route filter
 		http.authorizeHttpRequests(auth -> auth
-				.requestMatchers("/auth/**").permitAll()
+				.requestMatchers("api/user/register", "api/user/login").permitAll()
 				.anyRequest().authenticated());
 
 		// Statelessness

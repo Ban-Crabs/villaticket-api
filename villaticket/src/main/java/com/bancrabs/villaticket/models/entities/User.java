@@ -83,7 +83,7 @@ public class User implements UserDetails {
     return this.active;
   }
 
-    public User(String unStr, String pwStr, String emStr) {
+    public User(String unStr, String emStr, String pwStr) {
         this.username = unStr;
         this.password = pwStr;
         this.email = emStr;

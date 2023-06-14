@@ -20,15 +20,28 @@ public class LocationServiceImpl implements LocationService {
     public Boolean save(SaveLocationDTO data) throws Exception {
         try {
             Location check = locationRepository.findByIdOrName(data.getId(), data.getName());
-            if (check == null) {
-                locationRepository.save(new Location(data.getId(), data.getName(), data.getIsAvailable()));
-            } else {
-                check.setId(data.getId());
-                check.setName(data.getName());
-                check.setIsAvailable(data.getIsAvailable());
-                locationRepository.save(check);
+            if(data.getIsAvailable() != null){
+                if (check == null) {
+                    locationRepository.save(new Location(data.getId(), data.getName(), data.getIsAvailable()));
+                } else {
+                    check.setId(data.getId());
+                    check.setName(data.getName());
+                    check.setIsAvailable(data.getIsAvailable());
+                    locationRepository.save(check);
+                }
+                return true;
             }
-            return true;
+            else{
+                if (check == null) {
+                    locationRepository.save(new Location(data.getId(), data.getName()));
+                } else {
+                    check.setId(data.getId());
+                    check.setName(data.getName());
+                    check.setIsAvailable(true);
+                    locationRepository.save(check);
+                }
+                return true;
+            }
         } catch (Exception e) {
             throw e;
         }

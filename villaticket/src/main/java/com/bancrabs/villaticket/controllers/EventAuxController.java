@@ -3,6 +3,7 @@ package com.bancrabs.villaticket.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,8 +38,11 @@ public class EventAuxController {
     private CategoryService categoryService;
 
     @PostMapping("/type")
-    public ResponseEntity<?> createType(@ModelAttribute @Valid SaveTypeDTO data){
+    public ResponseEntity<?> createType(@ModelAttribute @Valid SaveTypeDTO data, BindingResult result){
         try{
+            if(result.hasErrors()){
+                return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
+            }
             if(typeService.save(data)){
                 return new ResponseEntity<>("Created", HttpStatus.CREATED);
             }
@@ -52,8 +56,11 @@ public class EventAuxController {
     }
 
     @PostMapping("/location")
-    public ResponseEntity<?> createLocation(@ModelAttribute @Valid SaveLocationDTO data){
+    public ResponseEntity<?> createLocation(@ModelAttribute @Valid SaveLocationDTO data, BindingResult result){
         try{
+            if(result.hasErrors()){
+                return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
+            }
             if(locationService.save(data)){
                 return new ResponseEntity<>("Created", HttpStatus.CREATED);
             }
@@ -67,8 +74,11 @@ public class EventAuxController {
     }
 
     @PostMapping("/image")
-    public ResponseEntity<?> createImage(@ModelAttribute @Valid SaveImageDTO data){
+    public ResponseEntity<?> createImage(@ModelAttribute @Valid SaveImageDTO data, BindingResult result){
         try{
+            if(result.hasErrors()){
+                return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
+            }
             if(imageService.save(data)){
                 return new ResponseEntity<>("Created", HttpStatus.CREATED);
             }
@@ -87,8 +97,11 @@ public class EventAuxController {
     }
 
     @PostMapping("/category")
-    public ResponseEntity<?> createCategory(@ModelAttribute @Valid SaveGenericDTO data){
+    public ResponseEntity<?> createCategory(@ModelAttribute @Valid SaveGenericDTO data, BindingResult result){
         try{
+            if(result.hasErrors()){
+                return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
+            }
             if(categoryService.save(data)){
                 return new ResponseEntity<>("Created", HttpStatus.CREATED);
             }

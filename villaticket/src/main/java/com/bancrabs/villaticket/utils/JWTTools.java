@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Component;
 
 import com.bancrabs.villaticket.models.entities.User;
@@ -64,13 +62,4 @@ public class JWTTools {
 			return null;
 		}		
 	}
-
-	public String getUsername() {
-		String username = null;
-		UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-		if (authentication != null) {
-			username = authentication.getName();
-		}
-		return username;
-	  }
 }
