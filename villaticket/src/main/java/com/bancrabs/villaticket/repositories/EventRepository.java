@@ -5,15 +5,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.data.repository.ListCrudRepository;
-
+import org.springframework.data.jpa.repository.JpaRepository;
 import com.bancrabs.villaticket.models.entities.Event;
 
-public interface EventRepository extends ListCrudRepository<Event, UUID>{
-    List<Event> findByVisibilityIsTrue();
-    List<Event> findByVisibilityIsFalse();
-    List<Event> findAllOrderByDateAsc();
-    List<Event> findAllOrderByDateDesc();
+public interface EventRepository extends JpaRepository<Event, UUID>{
+    List<Event> findByIsVisibleIsTrue();
+    List<Event> findByIsVisibleIsFalse();
+    List<Event> findAllByOrderByDateAsc();
+    List<Event> findAllByOrderByDateDesc();
     List<Event> findByEndTimeIsNotNull();
     List<Event> findByEndTimeIsNull();
     List<Event> findByTitleContainingIgnoreCase(String title);

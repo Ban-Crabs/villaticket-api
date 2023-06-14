@@ -1,5 +1,7 @@
 package com.bancrabs.villaticket.models.entities;
 
+import java.util.List;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,5 +28,5 @@ public class Category {
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "event_id", nullable = true)
-    private Event event;
+    private List<Event> event;
 }

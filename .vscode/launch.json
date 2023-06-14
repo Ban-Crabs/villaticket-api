@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-VillaticketApplication<villaticket>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.bancrabs.villaticket.VillaticketApplication",
+            "projectName": "villaticket",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

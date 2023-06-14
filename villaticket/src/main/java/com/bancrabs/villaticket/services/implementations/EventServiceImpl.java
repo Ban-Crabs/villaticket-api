@@ -114,12 +114,12 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<Event> findAllVisibleEvents() {
-        return eventRepository.findByVisibilityIsTrue();
+        return eventRepository.findByIsVisibleIsTrue();
     }
 
     @Override
     public List<Event> findAllInvisibleEvents() {
-        return eventRepository.findByVisibilityIsFalse();
+        return eventRepository.findByIsVisibleIsFalse();
     }
 
     @Override

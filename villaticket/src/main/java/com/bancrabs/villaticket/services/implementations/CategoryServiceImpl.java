@@ -28,7 +28,7 @@ public class CategoryServiceImpl implements CategoryService{
     @Transactional(rollbackOn = Exception.class)
     public Boolean save(SaveGenericDTO data) throws Exception {
         try{
-            Event related = eventService.findById(data.getEventId());
+            List<Event> related = List.of(eventService.findById(data.getEventId()));
             if(related == null){
                 throw new Exception("Event not found");
             }

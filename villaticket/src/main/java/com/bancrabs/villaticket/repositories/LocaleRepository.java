@@ -1,9 +1,8 @@
 package com.bancrabs.villaticket.repositories;
 
-import org.springframework.data.repository.ListCrudRepository;
-
+import org.springframework.data.jpa.repository.JpaRepository;
 import com.bancrabs.villaticket.models.entities.Locale;
 
-public interface LocaleRepository extends ListCrudRepository<Locale, String>{
+public interface LocaleRepository extends JpaRepository<Locale, String>{
     
 }
