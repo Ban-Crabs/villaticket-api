@@ -1,7 +1,8 @@
 package com.bancrabs.villaticket.services;
 
-import java.util.List;
 import java.util.UUID;
+
+import org.springframework.data.domain.Page;
 
 import com.bancrabs.villaticket.models.dtos.save.CreateTicketDTO;
 import com.bancrabs.villaticket.models.entities.Ticket;
@@ -12,8 +13,8 @@ public interface TicketService {
     Boolean delete(UUID id) throws Exception;
     Boolean update(UUID id, CreateTicketDTO data) throws Exception;
 
-    List<Ticket> findAll();
+    Page<Ticket> findAll(int page, int size);
     Ticket findById(UUID id);
-    List<Ticket> findByTierId(UUID tierId);
+    Page<Ticket> findByTierId(UUID tierId, int page, int size);
     Ticket findByUserId(UUID userId);
 }

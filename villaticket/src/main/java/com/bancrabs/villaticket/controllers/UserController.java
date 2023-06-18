@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -17,11 +18,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bancrabs.villaticket.models.dtos.LoginDTO;
+import com.bancrabs.villaticket.models.dtos.response.PageResponseDTO;
 import com.bancrabs.villaticket.models.dtos.response.TokenDTO;
 import com.bancrabs.villaticket.models.dtos.response.UserResponseDTO;
 import com.bancrabs.villaticket.models.dtos.save.RecordAttendanceDTO;
 import com.bancrabs.villaticket.models.dtos.save.SavePrivilegeDTO;
 import com.bancrabs.villaticket.models.dtos.save.SaveUserDTO;
+import com.bancrabs.villaticket.models.entities.Attendance;
 import com.bancrabs.villaticket.models.entities.Token;
 import com.bancrabs.villaticket.models.entities.User;
 import com.bancrabs.villaticket.services.AttendanceService;
@@ -162,14 +165,15 @@ public class UserController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<?> findAll(){
+    public ResponseEntity<?> findAll(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "amt", defaultValue = "10") int size){
         try{
-            List<User> rawUsers = userService.findAll();
+            Page<User> rawUsers = userService.findAll(page, size);
             List<UserResponseDTO> users = new ArrayList<>();
             rawUsers.forEach(us->{
                 users.add(new UserResponseDTO(us.getUsername(), us.getEmail()));
             });
-            return new ResponseEntity<>(users, HttpStatus.OK);
+            PageResponseDTO<UserResponseDTO> response = new PageResponseDTO<>(users, rawUsers.getTotalPages(), rawUsers.getTotalElements());
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }
         catch(Exception e){
             return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -177,7 +181,7 @@ public class UserController {
     }
 
     @PostMapping("/privilege")
-    public ResponseEntity<?> addPrivilege(@RequestParam("userId") String id, @RequestParam("privName") String privName){
+    public ResponseEntity<?> addPrivilege(@RequestParam(name = "userId", defaultValue = "") String id, @RequestParam(name = "privName", defaultValue = "") String privName){
         try{
             User user = userService.findById(id);
             if(user == null){
@@ -224,7 +228,7 @@ public class UserController {
     }
 
     @PostMapping("/attendance")
-    public ResponseEntity<?> attendEvent(@RequestParam("userId") String id, @RequestParam("eventId") UUID eventId){
+    public ResponseEntity<?> attendEvent(@RequestParam(name="userId", defaultValue = "") String id, @RequestParam(name="eventId", defaultValue = "") UUID eventId){
         try{
             if(attendanceService.save(new RecordAttendanceDTO(id, eventId))){
                 return new ResponseEntity<>("Created", HttpStatus.CREATED);
@@ -246,13 +250,15 @@ public class UserController {
     }
 
     @GetMapping("/{id}/attendance")
-    public ResponseEntity<?> getAttendance(@PathParam("id") String id){
+    public ResponseEntity<?> getAttendance(@PathParam("id") String id, @RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "amt", defaultValue = "10") int size){
         try{
             User user = userService.findById(id);
             if(user == null){
                 return new ResponseEntity<>("Not found", HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(attendanceService.findByUserId(user.getId()), HttpStatus.OK);
+            Page<Attendance> rawAttendance = attendanceService.findByUserId(user.getId(), page, size);
+            PageResponseDTO<Attendance> response = new PageResponseDTO<>(rawAttendance.getContent(), rawAttendance.getTotalPages(), rawAttendance.getTotalElements());
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }
         catch(Exception e){
             return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -260,9 +266,11 @@ public class UserController {
     }
 
     @GetMapping("/attendance")
-    public ResponseEntity<?> getAllAttendance(){
+    public ResponseEntity<?> getAllAttendance(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "amt", defaultValue = "10") int size){
         try{
-            return new ResponseEntity<>(attendanceService.findAll(), HttpStatus.OK);
+            Page<Attendance> rawAttendance = attendanceService.findAll(page, size);
+            PageResponseDTO<Attendance> response = new PageResponseDTO<>(rawAttendance.getContent(), rawAttendance.getTotalPages(), rawAttendance.getTotalElements());
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }
         catch(Exception e){
             return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);

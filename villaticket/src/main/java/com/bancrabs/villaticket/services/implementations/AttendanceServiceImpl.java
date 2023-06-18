@@ -1,9 +1,11 @@
 package com.bancrabs.villaticket.services.implementations;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.bancrabs.villaticket.models.dtos.save.RecordAttendanceDTO;
@@ -50,18 +52,21 @@ public class AttendanceServiceImpl implements AttendanceService{
     }
 
     @Override
-    public List<Attendance> findAll() {
-        return attendanceRepository.findAll();
+    public Page<Attendance> findAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return attendanceRepository.findAll(pageable);
     }
 
     @Override
-    public List<Attendance> findByUserId(UUID userId) {
-        return attendanceRepository.findByUserId(userId);
+    public Page<Attendance> findByUserId(UUID userId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return attendanceRepository.findByUserId(userId, pageable);
     }
 
     @Override
-    public List<Attendance> findByEventId(UUID eventId) {
-        return attendanceRepository.findByEventId(eventId);
+    public Page<Attendance> findByEventId(UUID eventId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return attendanceRepository.findByEventId(eventId, pageable);
     }
     
 }

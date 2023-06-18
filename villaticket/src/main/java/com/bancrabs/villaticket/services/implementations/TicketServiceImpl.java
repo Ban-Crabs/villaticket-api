@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.bancrabs.villaticket.models.dtos.save.CreateTicketDTO;
@@ -38,7 +41,7 @@ public class TicketServiceImpl implements TicketService{
             if(relatedUser == null){
                 throw new Exception("User not found");
             }
-            List<Ticket> tickets = findByTierId(relatedTier.getId());
+            List<Ticket> tickets = findAllByTierId(relatedTier.getId());
             if(tickets.size() >= relatedTier.getQuantity()){
                 return false;
             }
@@ -48,6 +51,10 @@ public class TicketServiceImpl implements TicketService{
         catch(Exception e){
             throw e;
         }
+    }
+
+    private List<Ticket> findAllByTierId(UUID id) {
+        return null;
     }
 
     @Override
@@ -66,8 +73,9 @@ public class TicketServiceImpl implements TicketService{
     }
 
     @Override
-    public List<Ticket> findAll() {
-        return ticketRepository.findAll();
+    public Page<Ticket> findAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ticketRepository.findAll(pageable);
     }
 
     @Override
@@ -76,8 +84,9 @@ public class TicketServiceImpl implements TicketService{
     }
 
     @Override
-    public List<Ticket> findByTierId(UUID tierId) {
-        return ticketRepository.findByTierId(tierId);
+    public Page<Ticket> findByTierId(UUID tierId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ticketRepository.findByTierId(tierId, pageable);
     }
 
     @Override

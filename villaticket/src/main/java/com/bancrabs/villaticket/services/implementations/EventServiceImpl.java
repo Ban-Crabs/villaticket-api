@@ -1,9 +1,11 @@
 package com.bancrabs.villaticket.services.implementations;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.bancrabs.villaticket.models.dtos.save.SaveEventDTO;
@@ -98,48 +100,55 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> findAll() {
-        return eventRepository.findAll();
+    public Page<Event> findAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return eventRepository.findAll(pageable);
     }
 
     @Override
-    public List<Event> findAllUpcomingEvents() {
-        return eventRepository.findByEndTimeIsNull();
+    public Page<Event> findAllUpcomingEvents(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return eventRepository.findByEndTimeIsNull(pageable);
     }
 
     @Override
-    public List<Event> findAllPastEvents() {
-        return eventRepository.findByEndTimeIsNotNull();
+    public Page<Event> findAllPastEvents(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return eventRepository.findByEndTimeIsNotNull(pageable);
     }
 
     @Override
-    public List<Event> findAllVisibleEvents() {
-        return eventRepository.findByIsVisibleIsTrue();
+    public Page<Event> findAllVisibleEvents(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return eventRepository.findByIsVisibleIsTrue(pageable);
     }
 
     @Override
-    public List<Event> findAllInvisibleEvents() {
-        return eventRepository.findByIsVisibleIsFalse();
+    public Page<Event> findAllInvisibleEvents(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return eventRepository.findByIsVisibleIsFalse(pageable);
     }
 
     @Override
-    public List<Event> findAllEventsByType(String typeID) {
+    public Page<Event> findAllEventsByType(String typeID, int page, int size) {
         Type type = typeService.findByNameOrId(typeID);
         if(type == null){
             System.out.println("Type not found");
             return null;
         }
-        return eventRepository.findByTypeId(type.getId());
+        Pageable pageable = PageRequest.of(page, size);
+        return eventRepository.findByTypeId(type.getId(), pageable);
     }
 
     @Override
-    public List<Event> findAllEventsByLocation(String locationID) {
+    public Page<Event> findAllEventsByLocation(String locationID, int page, int size) {
         Location location = locationService.findByIdOrName(locationID);
         if(location == null){
             System.out.println("Location not found");
             return null;
         }
-        return eventRepository.findByLocationId(location.getId());
+        Pageable pageable = PageRequest.of(page, size);
+        return eventRepository.findByLocationId(location.getId(), pageable);
     }
 
     @Override

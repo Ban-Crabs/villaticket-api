@@ -1,7 +1,8 @@
 package com.bancrabs.villaticket.services;
 
-import java.util.List;
 import java.util.UUID;
+
+import org.springframework.data.domain.Page;
 
 import com.bancrabs.villaticket.models.dtos.LoginDTO;
 import com.bancrabs.villaticket.models.dtos.save.SaveUserDTO;
@@ -15,7 +16,7 @@ public interface UserService {
     Boolean deleteById(String id) throws Exception;
     User findById(UUID id);
     User findById(String id);
-    List<User> findAll();
+    Page<User> findAll(int page, int size);
 
     Token registerToken(User user) throws Exception;
 	Boolean isTokenValid(User user, String token);

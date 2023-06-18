@@ -1,10 +1,12 @@
 package com.bancrabs.villaticket.services.implementations;
 
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.bancrabs.villaticket.models.dtos.save.RegisterOrderDTO;
@@ -40,23 +42,27 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public List<Order> findAll() {
-        return orderRepository.findAll();
+    public Page<Order> findAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return orderRepository.findAll(pageable);
     }
 
     @Override
-    public List<Order> findByUserId(UUID userId) {
-        return orderRepository.findByUserId(userId);
+    public Page<Order> findByUserId(UUID userId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return orderRepository.findByUserId(userId, pageable);
     }
 
     @Override
-    public List<Order> findByPurchaseDate(Date date) {
-        return orderRepository.findByPurchaseDate(date);
+    public Page<Order> findByPurchaseDate(Date date, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return orderRepository.findByPurchaseDate(date, pageable);
     }
 
     @Override
-    public List<Order> findByPurchaseMethod(String method) {
-        return orderRepository.findByPurchaseMethod(method);
+    public Page<Order> findByPurchaseMethod(String method, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return orderRepository.findByPurchaseMethod(method, pageable);
     }
 
     @Override

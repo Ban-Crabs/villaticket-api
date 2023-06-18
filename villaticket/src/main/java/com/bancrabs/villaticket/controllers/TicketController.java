@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -12,8 +13,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bancrabs.villaticket.models.dtos.response.PageResponseDTO;
 import com.bancrabs.villaticket.models.dtos.response.VerifyDTO;
 import com.bancrabs.villaticket.models.dtos.save.CreateTicketDTO;
 import com.bancrabs.villaticket.models.dtos.save.RegisterOrderDTO;
@@ -23,6 +26,7 @@ import com.bancrabs.villaticket.models.dtos.save.SaveTicketTransferDTO;
 import com.bancrabs.villaticket.models.dtos.save.SaveTierDTO;
 import com.bancrabs.villaticket.models.dtos.save.SaveTransferDTO;
 import com.bancrabs.villaticket.models.dtos.save.VerifyTransferDTO;
+import com.bancrabs.villaticket.models.entities.Ticket;
 import com.bancrabs.villaticket.services.OrderService;
 import com.bancrabs.villaticket.services.TicketQRService;
 import com.bancrabs.villaticket.services.TicketRegisterService;
@@ -111,9 +115,11 @@ public class TicketController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<?> getAll(){
+    public ResponseEntity<?> getAll(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "amt", defaultValue = "10") int size){
         try{
-            return new ResponseEntity<>(ticketService.findAll(), HttpStatus.OK);
+            Page<Ticket> rawTickets = ticketService.findAll(page, size);
+            PageResponseDTO<Ticket> response = new PageResponseDTO<>(rawTickets.getContent(), rawTickets.getTotalPages(), rawTickets.getTotalElements());
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }
         catch(Exception e){
             return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);

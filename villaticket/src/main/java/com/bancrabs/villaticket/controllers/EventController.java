@@ -3,6 +3,7 @@ package com.bancrabs.villaticket.controllers;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -11,8 +12,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bancrabs.villaticket.models.dtos.response.PageResponseDTO;
 import com.bancrabs.villaticket.models.dtos.save.SaveEventDTO;
 import com.bancrabs.villaticket.models.dtos.save.SaveGenericDTO;
 import com.bancrabs.villaticket.models.entities.Event;
@@ -49,9 +52,11 @@ public class EventController {
     private CategoryService categoryService;
 
     @GetMapping("/visible")
-    public ResponseEntity<?> getAllVisible(){
+    public ResponseEntity<?> getAllVisible(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "amt", defaultValue = "10") int size){
         try{
-            return new ResponseEntity<>(eventService.findAllVisibleEvents(), HttpStatus.OK);
+            Page<Event> rawEvents = eventService.findAllVisibleEvents(page, size);
+            PageResponseDTO<Event> response = new PageResponseDTO<>(rawEvents.getContent(), rawEvents.getTotalPages(), rawEvents.getTotalElements());
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }
         catch(Exception e){
             return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -59,9 +64,11 @@ public class EventController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<?> getAll(){
+    public ResponseEntity<?> getAll(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "amt", defaultValue = "10") int size){
         try{
-            return new ResponseEntity<>(eventService.findAll(), HttpStatus.OK);
+            Page<Event> rawEvents = eventService.findAll(page, size);
+            PageResponseDTO<Event> response = new PageResponseDTO<>(rawEvents.getContent(), rawEvents.getTotalPages(), rawEvents.getTotalElements());
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }
         catch(Exception e){
             return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
