@@ -116,18 +116,29 @@ public class TicketServiceImpl implements TicketService{
             if(toUpdate.getResult()){
                 throw new Exception("Ticket already redeemed");
             }
-            Tier relatedTier = tierService.findById(data.getTierId());
-            if(relatedTier == null){
-                throw new Exception("Tier not found");
+            if(data.getTierId() == null){
+                User relatedUser = userService.findById(data.getUserId());
+                if(relatedUser == null){
+                    throw new Exception("User not found");
+                }
+                toUpdate.setUser(relatedUser);
+                ticketRepository.save(toUpdate);
+                return true;
             }
-            User relatedUser = userService.findById(data.getUserId());
-            if(relatedUser == null){
-                throw new Exception("User not found");
+            else{
+                Tier relatedTier = tierService.findById(data.getTierId());
+                if(relatedTier == null){
+                    throw new Exception("Tier not found");
+                }
+                User relatedUser = userService.findById(data.getUserId());
+                if(relatedUser == null){
+                    throw new Exception("User not found");
+                }
+                toUpdate.setTier(relatedTier);
+                toUpdate.setUser(relatedUser);
+                ticketRepository.save(toUpdate);
+                return true;
             }
-            toUpdate.setTier(relatedTier);
-            toUpdate.setUser(relatedUser);
-            ticketRepository.save(toUpdate);
-            return true;
         }
         catch(Exception e){
             throw e;

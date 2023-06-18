@@ -25,14 +25,15 @@ public class Type {
 
     @Column(name = "name", unique = true, nullable = false)
     private String name;
-
+    
+    @OneToMany(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @Exclude
+    private List<Event> events;
+    
     public Type(String code, String name) {
         this.id = code;
         this.name = name;
     }
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JsonIgnore
-    @Exclude
-    private List<Event> events;
 }

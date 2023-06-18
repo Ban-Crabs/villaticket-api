@@ -37,12 +37,16 @@ public class Event {
     private String title;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "type_id", nullable = true)
+    @JoinColumn(name = "type_id", nullable = false)
     private Type type;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "location_id", nullable = true)
+    @JoinColumn(name = "location_id", nullable = false)
     private Location location;
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "category_id", referencedColumnName = "id", nullable = false)
+    private Category category;
 
     @Column(name = "date", nullable = false)
     private Date date;
@@ -63,12 +67,7 @@ public class Event {
     @JsonIgnore
     @Exclude
     private List<Sponsor> sponsors;
-
-    @OneToMany(fetch = FetchType.LAZY)
-    @JsonIgnore
-    @Exclude
-    private List<Category> categories;
-
+    
     @OneToMany(fetch = FetchType.LAZY)
     @JsonIgnore
     @Exclude
@@ -79,10 +78,11 @@ public class Event {
     @Exclude
     private List<Attendance> attendances;
 
-    public Event(String title, Type type, Location location, Date date, Timestamp startTime, Timestamp endTime, String status, Boolean isVisible){
+    public Event(String title, Type type, Location location, Category category, Date date, Timestamp startTime, Timestamp endTime, String status, Boolean isVisible){
         this.title = title;
         this.type = type;
         this.location = location;
+        this.category = category;
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -90,10 +90,11 @@ public class Event {
         this.isVisible = isVisible;
     }
 
-    public Event(String title, Type type, Location location, Date date, Timestamp startTime, String status, Boolean isVisible){
+    public Event(String title, Type type, Location location, Category category, Date date, Timestamp startTime, String status, Boolean isVisible){
         this.title = title;
         this.type = type;
         this.location = location;
+        this.category = category;
         this.date = date;
         this.startTime = startTime;
         this.endTime = null;

@@ -3,6 +3,7 @@ package com.bancrabs.villaticket.models.dtos.save;
 import java.util.UUID;
 
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -12,7 +13,6 @@ public class RecordAttendanceDTO {
     @NotEmpty
     private String userId;
 
-    @NotEmpty
-    @org.hibernate.validator.constraints.UUID
+    @NotNull
     private UUID eventId;
 }

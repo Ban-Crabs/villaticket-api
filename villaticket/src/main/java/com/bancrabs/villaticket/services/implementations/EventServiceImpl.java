@@ -9,10 +9,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.bancrabs.villaticket.models.dtos.save.SaveEventDTO;
+import com.bancrabs.villaticket.models.entities.Category;
 import com.bancrabs.villaticket.models.entities.Event;
 import com.bancrabs.villaticket.models.entities.Location;
 import com.bancrabs.villaticket.models.entities.Type;
 import com.bancrabs.villaticket.repositories.EventRepository;
+import com.bancrabs.villaticket.services.CategoryService;
 import com.bancrabs.villaticket.services.EventService;
 import com.bancrabs.villaticket.services.LocationService;
 import com.bancrabs.villaticket.services.TypeService;
@@ -31,21 +33,28 @@ public class EventServiceImpl implements EventService {
     @Autowired
     private LocationService locationService;
 
+    @Autowired
+    private CategoryService categoryService;
+
     @Override
     @Transactional(rollbackOn = Exception.class)
     public Boolean saveEvent(SaveEventDTO data) throws Exception{
         try{
-            Type type = typeService.findByNameOrId(data.getTypeID());
+            Type type = typeService.findByNameOrId(data.getTypeId());
             if(type == null){
                 throw new Exception("Type not found");
             }
-            Location location = locationService.findByIdOrName(data.getLocationID());
+            Location location = locationService.findByIdOrName(data.getLocationId());
             if(location == null){
                 throw new Exception("Location not found");
             }
+            Category category = categoryService.findById(data.getCategoryId());
+            if(category == null){
+                throw new Exception("Category not found");
+            }
             Event toSave = eventRepository.findByTitleAndDateAndStartTime(data.getTitle(), data.getDate(), data.getStartTime());
             if(toSave == null){
-                toSave = new Event(data.getTitle(), type, location, data.getDate(), data.getStartTime(), data.getEndTime(), data.getStatus(), data.getIsVisible());
+                toSave = new Event(data.getTitle(), type, location, category, data.getDate(), data.getStartTime(), data.getEndTime(), data.getStatus(), data.getIsVisible());
             }
             else{
                 throw new Exception("Event already exists");
@@ -53,6 +62,7 @@ public class EventServiceImpl implements EventService {
             toSave.setTitle(data.getTitle());
             toSave.setType(type);
             toSave.setLocation(location);
+            toSave.setCategory(category);
             toSave.setDate(data.getDate());
             toSave.setStartTime(data.getStartTime());
             toSave.setEndTime(data.getEndTime());
@@ -69,11 +79,11 @@ public class EventServiceImpl implements EventService {
     @Transactional(rollbackOn = Exception.class)
     public Boolean updateEvent(UUID eventId, SaveEventDTO data) throws Exception {
         try{
-            Type type = typeService.findByNameOrId(data.getTypeID());
+            Type type = typeService.findByNameOrId(data.getTypeId());
             if(type == null){
                 throw new Exception("Type not found");
             }
-            Location location = locationService.findByIdOrName(data.getLocationID());
+            Location location = locationService.findByIdOrName(data.getLocationId());
             if(location == null){
                 throw new Exception("Location not found");
             }

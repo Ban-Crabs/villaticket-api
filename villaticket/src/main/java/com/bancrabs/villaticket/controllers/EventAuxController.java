@@ -10,10 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bancrabs.villaticket.models.dtos.save.SaveGenericDTO;
 import com.bancrabs.villaticket.models.dtos.save.SaveImageDTO;
 import com.bancrabs.villaticket.models.dtos.save.SaveLocationDTO;
-import com.bancrabs.villaticket.models.dtos.save.SaveTypeDTO;
+import com.bancrabs.villaticket.models.dtos.save.SaveEventAuxDTO;
 import com.bancrabs.villaticket.services.CategoryService;
 import com.bancrabs.villaticket.services.ImageService;
 import com.bancrabs.villaticket.services.LocationService;
@@ -38,7 +37,7 @@ public class EventAuxController {
     private CategoryService categoryService;
 
     @PostMapping("/type")
-    public ResponseEntity<?> createType(@ModelAttribute @Valid SaveTypeDTO data, BindingResult result){
+    public ResponseEntity<?> createType(@ModelAttribute @Valid SaveEventAuxDTO data, BindingResult result){
         try{
             if(result.hasErrors()){
                 return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
@@ -51,7 +50,8 @@ public class EventAuxController {
             }
         }
         catch(Exception e){
-            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            System.out.println(e);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -69,7 +69,8 @@ public class EventAuxController {
             }
         }
         catch(Exception e){
-            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            System.out.println(e);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -87,6 +88,7 @@ public class EventAuxController {
             }
         }
         catch(Exception e){
+            System.out.println(e);
             switch(e.getMessage()){
                 case "Event not found":
                     return new ResponseEntity<>("Event not found", HttpStatus.NOT_FOUND);
@@ -97,7 +99,7 @@ public class EventAuxController {
     }
 
     @PostMapping("/category")
-    public ResponseEntity<?> createCategory(@ModelAttribute @Valid SaveGenericDTO data, BindingResult result){
+    public ResponseEntity<?> createCategory(@ModelAttribute @Valid SaveEventAuxDTO data, BindingResult result){
         try{
             if(result.hasErrors()){
                 return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
@@ -110,6 +112,7 @@ public class EventAuxController {
             }
         }
         catch(Exception e){
+            System.out.println(e);
             switch(e.getMessage()){
                 case "Event not found":
                     return new ResponseEntity<>("Event not found", HttpStatus.NOT_FOUND);
@@ -125,7 +128,8 @@ public class EventAuxController {
             return new ResponseEntity<>(typeService.findAll(), HttpStatus.OK);
         }
         catch(Exception e){
-            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            System.out.println(e);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -135,7 +139,8 @@ public class EventAuxController {
             return new ResponseEntity<>(locationService.findAll(), HttpStatus.OK);
         }
         catch(Exception e){
-            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            System.out.println(e);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -145,7 +150,8 @@ public class EventAuxController {
             return new ResponseEntity<>(imageService.findAll(), HttpStatus.OK);
         }
         catch(Exception e){
-            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            System.out.println(e);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -155,7 +161,8 @@ public class EventAuxController {
             return new ResponseEntity<>(categoryService.findAll(), HttpStatus.OK);
         }
         catch(Exception e){
-            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            System.out.println(e);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

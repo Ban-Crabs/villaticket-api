@@ -54,34 +54,34 @@ public class User implements UserDetails {
     private List<Attendance> attendances;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-	@JsonIgnore
-  @Exclude
-	private List<Token> tokens;
+    @JsonIgnore
+    @Exclude
+    private List<Token> tokens;
 
-  @Override
-  public Collection<? extends GrantedAuthority> getAuthorities() {
-    return null;
-  }
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+      return null;
+    }
 
-  @Override
-  public boolean isAccountNonExpired() {
-    return false;
-  }
+    @Override
+    public boolean isAccountNonExpired() {
+      return false;
+    }
 
-  @Override
-  public boolean isAccountNonLocked() {
-    return false;
-  }
+    @Override
+    public boolean isAccountNonLocked() {
+      return false;
+    }
 
-  @Override
-  public boolean isCredentialsNonExpired() {
-    return false;
-  }
+    @Override
+    public boolean isCredentialsNonExpired() {
+      return false;
+    }
 
-  @Override
-  public boolean isEnabled() {
-    return this.active;
-  }
+    @Override
+    public boolean isEnabled() {
+      return this.active;
+    }
 
     public User(String unStr, String emStr, String pwStr) {
         this.username = unStr;

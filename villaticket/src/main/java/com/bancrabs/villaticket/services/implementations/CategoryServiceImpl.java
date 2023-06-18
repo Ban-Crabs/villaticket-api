@@ -1,18 +1,14 @@
 package com.bancrabs.villaticket.services.implementations;
 
 import java.util.List;
-import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bancrabs.villaticket.models.dtos.save.SaveGenericDTO;
+import com.bancrabs.villaticket.models.dtos.save.SaveEventAuxDTO;
 import com.bancrabs.villaticket.models.entities.Category;
 import com.bancrabs.villaticket.models.entities.Event;
 import com.bancrabs.villaticket.repositories.CategoryRepository;
 import com.bancrabs.villaticket.services.CategoryService;
-import com.bancrabs.villaticket.services.EventService;
-
 import jakarta.transaction.Transactional;
 
 @Service
@@ -21,25 +17,17 @@ public class CategoryServiceImpl implements CategoryService{
     @Autowired
     private CategoryRepository categoryRepository;
 
-    @Autowired
-    private EventService eventService;
-
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public Boolean save(SaveGenericDTO data) throws Exception {
+    public Boolean save(SaveEventAuxDTO data) throws Exception {
         try{
-            List<Event> related = List.of(eventService.findById(data.getEventId()));
-            if(related == null){
-                throw new Exception("Event not found");
-            }
             Category check = categoryRepository.findById(data.getCode()).orElse(null);
             if(check == null){
-                categoryRepository.save(new Category(data.getCode(), data.getName(), related));
+                categoryRepository.save(new Category(data.getCode(), data.getName()));
             }
             else{
                 check.setId(data.getCode());
                 check.setName(data.getName());
-                check.setEvent(related);
                 categoryRepository.save(check);
             }
             return true;
@@ -51,7 +39,7 @@ public class CategoryServiceImpl implements CategoryService{
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public Boolean delete(SaveGenericDTO data) throws Exception {
+    public Boolean delete(SaveEventAuxDTO data) throws Exception {
         try{
             Category check = categoryRepository.findById(data.getCode()).orElse(null);
             if(check != null){
@@ -78,13 +66,13 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
-    public List<Category> findAllByEvent(UUID eventId) {
-        return categoryRepository.findByEventId(eventId);
+    public List<Category> findByName(String name) {
+        return categoryRepository.findByName(name);
     }
 
     @Override
-    public List<Category> findByName(String name) {
-        return categoryRepository.findByName(name);
+    public List<Event> findEventsById(String id) {
+        return categoryRepository.findById(id).orElse(null).getEvents();
     }
     
 }

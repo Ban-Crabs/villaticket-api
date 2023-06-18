@@ -27,13 +27,14 @@ public class Locale {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @OneToMany(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @Exclude
+    private List<Tier> tiers;
+    
     public Locale(String id, String name){
         this.id = id;
         this.name = name;
     }
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JsonIgnore
-    @Exclude
-    private List<Tier> tiers;
 }

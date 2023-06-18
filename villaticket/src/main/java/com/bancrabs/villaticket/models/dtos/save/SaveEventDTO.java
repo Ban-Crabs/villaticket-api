@@ -3,8 +3,8 @@ package com.bancrabs.villaticket.models.dtos.save;
 import java.sql.Timestamp;
 import java.util.Date;
 
-import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -16,23 +16,26 @@ public class SaveEventDTO {
     private String title;
     
     @NotEmpty
-    private String typeID;
+    private String typeId;
     
     @NotEmpty
-    private String locationID;
+    private String locationId;
 
     @NotEmpty
+    private String categoryId;
+
+    @NotNull
     private Date date;
 
-    @NotEmpty
+    @NotNull
     private Timestamp startTime;
 
-    @Nullable
+    @NotNull
     private Timestamp endTime;
     
     @NotEmpty
     private String status;
 
-    @NotEmpty
+    @NotNull
     private Boolean isVisible;
 }

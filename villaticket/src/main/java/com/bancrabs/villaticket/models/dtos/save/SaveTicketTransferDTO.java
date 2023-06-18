@@ -2,24 +2,19 @@ package com.bancrabs.villaticket.models.dtos.save;
 
 import java.util.UUID;
 
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class SaveTicketTransferDTO {
 
-    @NotEmpty
-    @org.hibernate.validator.constraints.UUID
+    @NotNull
     private UUID qrId;
 
-    @NotEmpty
-    @org.hibernate.validator.constraints.UUID
+    @NotNull
     private UUID transferId;
-
-    public SaveTicketTransferDTO(UUID qrId, UUID transferId){
-        this.qrId = qrId;
-        this.transferId = transferId;
-    }
 }

@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -37,7 +38,6 @@ import com.bancrabs.villaticket.services.TransferService;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.websocket.server.PathParam;
 
 @RestController
 @RequestMapping("/api/ticket")
@@ -78,6 +78,7 @@ public class TicketController {
             }
         }
         catch(Exception e){
+            System.out.println(e);
             switch(e.getMessage()){
                 case "Tier not found":
                     return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
@@ -90,7 +91,7 @@ public class TicketController {
     }
 
     @PostMapping("/order/{id}")
-    public ResponseEntity<?> orderTicket(@PathParam("id") UUID ticketId, @ModelAttribute @Valid RegisterOrderDTO data, BindingResult result){
+    public ResponseEntity<?> orderTicket(@PathVariable("id") UUID ticketId, @ModelAttribute @Valid RegisterOrderDTO data, BindingResult result){
         try{
             if(result.hasErrors()){
                 return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
@@ -105,6 +106,7 @@ public class TicketController {
             }
         }
         catch(Exception e){
+            System.out.println(e);
             switch(e.getMessage()){
                 case "User not found":
                     return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
@@ -122,22 +124,24 @@ public class TicketController {
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
         catch(Exception e){
-            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            System.out.println(e);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getById(@PathParam("id") UUID id){
+    public ResponseEntity<?> getById(@PathVariable("id") UUID id){
         try{
             return new ResponseEntity<>(ticketService.findById(id), HttpStatus.OK);
         }
         catch(Exception e){
-            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            System.out.println(e);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity<?> updateTicket(@PathParam("id") UUID id, @ModelAttribute @Valid CreateTicketDTO data, BindingResult result){
+    public ResponseEntity<?> updateTicket(@PathVariable("id") UUID id, @ModelAttribute @Valid CreateTicketDTO data, BindingResult result){
         try{
             if(result.hasErrors()){
                 return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
@@ -146,6 +150,7 @@ public class TicketController {
             return new ResponseEntity<>("Updated", HttpStatus.OK);
         }
         catch(Exception e){
+            System.out.println(e);
             switch(e.getMessage()){
                 case "Ticket not found":
                     return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
@@ -162,12 +167,14 @@ public class TicketController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteTicket(@PathParam("id") UUID id){
+    public ResponseEntity<?> deleteTicket(@PathVariable("id") String id){
         try{
-            ticketService.delete(id);
+            UUID uuid = UUID.fromString(id);
+            ticketService.delete(uuid);
             return new ResponseEntity<>("Deleted", HttpStatus.OK);
         }
         catch(Exception e){
+            System.out.println(e);
             switch(e.getMessage()){
                 case "Ticket not found":
                     return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
@@ -183,7 +190,8 @@ public class TicketController {
             return new ResponseEntity<>(tierService.findAll(), HttpStatus.OK);
         }
         catch(Exception e){
-            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            System.out.println(e);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -197,6 +205,7 @@ public class TicketController {
             return new ResponseEntity<>("Created", HttpStatus.CREATED);
         }
         catch(Exception e){
+            System.out.println(e);
             switch(e.getMessage()){
                 case "Locale not found":
                     return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
@@ -216,6 +225,7 @@ public class TicketController {
             return new ResponseEntity<>("Created", HttpStatus.CREATED);
         }
         catch(Exception e){
+            System.out.println(e);
             switch(e.getMessage()){
                 case "Ticket not found":
                     return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
@@ -232,13 +242,14 @@ public class TicketController {
     }
 
     @PostMapping("/transfer/{id}")
-    public ResponseEntity<?> transferTicket(@PathParam("id") UUID ticketId, @ModelAttribute @Valid VerifyTransferDTO req, @ModelAttribute @Valid SaveTicketTransferDTO data, BindingResult result){
+    public ResponseEntity<?> transferTicket(@PathVariable("id") UUID ticketId, @ModelAttribute @Valid VerifyTransferDTO req, @ModelAttribute @Valid SaveTicketTransferDTO data, BindingResult result){
         try{
             if(result.hasErrors()){
                 return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
             }
             VerifyDTO res = ticketTransferService.verify(req, data);
             if(res.getResult()){
+                ticketService.update(ticketId, new CreateTicketDTO(null, req.getReceiverId()));
                 return new ResponseEntity<>("Verified", HttpStatus.OK);
             }
             else{
@@ -251,12 +262,15 @@ public class TicketController {
                         return new ResponseEntity<>(res.getMessage(), HttpStatus.CONFLICT);    
                     case "QR expired":
                         return new ResponseEntity<>(res.getMessage(), HttpStatus.BAD_REQUEST);
+                    case "Tier not found":
+                        return new ResponseEntity<>(res.getMessage(), HttpStatus.NOT_FOUND);
                     default:
                         return new ResponseEntity<>(res.getMessage(), HttpStatus.BAD_REQUEST);
                 }
             }
         }
         catch(Exception e){
+            System.out.println(e);
             switch(e.getMessage()){
                 case "Ticket not found":
                     return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
@@ -292,6 +306,7 @@ public class TicketController {
             }
         }
         catch(Exception e){
+            System.out.println(e);
             switch(e.getMessage()){
                 case "Ticket not found":
                     return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);

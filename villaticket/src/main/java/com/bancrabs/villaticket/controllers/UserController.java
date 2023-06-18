@@ -12,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,7 +33,6 @@ import com.bancrabs.villaticket.services.UserPrivilegeService;
 import com.bancrabs.villaticket.services.UserService;
 
 import jakarta.validation.Valid;
-import jakarta.websocket.server.PathParam;
 
 @RestController
 @RequestMapping("/api/user")
@@ -69,6 +69,7 @@ public class UserController {
             }
         }
         catch(Exception e){
+            System.out.println(e);
             switch(e.getMessage()){
                 case "User not found":
                     return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
@@ -95,6 +96,7 @@ public class UserController {
             }
         }
         catch(Exception e){
+            System.out.println(e);
             switch(e.getMessage()){
                 case "User already exists":
                     return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
@@ -105,7 +107,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteById(@PathParam("id") String id){
+    public ResponseEntity<?> deleteById(@PathVariable("id") String id){
         try{
             if(userService.deleteById(id)){
                 return new ResponseEntity<>("Deleted", HttpStatus.OK);
@@ -115,6 +117,7 @@ public class UserController {
             }
         }
         catch(Exception e){
+            System.out.println(e);
             switch(e.getMessage()){
                 case "User not found":
                     return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
@@ -125,7 +128,7 @@ public class UserController {
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity<?> updateUser(@PathParam("id") String id, @ModelAttribute @Valid SaveUserDTO data, BindingResult result){
+    public ResponseEntity<?> updateUser(@PathVariable("id") String id, @ModelAttribute @Valid SaveUserDTO data, BindingResult result){
         try{
             if(result.hasErrors()){
                 return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
@@ -139,6 +142,7 @@ public class UserController {
             }
         }
         catch(Exception e){
+            System.out.println(e);
             switch(e.getMessage()){
                 case "User not found":
                     return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
@@ -149,7 +153,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathParam("id") String id){
+    public ResponseEntity<?> findById(@PathVariable("id") String id){
         try{
             User user = userService.findById(id);
             if(user != null){
@@ -160,7 +164,8 @@ public class UserController {
             }
         }
         catch(Exception e){
-            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            System.out.println(e);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -176,7 +181,8 @@ public class UserController {
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
         catch(Exception e){
-            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            System.out.println(e);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -196,6 +202,7 @@ public class UserController {
             }
         }
         catch(Exception e){
+            System.out.println(e);
             switch(e.getMessage()){
                 case "User not found":
                     return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
@@ -208,12 +215,13 @@ public class UserController {
     }
 
     @GetMapping("/{id}/privilege")
-    public ResponseEntity<?> getPrivileges(@PathParam("id") String id){
+    public ResponseEntity<?> getPrivileges(@PathVariable("id") String id){
         try{
             return new ResponseEntity<>(userPrivilegeService.findByUserId(id), HttpStatus.OK);
         }
         catch(Exception e){
-            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            System.out.println(e);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -223,7 +231,8 @@ public class UserController {
             return new ResponseEntity<>(userPrivilegeService.findAll(), HttpStatus.OK);
         }
         catch(Exception e){
-            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            System.out.println(e);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -238,6 +247,7 @@ public class UserController {
             }
         }
         catch(Exception e){
+            System.out.println(e);
             switch(e.getMessage()){
                 case "User not found":
                     return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
@@ -250,7 +260,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}/attendance")
-    public ResponseEntity<?> getAttendance(@PathParam("id") String id, @RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "amt", defaultValue = "10") int size){
+    public ResponseEntity<?> getAttendance(@PathVariable("id") String id, @RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "amt", defaultValue = "10") int size){
         try{
             User user = userService.findById(id);
             if(user == null){
@@ -261,7 +271,8 @@ public class UserController {
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
         catch(Exception e){
-            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            System.out.println(e);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -273,7 +284,8 @@ public class UserController {
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
         catch(Exception e){
-            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            System.out.println(e);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

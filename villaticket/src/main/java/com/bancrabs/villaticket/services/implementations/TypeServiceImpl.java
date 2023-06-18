@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bancrabs.villaticket.models.dtos.save.SaveTypeDTO;
+import com.bancrabs.villaticket.models.dtos.save.SaveEventAuxDTO;
 import com.bancrabs.villaticket.models.entities.Type;
 import com.bancrabs.villaticket.repositories.TypeRepository;
 import com.bancrabs.villaticket.services.TypeService;
@@ -20,7 +20,7 @@ public class TypeServiceImpl implements TypeService{
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public Boolean save(SaveTypeDTO data) throws Exception{
+    public Boolean save(SaveEventAuxDTO data) throws Exception{
         try{
             Type check = typeRepository.findByNameOrId(data.getName(), data.getCode());
             if(check == null){

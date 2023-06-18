@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class SaveTypeDTO {
+public class SaveEventAuxDTO {
     
     @NotEmpty
     @Pattern(regexp = "[A-Z]{3}[0-9]{2}")

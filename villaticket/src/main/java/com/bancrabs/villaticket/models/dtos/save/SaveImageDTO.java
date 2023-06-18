@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.hibernate.validator.constraints.URL;
 
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,7 +22,6 @@ public class SaveImageDTO {
     @URL
     private String url;
 
-    @NotEmpty
-    @org.hibernate.validator.constraints.UUID
+    @NotNull
     private UUID eventId;
 }

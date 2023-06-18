@@ -2,19 +2,20 @@ package com.bancrabs.villaticket.models.entities;
 
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString.Exclude;
 
 @Data
-@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "category", schema = "public")
 public class Category {
@@ -26,7 +27,13 @@ public class Category {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "event_id", nullable = true)
-    private List<Event> event;
+    @OneToMany(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @Exclude
+    private List<Event> events;
+
+    public Category(String id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }

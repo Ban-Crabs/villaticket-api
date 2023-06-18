@@ -24,6 +24,7 @@ import com.bancrabs.villaticket.services.TicketService;
 import com.bancrabs.villaticket.services.TransferService;
 
 import jakarta.validation.Valid;
+import net.glxn.qrgen.javase.QRCode;
 
 @RestController
 @RequestMapping("/api/ticketaux")
@@ -72,12 +73,11 @@ public class TicketAuxController {
     @PostMapping("/qr/ticket")
     public ResponseEntity<?> createTicketQR(@RequestParam("ticketId") UUID ticketId){
         try{
-            //TODO: Generate new random qr code
             Ticket ticket = ticketService.findById(ticketId);
             if(ticket == null){
                 return new ResponseEntity<>("Ticket not found", HttpStatus.NOT_FOUND);
             }
-            QR newQR = qrService.save("code");
+            QR newQR = qrService.save(QRCode.from(ticketId.toString()).toString());
             if(newQR == null){
                 return new ResponseEntity<>("QR not created", HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -91,19 +91,19 @@ public class TicketAuxController {
     @PostMapping("/qr/transfer")
     public ResponseEntity<?> createTransferQR(@RequestParam("transferId") UUID transferId){
         try{
-            //TODO: Generate new random qr code
             Transfer transfer = transferService.findById(transferId);
             if(transfer == null){
                 return new ResponseEntity<>("Transfer not found", HttpStatus.NOT_FOUND);
             }
-            QR newQR = qrService.save("code");
+            QR newQR = qrService.save(QRCode.from(transferId.toString()).toString());
             if(newQR == null){
                 return new ResponseEntity<>("QR not created", HttpStatus.INTERNAL_SERVER_ERROR);
             }
             return new ResponseEntity<>(new QRResponseDTO(transferId, newQR.getId()), HttpStatus.CREATED);
         }
         catch(Exception e){
-            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            System.out.println(e);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
