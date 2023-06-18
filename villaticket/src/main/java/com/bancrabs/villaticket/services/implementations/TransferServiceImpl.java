@@ -31,7 +31,7 @@ public class TransferServiceImpl implements TransferService{
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public Boolean save(SaveTransferDTO data) throws Exception {
+    public Transfer save(SaveTransferDTO data) throws Exception {
         try{
             User sender = userService.findById(data.getSenderId());
             if(sender == null){
@@ -41,7 +41,7 @@ public class TransferServiceImpl implements TransferService{
             if(ticket == null){
                 throw new Exception("Ticket not found");
             }
-            if(ticket.getResult()){
+            if(ticket.getResult() != null && ticket.getResult()){
                 throw new Exception("Ticket already redeemed");
             }
             if(data.getReceiverId() != null){
@@ -49,12 +49,11 @@ public class TransferServiceImpl implements TransferService{
                 if(receiver == null){
                     throw new Exception("Receiver not found");
                 }
-                transferRepository.save(new Transfer(sender, receiver, ticket));
+                return transferRepository.save(new Transfer(sender, receiver, ticket));
             }
             else{
-                transferRepository.save(new Transfer(sender, ticket));
+                return transferRepository.save(new Transfer(sender, ticket));
             }
-            return true;
         }
         catch(Exception e){
             throw e;

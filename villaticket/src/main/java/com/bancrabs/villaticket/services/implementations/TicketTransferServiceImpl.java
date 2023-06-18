@@ -52,7 +52,7 @@ public class TicketTransferServiceImpl implements TicketTransferService {
             if (qr == null) {
                 throw new Exception("QR not found");
             }
-            if (transfer.getResult()) {
+            if (transfer.getResult() != null && transfer.getResult()) {
                 ticketTransferRepository.save(new TicketTransfer(req.getTimestamp(), qr, transfer));
                 return new VerifyDTO(false, "Transfer already completed");
             }
@@ -62,12 +62,10 @@ public class TicketTransferServiceImpl implements TicketTransferService {
                 ticketTransferRepository.save(new TicketTransfer(req.getTimestamp(), qr, transfer));
                 return new VerifyDTO(false, "Transfer already attempted with this QR");
             }
-            else if(transfer.getReceiver() != null && transfer.getReceiver().getId() != req.getReceiverId()){
+            else if(transfer.getReceiver() != null && transfer.getReceiver().getId() != userService.findById(req.getReceiverId()).getId()){
                 return new VerifyDTO(false, "Transfer reserved for another user");
             }
-            Integer toVerify = (int) qr.getCreationTime().getTime();
-            Integer toCompare = (int) req.getTimestamp().getTime();
-            if (toCompare - toVerify > 600000 || toCompare - toVerify <= 0) {
+            if (req.getTimestamp().getTime() - qr.getCreationTime().getTime() > 600000 || req.getTimestamp().getTime() - qr.getCreationTime().getTime() <= 0) {
                 transfer.setResult(false);
                 transfer.setReceiver(null);
                 transferService.save(transfer);

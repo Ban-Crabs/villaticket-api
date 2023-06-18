@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bancrabs.villaticket.models.dtos.save.CreateTicketDTO;
 import com.bancrabs.villaticket.models.dtos.save.RegisterTicketDTO;
 import com.bancrabs.villaticket.models.entities.Order;
 import com.bancrabs.villaticket.models.entities.Ticket;
@@ -38,6 +39,7 @@ public class TicketRegisterImpl implements TicketRegisterService{
             if(relatedOrder == null){
                 throw new Exception("Order not found");
             }
+            ticketService.update(boughtTicket.getId(), new CreateTicketDTO(null ,relatedOrder.getUser().getUsername()));
             ticketRegisterRepository.save(new TicketRegister(boughtTicket, relatedOrder));
             return true;
         }

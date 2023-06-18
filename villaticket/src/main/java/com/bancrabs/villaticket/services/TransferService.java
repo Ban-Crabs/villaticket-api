@@ -7,7 +7,7 @@ import com.bancrabs.villaticket.models.dtos.save.SaveTransferDTO;
 import com.bancrabs.villaticket.models.entities.Transfer;
 
 public interface TransferService {
-    Boolean save(SaveTransferDTO data) throws Exception;
+    Transfer save(SaveTransferDTO data) throws Exception;
     Boolean save(Transfer data) throws Exception;
     Boolean delete(UUID id) throws Exception;
 

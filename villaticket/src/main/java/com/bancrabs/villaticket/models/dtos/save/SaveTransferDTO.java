@@ -12,10 +12,10 @@ import lombok.Data;
 public class SaveTransferDTO {
 
     @NotNull
-    private UUID senderId;
+    private String senderId;
     
     @Nullable
-    private UUID receiverId;
+    private String receiverId;
 
     @NotNull
     private UUID ticketId;

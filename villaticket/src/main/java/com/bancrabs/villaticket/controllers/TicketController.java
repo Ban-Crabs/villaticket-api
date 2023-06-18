@@ -1,6 +1,8 @@
 package com.bancrabs.villaticket.controllers;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bancrabs.villaticket.models.dtos.response.IdResponseDTO;
 import com.bancrabs.villaticket.models.dtos.response.PageResponseDTO;
+import com.bancrabs.villaticket.models.dtos.response.TicketResponseDTO;
+import com.bancrabs.villaticket.models.dtos.response.UserResponseDTO;
 import com.bancrabs.villaticket.models.dtos.response.VerifyDTO;
 import com.bancrabs.villaticket.models.dtos.save.CreateTicketDTO;
 import com.bancrabs.villaticket.models.dtos.save.RegisterOrderDTO;
@@ -28,6 +33,7 @@ import com.bancrabs.villaticket.models.dtos.save.SaveTierDTO;
 import com.bancrabs.villaticket.models.dtos.save.SaveTransferDTO;
 import com.bancrabs.villaticket.models.dtos.save.VerifyTransferDTO;
 import com.bancrabs.villaticket.models.entities.Ticket;
+import com.bancrabs.villaticket.models.entities.Transfer;
 import com.bancrabs.villaticket.services.OrderService;
 import com.bancrabs.villaticket.services.TicketQRService;
 import com.bancrabs.villaticket.services.TicketRegisterService;
@@ -65,12 +71,9 @@ public class TicketController {
     private TicketQRService ticketQRService;
 
     @PostMapping("/")
-    public ResponseEntity<?> createTicket(@ModelAttribute @Valid CreateTicketDTO data, BindingResult result){
+    public ResponseEntity<?> createTicket(@RequestParam UUID tierId){
         try{
-            if(result.hasErrors()){
-                return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
-            }
-            if(ticketService.save(data)){
+            if(ticketService.save(tierId)){
                 return new ResponseEntity<>("Created", HttpStatus.CREATED);
             }
             else{
@@ -81,11 +84,11 @@ public class TicketController {
             System.out.println(e);
             switch(e.getMessage()){
                 case "Tier not found":
-                    return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
                 case "User not found":
-                    return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
                 default:
-                    return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
     }
@@ -109,9 +112,9 @@ public class TicketController {
             System.out.println(e);
             switch(e.getMessage()){
                 case "User not found":
-                    return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
                 default:
-                    return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
     }
@@ -120,7 +123,14 @@ public class TicketController {
     public ResponseEntity<?> getAll(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "amt", defaultValue = "10") int size){
         try{
             Page<Ticket> rawTickets = ticketService.findAll(page, size);
-            PageResponseDTO<Ticket> response = new PageResponseDTO<>(rawTickets.getContent(), rawTickets.getTotalPages(), rawTickets.getTotalElements());
+            List<TicketResponseDTO> tickets = new ArrayList<>();
+            rawTickets.getContent().forEach(ticket->{
+                if(ticket.getUser() == null)
+                    tickets.add(new TicketResponseDTO(ticket.getId(), ticket.getTier().getId(), null, ticket.getResult()));
+                else
+                    tickets.add(new TicketResponseDTO(ticket.getId(), ticket.getTier().getId(), new UserResponseDTO(ticket.getUser().getUsername(), ticket.getUser().getEmail()), ticket.getResult()));
+            });
+            PageResponseDTO<TicketResponseDTO> response = new PageResponseDTO<>(tickets, rawTickets.getTotalPages(), rawTickets.getTotalElements());
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
         catch(Exception e){
@@ -132,7 +142,9 @@ public class TicketController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable("id") UUID id){
         try{
-            return new ResponseEntity<>(ticketService.findById(id), HttpStatus.OK);
+            Ticket rawTicket = ticketService.findById(id);
+            TicketResponseDTO ticket = new TicketResponseDTO(rawTicket.getId(), rawTicket.getTier().getId(), new UserResponseDTO(rawTicket.getUser().getUsername(), rawTicket.getUser().getEmail()), rawTicket.getResult());
+            return new ResponseEntity<>(ticket, HttpStatus.OK);
         }
         catch(Exception e){
             System.out.println(e);
@@ -153,15 +165,15 @@ public class TicketController {
             System.out.println(e);
             switch(e.getMessage()){
                 case "Ticket not found":
-                    return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
                 case "Tier not found":
-                    return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
                 case "User not found":
-                    return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
                 case "Ticket already redeemed":
-                    return new ResponseEntity<>(e, HttpStatus.CONFLICT);
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
                 default:
-                    return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
     }
@@ -177,9 +189,9 @@ public class TicketController {
             System.out.println(e);
             switch(e.getMessage()){
                 case "Ticket not found":
-                    return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
                 default:
-                    return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
     }
@@ -208,9 +220,9 @@ public class TicketController {
             System.out.println(e);
             switch(e.getMessage()){
                 case "Locale not found":
-                    return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
                 default:
-                    return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
     }
@@ -221,22 +233,22 @@ public class TicketController {
             if(result.hasErrors()){
                 return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
             }
-            transferService.save(data);
-            return new ResponseEntity<>("Created", HttpStatus.CREATED);
+            Transfer transfer = transferService.save(data);
+            return new ResponseEntity<>(new IdResponseDTO(transfer.getId()), HttpStatus.CREATED);
         }
         catch(Exception e){
             System.out.println(e);
             switch(e.getMessage()){
                 case "Ticket not found":
-                    return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
                 case "Sender not found":
-                    return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
                 case "Receiver not found":
-                    return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
                 case "Ticket already redeemed":
-                    return new ResponseEntity<>(e, HttpStatus.CONFLICT);
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
                 default:
-                    return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
     }
@@ -246,6 +258,10 @@ public class TicketController {
         try{
             if(result.hasErrors()){
                 return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
+            }
+            Ticket check = ticketService.findById(ticketId);
+            if(check == null){
+                throw new Exception("Ticket not found");
             }
             VerifyDTO res = ticketTransferService.verify(req, data);
             if(res.getResult()){
@@ -264,6 +280,8 @@ public class TicketController {
                         return new ResponseEntity<>(res.getMessage(), HttpStatus.BAD_REQUEST);
                     case "Tier not found":
                         return new ResponseEntity<>(res.getMessage(), HttpStatus.NOT_FOUND);
+                    case "Ticket not found":
+                        return new ResponseEntity<>(res.getMessage(), HttpStatus.NOT_FOUND);
                     default:
                         return new ResponseEntity<>(res.getMessage(), HttpStatus.BAD_REQUEST);
                 }
@@ -273,11 +291,11 @@ public class TicketController {
             System.out.println(e);
             switch(e.getMessage()){
                 case "Ticket not found":
-                    return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
                 case "QR not found":
-                    return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
                 default:
-                    return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
     }
@@ -309,11 +327,11 @@ public class TicketController {
             System.out.println(e);
             switch(e.getMessage()){
                 case "Ticket not found":
-                    return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
                 case "QR not found":
-                    return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
                 default:
-                    return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
     }

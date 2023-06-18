@@ -26,7 +26,7 @@ public class Ticket {
     @Column(name = "id", nullable = false)
     private UUID id;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     @JoinColumn(name = "tier_id", nullable = false)
     private Tier tier;
 
@@ -36,6 +36,12 @@ public class Ticket {
 
     @Column(name = "result", nullable = true)
     Boolean result;
+
+    public Ticket(Tier tier) {
+        this.tier = tier;
+        this.user = null;
+        this.result = null;
+    }
 
     public Ticket(Tier tier, User user) {
         this.tier = tier;

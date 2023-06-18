@@ -101,7 +101,7 @@ public class UserController {
                 case "User already exists":
                     return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
                 default:
-                    return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
     }
@@ -122,7 +122,7 @@ public class UserController {
                 case "User not found":
                     return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
                 default:
-                    return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
     }
@@ -147,7 +147,7 @@ public class UserController {
                 case "User not found":
                     return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
                 default:
-                    return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
     }
@@ -209,7 +209,7 @@ public class UserController {
                 case "Privilege already exists":
                     return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
                 default:
-                    return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
     }
@@ -254,7 +254,7 @@ public class UserController {
                 case "Event not found":
                     return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
                 default:
-                    return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
     }

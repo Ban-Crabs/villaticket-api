@@ -14,5 +14,5 @@ public class CreateTicketDTO {
     private UUID tierId;
 
     @NotNull
-    private UUID userId;
+    private String userId;
 }

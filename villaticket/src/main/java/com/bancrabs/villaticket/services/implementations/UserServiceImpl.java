@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService{
             if(toDelete == null){
                 throw new Exception("User not found");
             }
-            userRepository.delete(toDelete);
+            userRepository.deleteById(toDelete.getId());
             return true;
         }
         catch(Exception e){

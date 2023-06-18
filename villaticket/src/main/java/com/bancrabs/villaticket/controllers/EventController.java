@@ -96,7 +96,7 @@ public class EventController {
                 case "Event already exists":
                     return new ResponseEntity<>("Event already exists", HttpStatus.CONFLICT);
                 default:
-                    return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
     }
@@ -131,7 +131,7 @@ public class EventController {
                 case "Event not found":
                     return new ResponseEntity<>("Event not found", HttpStatus.NOT_FOUND);
                 default:
-                    return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
     }

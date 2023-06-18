@@ -1,6 +1,7 @@
 package com.bancrabs.villaticket.models.dtos.save;
 
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,10 +13,10 @@ public class SaveTierDTO {
     @NotEmpty
     private String name;
 
-    @NotEmpty
+    @NotNull
     private Float price;
     
-    @NotEmpty
+    @NotNull
     private Integer quantity;
     
     @NotEmpty

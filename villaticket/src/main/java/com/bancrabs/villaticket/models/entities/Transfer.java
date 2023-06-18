@@ -44,12 +44,14 @@ public class Transfer {
         result = null;
         this.sender = sender;
         this.receiver = receiver;
+        this.ticket = ticket;
     }
 
     public Transfer(User sender, Ticket ticket) {
         result = null;
         this.sender = sender;
         this.receiver = null;
+        this.ticket = ticket;
     }
 
 }

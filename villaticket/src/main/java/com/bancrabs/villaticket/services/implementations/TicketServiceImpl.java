@@ -31,30 +31,24 @@ public class TicketServiceImpl implements TicketService{
     private UserService userService;
 
     @Override
-    public Boolean save(CreateTicketDTO data) throws Exception {
+    public Boolean save(UUID tierId) throws Exception {
         try{
-            Tier relatedTier = tierService.findById(data.getTierId());
+            Tier relatedTier = tierService.findById(tierId);
             if(relatedTier == null){
                 throw new Exception("Tier not found");
             }
-            User relatedUser = userService.findById(data.getUserId());
-            if(relatedUser == null){
-                throw new Exception("User not found");
+            List<Ticket> tickets = ticketRepository.findAllByTierId(relatedTier.getId());
+            if(tickets != null){
+                if(tickets.size() >= relatedTier.getQuantity()){
+                    return false;
+                }
             }
-            List<Ticket> tickets = findAllByTierId(relatedTier.getId());
-            if(tickets.size() >= relatedTier.getQuantity()){
-                return false;
-            }
-            ticketRepository.save(new Ticket(relatedTier, relatedUser));
+            ticketRepository.save(new Ticket(relatedTier, null));
             return true;
         }
         catch(Exception e){
             throw e;
         }
-    }
-
-    private List<Ticket> findAllByTierId(UUID id) {
-        return null;
     }
 
     @Override
@@ -64,7 +58,7 @@ public class TicketServiceImpl implements TicketService{
             if(toDelete == null){
                 throw new Exception("Ticket not found");
             }
-            ticketRepository.delete(toDelete);
+            ticketRepository.deleteById(id);
             return true;
         }
         catch(Exception e){
@@ -113,7 +107,7 @@ public class TicketServiceImpl implements TicketService{
             if(toUpdate == null){
                 throw new Exception("Ticket not found");
             }
-            if(toUpdate.getResult()){
+            if(toUpdate.getResult() != null && toUpdate.getResult()){
                 throw new Exception("Ticket already redeemed");
             }
             if(data.getTierId() == null){

@@ -43,16 +43,6 @@ public class User implements UserDetails {
     @Column(name = "active", insertable = false)
     private Boolean active;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JsonIgnore
-    @Exclude
-    private List<UserPrivilege> privileges;
-
-    @OneToMany(fetch = FetchType.LAZY)
-    @JsonIgnore
-    @Exclude
-    private List<Attendance> attendances;
-
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonIgnore
     @Exclude
