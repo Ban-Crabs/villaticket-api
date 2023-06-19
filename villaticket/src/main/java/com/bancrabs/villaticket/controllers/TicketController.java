@@ -254,18 +254,18 @@ public class TicketController {
     }
 
     @PostMapping("/transfer/{id}")
-    public ResponseEntity<?> transferTicket(@PathVariable("id") UUID ticketId, @ModelAttribute @Valid VerifyTransferDTO req, @ModelAttribute @Valid SaveTicketTransferDTO data, BindingResult result){
+    public ResponseEntity<?> transferTicket(@PathVariable("id") UUID transferId, @ModelAttribute @Valid VerifyTransferDTO req, @ModelAttribute @Valid SaveTicketTransferDTO data, BindingResult result){
         try{
             if(result.hasErrors()){
                 return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
             }
-            Ticket check = ticketService.findById(ticketId);
+            Transfer check = transferService.findById(transferId);
             if(check == null){
-                throw new Exception("Ticket not found");
+                throw new Exception("Transfer not found");
             }
-            VerifyDTO res = ticketTransferService.verify(req, data);
+            VerifyDTO res = ticketTransferService.verify(check, req, data);
             if(res.getResult()){
-                ticketService.update(ticketId, new CreateTicketDTO(null, req.getReceiverId()));
+                ticketService.update(data.getTicketId(), new CreateTicketDTO(null, req.getReceiverId()));
                 return new ResponseEntity<>("Verified", HttpStatus.OK);
             }
             else{
@@ -293,6 +293,8 @@ public class TicketController {
                 case "Ticket not found":
                     return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
                 case "QR not found":
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+                case "Transfer not found":
                     return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
                 default:
                     return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

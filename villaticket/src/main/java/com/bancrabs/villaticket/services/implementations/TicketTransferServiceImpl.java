@@ -42,11 +42,11 @@ public class TicketTransferServiceImpl implements TicketTransferService {
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public VerifyDTO verify(VerifyTransferDTO req, SaveTicketTransferDTO data) throws Exception {
+    public VerifyDTO verify(Transfer transfer, VerifyTransferDTO req, SaveTicketTransferDTO data) throws Exception {
         try {
-            Transfer transfer = transferService.findById(data.getTransferId());
-            if (transfer == null) {
-                throw new Exception("Transfer not found");
+            Ticket ticket = ticketService.findById(data.getTicketId());
+            if (ticket == null) {
+                throw new Exception("Ticket not found");
             }
             QR qr = qrService.findById(data.getQrId());
             if (qr == null) {
@@ -56,7 +56,7 @@ public class TicketTransferServiceImpl implements TicketTransferService {
                 ticketTransferRepository.save(new TicketTransfer(req.getTimestamp(), qr, transfer));
                 return new VerifyDTO(false, "Transfer already completed");
             }
-            TicketTransfer check = ticketTransferRepository.findByTransferIdAndQrId(data.getTransferId(), data.getQrId());
+            TicketTransfer check = ticketTransferRepository.findByTransferIdAndQrId(transfer.getId(), data.getQrId());
             if (check != null && transfer.getResult() != null) {
                 //The transfer has already been attempted before and therefore this attempt should only be logged
                 ticketTransferRepository.save(new TicketTransfer(req.getTimestamp(), qr, transfer));
@@ -76,7 +76,6 @@ public class TicketTransferServiceImpl implements TicketTransferService {
                 transfer.setResult(true);
                 transfer.setReceiver(userService.findById(req.getReceiverId()));
                 transferService.save(transfer);
-                Ticket ticket = transfer.getTicket();
                 ticket.setUser(transfer.getReceiver());
                 ticketService.save(ticket);
                 ticketTransferRepository.save(new TicketTransfer(req.getTimestamp(), qr, transfer));

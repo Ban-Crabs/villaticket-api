@@ -51,9 +51,7 @@ public class TicketQRServiceImpl implements TicketQRService{
                 ticketQRRepository.save(new TicketQR(timestamp, ticket, qr));
                 return new VerifyDTO(false, "Ticket redeem has already been attempted with this QR");
             }
-            Integer toVerify = (int) qr.getCreationTime().getTime();
-            Integer toCompare = (int) timestamp.getTime();
-            if(toCompare - toVerify > 600000 || toCompare - toVerify <= 0){
+            if(timestamp.getTime() - qr.getCreationTime().getTime() > 600000 || timestamp.getTime() - qr.getCreationTime().getTime() <= 0){
                 ticket.setResult(false);
                 ticketService.save(ticket);
                 ticketQRRepository.save(new TicketQR(timestamp, ticket, qr));

@@ -16,5 +16,5 @@ public class SaveTicketTransferDTO {
     private UUID qrId;
 
     @NotNull
-    private UUID transferId;
+    private UUID ticketId;
 }
