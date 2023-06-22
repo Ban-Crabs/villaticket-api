@@ -14,5 +14,5 @@ public class RegisterTicketQRDTO {
     private UUID ticketId;
 
     @NotNull
-    private UUID qrId;
+    private String qrCode;
 }

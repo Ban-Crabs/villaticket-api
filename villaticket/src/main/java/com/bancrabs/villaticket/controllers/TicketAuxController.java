@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -34,6 +35,9 @@ public class TicketAuxController {
 
     @Autowired
     private QRService qrService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private TicketService ticketService;
@@ -77,11 +81,11 @@ public class TicketAuxController {
             if(ticket == null){
                 return new ResponseEntity<>("Ticket not found", HttpStatus.NOT_FOUND);
             }
-            QR newQR = qrService.save(QRCode.from(ticketId.toString()).toString());
+            QR newQR = qrService.save(passwordEncoder.encode(ticketId.toString() + Long.toString(System.currentTimeMillis())));
             if(newQR == null){
                 return new ResponseEntity<>("QR not created", HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            return new ResponseEntity<>(new QRResponseDTO(ticketId, newQR.getId()), HttpStatus.CREATED);
+            return new ResponseEntity<>(new QRResponseDTO(newQR.getCode()), HttpStatus.CREATED);
         }
         catch(Exception e){
             System.out.println(e);
@@ -100,7 +104,7 @@ public class TicketAuxController {
             if(newQR == null){
                 return new ResponseEntity<>("QR not created", HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            return new ResponseEntity<>(new QRResponseDTO(transferId, newQR.getId()), HttpStatus.CREATED);
+            return new ResponseEntity<>(new QRResponseDTO(newQR.getCode()), HttpStatus.CREATED);
         }
         catch(Exception e){
             System.out.println(e);

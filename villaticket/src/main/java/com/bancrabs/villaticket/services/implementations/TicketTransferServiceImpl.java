@@ -48,7 +48,7 @@ public class TicketTransferServiceImpl implements TicketTransferService {
             if (ticket == null) {
                 throw new Exception("Ticket not found");
             }
-            QR qr = qrService.findById(data.getQrId());
+            QR qr = qrService.findByCode(data.getQrCode());
             if (qr == null) {
                 throw new Exception("QR not found");
             }
@@ -56,7 +56,7 @@ public class TicketTransferServiceImpl implements TicketTransferService {
                 ticketTransferRepository.save(new TicketTransfer(req.getTimestamp(), qr, transfer));
                 return new VerifyDTO(false, "Transfer already completed");
             }
-            TicketTransfer check = ticketTransferRepository.findByTransferIdAndQrId(transfer.getId(), data.getQrId());
+            TicketTransfer check = ticketTransferRepository.findByTransferIdAndQrId(transfer.getId(), qr.getId());
             if (check != null && transfer.getResult() != null) {
                 //The transfer has already been attempted before and therefore this attempt should only be logged
                 ticketTransferRepository.save(new TicketTransfer(req.getTimestamp(), qr, transfer));

@@ -38,7 +38,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public Boolean saveEvent(SaveEventDTO data) throws Exception{
+    public Event saveEvent(SaveEventDTO data) throws Exception{
         try{
             Type type = typeService.findByNameOrId(data.getTypeId());
             if(type == null){
@@ -55,21 +55,12 @@ public class EventServiceImpl implements EventService {
             Event toSave = eventRepository.findByTitleAndDateAndStartTime(data.getTitle(), data.getDate(), data.getStartTime());
             if(toSave == null){
                 toSave = new Event(data.getTitle(), type, location, category, data.getDate(), data.getStartTime(), data.getEndTime(), data.getStatus(), data.getIsVisible());
+                toSave = eventRepository.save(toSave);
+                return toSave;
             }
             else{
                 throw new Exception("Event already exists");
             }
-            toSave.setTitle(data.getTitle());
-            toSave.setType(type);
-            toSave.setLocation(location);
-            toSave.setCategory(category);
-            toSave.setDate(data.getDate());
-            toSave.setStartTime(data.getStartTime());
-            toSave.setEndTime(data.getEndTime());
-            toSave.setStatus(data.getStatus());
-            toSave.setIsVisible(data.getIsVisible());
-            eventRepository.save(toSave);
-            return true;
         } catch (Exception e) {
             throw e;
         }

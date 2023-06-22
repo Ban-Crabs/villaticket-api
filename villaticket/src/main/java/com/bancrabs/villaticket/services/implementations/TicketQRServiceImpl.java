@@ -38,7 +38,7 @@ public class TicketQRServiceImpl implements TicketQRService{
             if(ticket == null){
                 throw new Exception("Ticket not found");
             }
-            QR qr = qrService.findById(data.getQrId());
+            QR qr = qrService.findByCode(data.getQrCode());
             if(qr == null){
                 throw new Exception("QR not found");
             }
@@ -46,7 +46,7 @@ public class TicketQRServiceImpl implements TicketQRService{
                 ticketQRRepository.save(new TicketQR(timestamp, ticket, qr));
                 return new VerifyDTO(false, "Ticket already redeemed");
             }
-            TicketQR check = ticketQRRepository.findByTicketIdAndQrId(data.getTicketId(), data.getQrId());
+            TicketQR check = ticketQRRepository.findByTicketIdAndQrId(data.getTicketId(), qr.getId());
             if(check != null && ticket.getResult() != null){
                 ticketQRRepository.save(new TicketQR(timestamp, ticket, qr));
                 return new VerifyDTO(false, "Ticket redeem has already been attempted with this QR");

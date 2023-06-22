@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bancrabs.villaticket.models.dtos.response.IdResponseDTO;
 import com.bancrabs.villaticket.models.dtos.response.PageResponseDTO;
 import com.bancrabs.villaticket.models.dtos.save.SaveEventDTO;
 import com.bancrabs.villaticket.models.dtos.save.SaveGenericDTO;
@@ -81,8 +82,8 @@ public class EventController {
             if(result.hasErrors()){
                 return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
             }
-            eventService.saveEvent(data);
-            return new ResponseEntity<>("Created", HttpStatus.CREATED);
+            Event ev = eventService.saveEvent(data);
+            return new ResponseEntity<>(new IdResponseDTO(ev.getId()), HttpStatus.CREATED);
         }
         catch(Exception e){
             System.out.println(e);

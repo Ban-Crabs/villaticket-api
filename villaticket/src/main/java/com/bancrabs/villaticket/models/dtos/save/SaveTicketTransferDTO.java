@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class SaveTicketTransferDTO {
 
     @NotNull
-    private UUID qrId;
+    private String qrCode;
 
     @NotNull
     private UUID ticketId;
