@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bancrabs.villaticket.models.dtos.response.QRResponseDTO;
@@ -72,7 +71,7 @@ public class TicketAuxController {
     }
 
     @PostMapping("/qr/ticket")
-    public ResponseEntity<?> createTicketQR(@RequestParam("ticketId") UUID ticketId){
+    public ResponseEntity<?> createTicketQR(@ModelAttribute("ticketId") UUID ticketId){
         try{
             Ticket ticket = ticketService.findById(ticketId);
             if(ticket == null){
@@ -91,7 +90,7 @@ public class TicketAuxController {
     }
 
     @PostMapping("/qr/transfer")
-    public ResponseEntity<?> createTransferQR(@RequestParam("transferId") UUID transferId){
+    public ResponseEntity<?> createTransferQR(@ModelAttribute("transferId") UUID transferId){
         try{
             Transfer transfer = transferService.findById(transferId);
             if(transfer == null){

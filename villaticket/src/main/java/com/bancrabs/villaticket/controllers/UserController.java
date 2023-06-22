@@ -187,7 +187,7 @@ public class UserController {
     }
 
     @PostMapping("/privilege")
-    public ResponseEntity<?> addPrivilege(@RequestParam(name = "userId", defaultValue = "") String id, @RequestParam(name = "privName", defaultValue = "") String privName){
+    public ResponseEntity<?> addPrivilege(@ModelAttribute(name = "userId") String id, @ModelAttribute(name = "privName") String privName){
         try{
             User user = userService.findById(id);
             if(user == null){
@@ -237,7 +237,7 @@ public class UserController {
     }
 
     @PostMapping("/attendance")
-    public ResponseEntity<?> attendEvent(@RequestParam(name="userId", defaultValue = "") String id, @RequestParam(name="eventId", defaultValue = "") UUID eventId){
+    public ResponseEntity<?> attendEvent(@ModelAttribute(name="userId") String id, @ModelAttribute(name="eventId") UUID eventId){
         try{
             if(attendanceService.save(new RecordAttendanceDTO(id, eventId))){
                 return new ResponseEntity<>("Created", HttpStatus.CREATED);

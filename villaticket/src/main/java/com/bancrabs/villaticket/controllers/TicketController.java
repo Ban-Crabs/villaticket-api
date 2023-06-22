@@ -71,7 +71,7 @@ public class TicketController {
     private TicketQRService ticketQRService;
 
     @PostMapping("/")
-    public ResponseEntity<?> createTicket(@RequestParam UUID tierId){
+    public ResponseEntity<?> createTicket(@ModelAttribute UUID tierId){
         try{
             if(ticketService.save(tierId)){
                 return new ResponseEntity<>("Created", HttpStatus.CREATED);
