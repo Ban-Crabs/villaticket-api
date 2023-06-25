@@ -5,12 +5,13 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 
 import com.bancrabs.villaticket.models.dtos.LoginDTO;
+import com.bancrabs.villaticket.models.dtos.save.RegisterUserDTO;
 import com.bancrabs.villaticket.models.dtos.save.SaveUserDTO;
 import com.bancrabs.villaticket.models.entities.Token;
 import com.bancrabs.villaticket.models.entities.User;
 
 public interface UserService {
-    Boolean register(SaveUserDTO data) throws Exception;
+    Boolean register(RegisterUserDTO data) throws Exception;
     Boolean login(LoginDTO data) throws Exception;
     Boolean update(SaveUserDTO data, String id) throws Exception;
     Boolean deleteById(String id) throws Exception;

@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.bancrabs.villaticket.models.dtos.LoginDTO;
+import com.bancrabs.villaticket.models.dtos.save.RegisterUserDTO;
 import com.bancrabs.villaticket.models.dtos.save.SaveUserDTO;
 import com.bancrabs.villaticket.models.entities.Token;
 import com.bancrabs.villaticket.models.entities.User;
@@ -39,11 +40,11 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public Boolean register(SaveUserDTO data) throws Exception {
+    public Boolean register(RegisterUserDTO data) throws Exception {
         try{
             User check = userRepository.findByUsernameOrEmail(data.getUsername(), data.getEmail());
             if(check == null){
-                userRepository.save(new User(data.getUsername(), data.getEmail(), passwordEncoder.encode(data.getPassword())));
+                userRepository.save(new User(data.getUsername(), data.getEmail(), null));
                 return true;
             }
             else{
@@ -95,6 +96,7 @@ public class UserServiceImpl implements UserService{
                 throw new Exception("User not found");
             }
             else{
+                if(check.getPassword() == null) throw new Exception("Unauthorized");
                 if(passwordEncoder.matches(data.getPassword(), check.getPassword())){
                     return true;
                 }

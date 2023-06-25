@@ -38,8 +38,8 @@ public class WebSecurityConfiguration {
 
 		// Route filter
 		http.authorizeHttpRequests(auth -> auth
-				.requestMatchers("api/user/register", "api/user/login").permitAll()
-				.anyRequest().authenticated());
+                .requestMatchers("api/user/register", "api/user/login").permitAll()
+                .anyRequest().authenticated()).oauth2Login(withDefaults());
 
 		// Statelessness
 		http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

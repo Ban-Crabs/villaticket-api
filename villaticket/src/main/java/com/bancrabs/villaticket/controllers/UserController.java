@@ -23,6 +23,7 @@ import com.bancrabs.villaticket.models.dtos.response.PageResponseDTO;
 import com.bancrabs.villaticket.models.dtos.response.TokenDTO;
 import com.bancrabs.villaticket.models.dtos.response.UserResponseDTO;
 import com.bancrabs.villaticket.models.dtos.save.RecordAttendanceDTO;
+import com.bancrabs.villaticket.models.dtos.save.RegisterUserDTO;
 import com.bancrabs.villaticket.models.dtos.save.SavePrivilegeDTO;
 import com.bancrabs.villaticket.models.dtos.save.SaveUserDTO;
 import com.bancrabs.villaticket.models.entities.Attendance;
@@ -76,13 +77,13 @@ public class UserController {
                 case "Wrong password":
                     return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
                 default:
-                    return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@ModelAttribute @Valid SaveUserDTO data, BindingResult result){
+    public ResponseEntity<?> register(@ModelAttribute @Valid RegisterUserDTO data, BindingResult result){
         try{
             if(result.hasErrors()){
                 return new ResponseEntity<>(result.getAllErrors(), HttpStatus.BAD_REQUEST);
