@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -71,6 +72,7 @@ public class TicketController {
     private TicketQRService ticketQRService;
 
     @PostMapping("/")
+    @PreAuthorize("hasAuthority('admin')")
     public ResponseEntity<?> createTicket(@ModelAttribute UUID tierId){
         try{
             if(ticketService.save(tierId)){
@@ -94,6 +96,7 @@ public class TicketController {
     }
 
     @PostMapping("/order/{id}")
+    @PreAuthorize("hasAuthority('user')")
     public ResponseEntity<?> orderTicket(@PathVariable("id") UUID ticketId, @ModelAttribute @Valid RegisterOrderDTO data, BindingResult result){
         try{
             if(result.hasErrors()){
@@ -120,6 +123,7 @@ public class TicketController {
     }
 
     @GetMapping("/")
+    @PreAuthorize("hasAuthority('admin')")
     public ResponseEntity<?> getAll(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "amt", defaultValue = "10") int size){
         try{
             Page<Ticket> rawTickets = ticketService.findAll(page, size);
@@ -140,6 +144,7 @@ public class TicketController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('admin')")
     public ResponseEntity<?> getById(@PathVariable("id") UUID id){
         try{
             Ticket rawTicket = ticketService.findById(id);
@@ -153,6 +158,7 @@ public class TicketController {
     }
 
     @PostMapping("/{id}")
+    @PreAuthorize("hasAuthority('admin')")
     public ResponseEntity<?> updateTicket(@PathVariable("id") UUID id, @ModelAttribute @Valid CreateTicketDTO data, BindingResult result){
         try{
             if(result.hasErrors()){
@@ -179,6 +185,7 @@ public class TicketController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('admin')")
     public ResponseEntity<?> deleteTicket(@PathVariable("id") String id){
         try{
             UUID uuid = UUID.fromString(id);
@@ -197,6 +204,7 @@ public class TicketController {
     }
 
     @GetMapping("/tier")
+    @PreAuthorize("hasAuthority('admin')")
     public ResponseEntity<?> getAllTiers(){
         try{
             return new ResponseEntity<>(tierService.findAll(), HttpStatus.OK);
@@ -208,6 +216,7 @@ public class TicketController {
     }
 
     @PostMapping("/tier")
+    @PreAuthorize("hasAuthority('admin')")
     public ResponseEntity<?> createTier(@ModelAttribute @Valid SaveTierDTO data, BindingResult result){
         try{
             if(result.hasErrors()){
@@ -228,6 +237,7 @@ public class TicketController {
     }
 
     @PostMapping("/transfer")
+    @PreAuthorize("hasAuthority('user')")
     public ResponseEntity<?> transferTicket(@ModelAttribute @Valid SaveTransferDTO data, BindingResult result){
         try{
             if(result.hasErrors()){
@@ -254,6 +264,7 @@ public class TicketController {
     }
 
     @PostMapping("/transfer/{id}")
+    @PreAuthorize("hasAuthority('user')")
     public ResponseEntity<?> transferTicket(@PathVariable("id") UUID transferId, @ModelAttribute @Valid VerifyTransferDTO req, @ModelAttribute @Valid SaveTicketTransferDTO data, BindingResult result){
         try{
             if(result.hasErrors()){
@@ -303,6 +314,7 @@ public class TicketController {
     }
 
     @PostMapping("/redeem")
+    @PreAuthorize("hasAuthority('employee')")
     public ResponseEntity<?> redeemTicket(@ModelAttribute @NotEmpty Timestamp timestamp, @ModelAttribute @Valid RegisterTicketQRDTO data, BindingResult result){
         try{
             if(result.hasErrors()){

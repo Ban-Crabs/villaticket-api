@@ -1,5 +1,6 @@
 package com.bancrabs.villaticket.models.entities;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -48,24 +49,38 @@ public class User implements UserDetails {
     @Exclude
     private List<Token> tokens;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonIgnore
+    @Exclude
+    private List<UserPrivilege> privileges;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-      return null;
+      ArrayList<GrantedAuthority> authorities = new ArrayList<>();
+      privileges.forEach(priv->{
+        authorities.add(new GrantedAuthority(){
+          @Override
+          public String getAuthority() {
+            return priv.getName();
+          }
+        });
+      });
+      return authorities;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-      return false;
+      return this.active;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-      return false;
+      return this.active;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-      return false;
+      return this.active;
     }
 
     @Override

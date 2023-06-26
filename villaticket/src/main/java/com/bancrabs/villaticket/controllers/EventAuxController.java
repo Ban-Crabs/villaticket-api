@@ -3,6 +3,7 @@ package com.bancrabs.villaticket.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -37,6 +38,7 @@ public class EventAuxController {
     private CategoryService categoryService;
 
     @PostMapping("/type")
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<?> createType(@ModelAttribute @Valid SaveEventAuxDTO data, BindingResult result){
         try{
             if(result.hasErrors()){
@@ -56,6 +58,7 @@ public class EventAuxController {
     }
 
     @PostMapping("/location")
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<?> createLocation(@ModelAttribute @Valid SaveLocationDTO data, BindingResult result){
         try{
             if(result.hasErrors()){
@@ -75,6 +78,7 @@ public class EventAuxController {
     }
 
     @PostMapping("/image")
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<?> createImage(@ModelAttribute @Valid SaveImageDTO data, BindingResult result){
         try{
             if(result.hasErrors()){
@@ -99,6 +103,7 @@ public class EventAuxController {
     }
 
     @PostMapping("/category")
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<?> createCategory(@ModelAttribute @Valid SaveEventAuxDTO data, BindingResult result){
         try{
             if(result.hasErrors()){
@@ -123,6 +128,7 @@ public class EventAuxController {
     }
 
     @GetMapping("/type")
+    @PreAuthorize("hasRole('user')")
     public ResponseEntity<?> getAllTypes(){
         try{
             return new ResponseEntity<>(typeService.findAll(), HttpStatus.OK);
@@ -134,6 +140,7 @@ public class EventAuxController {
     }
 
     @GetMapping("/location")
+    @PreAuthorize("hasRole('user')")
     public ResponseEntity<?> getAllLocations(){
         try{
             return new ResponseEntity<>(locationService.findAll(), HttpStatus.OK);
@@ -145,6 +152,7 @@ public class EventAuxController {
     }
 
     @GetMapping("/image")
+    @PreAuthorize("hasRole('user')")
     public ResponseEntity<?> getAllImages(){
         try{
             return new ResponseEntity<>(imageService.findAll(), HttpStatus.OK);
@@ -156,6 +164,7 @@ public class EventAuxController {
     }
 
     @GetMapping("/category")
+    @PreAuthorize("hasRole('user')")
     public ResponseEntity<?> getAllCategories(){
         try{
             return new ResponseEntity<>(categoryService.findAll(), HttpStatus.OK);

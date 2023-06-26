@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,6 +41,7 @@ public class EventController {
     private SponsorService sponsorService;
 
     @GetMapping("/visible")
+    @PreAuthorize("hasRole('user')")
     public ResponseEntity<?> getAllVisible(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "amt", defaultValue = "10") int size){
         try{
             Page<Event> rawEvents = eventService.findAllVisibleEvents(page, size);
@@ -53,6 +55,7 @@ public class EventController {
     }
 
     @GetMapping("/invisible")
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<?> getAllInvisible(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "amt", defaultValue = "10") int size){
         try{
             Page<Event> rawEvents = eventService.findAllInvisibleEvents(page, size);
@@ -65,6 +68,7 @@ public class EventController {
     }
 
     @GetMapping("/")
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<?> getAll(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "amt", defaultValue = "10") int size){
         try{
             Page<Event> rawEvents = eventService.findAll(page, size);
@@ -77,6 +81,7 @@ public class EventController {
     }
 
     @PostMapping("/")
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<?> create(@ModelAttribute @Valid SaveEventDTO data, BindingResult result){
         try{
             if(result.hasErrors()){
@@ -103,6 +108,7 @@ public class EventController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('user')")
     public ResponseEntity<?> getOne(@PathVariable("id") UUID id){
         try{
             return new ResponseEntity<>(eventService.findById(id), HttpStatus.OK);
@@ -114,6 +120,7 @@ public class EventController {
     }
 
     @PostMapping("/{id}")
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<?> update(@PathVariable("id") UUID id, @ModelAttribute @Valid SaveEventDTO data, BindingResult result){
         try{
             if(result.hasErrors()){
@@ -138,6 +145,7 @@ public class EventController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<?> delete(@PathVariable("id") UUID id){
         try{
             eventService.deleteEvent(id);
@@ -150,6 +158,7 @@ public class EventController {
     }
 
     @GetMapping("/{id}/type")
+    @PreAuthorize("hasRole('user')")
     public ResponseEntity<?> getEventType(@PathVariable("id") UUID id){
         try{
             Event event = eventService.findById(id);
@@ -162,6 +171,7 @@ public class EventController {
     }
 
     @GetMapping("/{id}/location")
+    @PreAuthorize("hasRole('user')")
     public ResponseEntity<?> getEventLocation(@PathVariable("id") UUID id){
         try{
             Event event = eventService.findById(id);
@@ -174,6 +184,7 @@ public class EventController {
     }
 
     @GetMapping("/sponsor")
+    @PreAuthorize("hasRole('user')")
     public ResponseEntity<?> getAllSponsors(){
         try{
             return new ResponseEntity<>(sponsorService.findAll(), HttpStatus.OK);
@@ -185,6 +196,7 @@ public class EventController {
     }
 
     @GetMapping("/{id}/sponsor")
+    @PreAuthorize("hasRole('user')")
     public ResponseEntity<?> getEventSponsor(@PathVariable("id") UUID id){
         try{
             return new ResponseEntity<>(sponsorService.findAllByEvent(id), HttpStatus.OK);
@@ -196,6 +208,7 @@ public class EventController {
     }
 
     @PostMapping("/sponsor")
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<?> addSponsor(@ModelAttribute @Valid SaveGenericDTO data, BindingResult result){
         try{
             if(result.hasErrors()){
@@ -216,6 +229,7 @@ public class EventController {
     }
 
     @GetMapping("/{id}/image")
+    @PreAuthorize("hasRole('user')")
     public ResponseEntity<?> getEventImage(@PathVariable("id") UUID id){
         try{
             return new ResponseEntity<>(imageService.findAllByEvent(id), HttpStatus.OK);
@@ -227,6 +241,7 @@ public class EventController {
     }
 
     @GetMapping("/{id}/category")
+    @PreAuthorize("hasRole('user')")
     public ResponseEntity<?> getEventCategory(@PathVariable("id") UUID id){
         try{
             Event event = eventService.findById(id);

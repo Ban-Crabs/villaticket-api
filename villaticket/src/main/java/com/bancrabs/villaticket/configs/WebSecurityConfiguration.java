@@ -9,6 +9,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationCodeTokenResponseClient;
+import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResponseClient;
+import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -39,7 +42,11 @@ public class WebSecurityConfiguration {
 		// Route filter
 		http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("api/user/register", "api/user/login").permitAll()
-                .anyRequest().authenticated()).oauth2Login(withDefaults());
+                .anyRequest().authenticated()).oauth2Login(oauth -> 
+				oauth.loginPage("/api/user/login/oauth2/code/google")
+						.tokenEndpoint().accessTokenResponseClient(accessTokenResponseClient())
+						.and().defaultSuccessUrl("/")
+						.failureUrl("/loginFailure"));
 
 		// Statelessness
 		http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
@@ -73,5 +80,10 @@ public class WebSecurityConfiguration {
 				.passwordEncoder(passwordEncoder);
 
 		return managerBuilder.build();
+	}
+
+	@Bean
+	public OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest> accessTokenResponseClient() {
+		return new DefaultAuthorizationCodeTokenResponseClient();
 	}
 }

@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,6 +47,7 @@ public class TicketAuxController {
     private TransferService transferService;
 
     @GetMapping("/locale")
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<?> getAllLocales(){
         return new ResponseEntity<>(localeService.findAll(), HttpStatus.OK);
     }
@@ -70,11 +72,13 @@ public class TicketAuxController {
     }
 
     @GetMapping("/qr")
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<?> getAllQR(){
         return new ResponseEntity<>(qrService.findAll(), HttpStatus.OK);
     }
 
     @PostMapping("/qr/ticket")
+    @PreAuthorize("hasRole('user')")
     public ResponseEntity<?> createTicketQR(@ModelAttribute("ticketId") UUID ticketId){
         try{
             Ticket ticket = ticketService.findById(ticketId);
@@ -94,6 +98,7 @@ public class TicketAuxController {
     }
 
     @PostMapping("/qr/transfer")
+    @PreAuthorize("hasRole('user')")
     public ResponseEntity<?> createTransferQR(@ModelAttribute("transferId") UUID transferId){
         try{
             Transfer transfer = transferService.findById(transferId);

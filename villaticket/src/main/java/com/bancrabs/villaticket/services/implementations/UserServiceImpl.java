@@ -118,6 +118,7 @@ public class UserServiceImpl implements UserService{
                 throw new Exception("User not found");
             }
             else{
+                if(!verifyIdentity(id)) throw new Exception("Unauthorized");
                 toUpdate.setUsername(data.getUsername());
                 toUpdate.setEmail(data.getEmail());
                 toUpdate.setPassword(passwordEncoder.encode(data.getPassword()));
@@ -182,5 +183,18 @@ public class UserServiceImpl implements UserService{
 			.getName();
 		
 		return userRepository.findByUsernameOrEmail(username, username);
+    }
+
+    @Override
+    public Boolean verifyIdentity(String id) throws Exception {
+        try {
+            User user = userRepository.findByUsernameOrEmail(id, id);
+            if(user == null) throw new Exception("User not found");
+            User check = findUserAuthenticated();
+            if(!check.equals(user)) return false;
+            return true;
+        } catch (Exception e) {
+            throw e;   
+        }
     }
 }

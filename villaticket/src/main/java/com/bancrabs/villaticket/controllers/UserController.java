@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -108,6 +109,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('admin')")
     public ResponseEntity<?> deleteById(@PathVariable("id") String id){
         try{
             if(userService.deleteById(id)){
@@ -129,6 +131,7 @@ public class UserController {
     }
 
     @PostMapping("/{id}")
+    @PreAuthorize("hasAuthority('user')")
     public ResponseEntity<?> updateUser(@PathVariable("id") String id, @ModelAttribute @Valid SaveUserDTO data, BindingResult result){
         try{
             if(result.hasErrors()){
@@ -154,6 +157,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('admin')")
     public ResponseEntity<?> findById(@PathVariable("id") String id){
         try{
             User user = userService.findById(id);
@@ -171,6 +175,7 @@ public class UserController {
     }
 
     @GetMapping("/")
+    @PreAuthorize("hasAuthority('admin')")
     public ResponseEntity<?> findAll(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "amt", defaultValue = "10") int size){
         try{
             Page<User> rawUsers = userService.findAll(page, size);
@@ -188,6 +193,7 @@ public class UserController {
     }
 
     @PostMapping("/privilege")
+    @PreAuthorize("hasAuthority('admin')")
     public ResponseEntity<?> addPrivilege(@ModelAttribute(name = "userId") String id, @ModelAttribute(name = "privName") String privName){
         try{
             User user = userService.findById(id);
@@ -216,6 +222,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}/privilege")
+    @PreAuthorize("hasAuthority('admin')")
     public ResponseEntity<?> getPrivileges(@PathVariable("id") String id){
         try{
             return new ResponseEntity<>(userPrivilegeService.findByUserId(id), HttpStatus.OK);
@@ -227,6 +234,7 @@ public class UserController {
     }
 
     @GetMapping("/privilege")
+    @PreAuthorize("hasAuthority('admin')")
     public ResponseEntity<?> getAllPrivileges(){
         try{
             return new ResponseEntity<>(userPrivilegeService.findAll(), HttpStatus.OK);
@@ -238,6 +246,7 @@ public class UserController {
     }
 
     @PostMapping("/attendance")
+    @PreAuthorize("hasAuthority('user')")
     public ResponseEntity<?> attendEvent(@ModelAttribute(name="userId") String id, @ModelAttribute(name="eventId") UUID eventId){
         try{
             if(attendanceService.save(new RecordAttendanceDTO(id, eventId))){
@@ -261,12 +270,17 @@ public class UserController {
     }
 
     @GetMapping("/{id}/attendance")
+    @PreAuthorize("hasAuthority('user')")
     public ResponseEntity<?> getAttendance(@PathVariable("id") String id, @RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "amt", defaultValue = "10") int size){
         try{
             User user = userService.findById(id);
             if(user == null){
                 return new ResponseEntity<>("Not found", HttpStatus.NOT_FOUND);
             }
+            if(!userService.verifyIdentity(id)) {
+                return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
+            }
+
             Page<Attendance> rawAttendance = attendanceService.findByUserId(user.getId(), page, size);
             PageResponseDTO<Attendance> response = new PageResponseDTO<>(rawAttendance.getContent(), rawAttendance.getTotalPages(), rawAttendance.getTotalElements());
             return new ResponseEntity<>(response, HttpStatus.OK);
@@ -278,6 +292,7 @@ public class UserController {
     }
 
     @GetMapping("/attendance")
+    @PreAuthorize("hasAuthority('admin')")
     public ResponseEntity<?> getAllAttendance(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "amt", defaultValue = "10") int size){
         try{
             Page<Attendance> rawAttendance = attendanceService.findAll(page, size);
