@@ -47,7 +47,7 @@ public class TicketAuxController {
     private TransferService transferService;
 
     @GetMapping("/locale")
-    @PreAuthorize("hasRole('admin')")
+    @PreAuthorize("hasAuthority('admin')")
     public ResponseEntity<?> getAllLocales(){
         return new ResponseEntity<>(localeService.findAll(), HttpStatus.OK);
     }
@@ -72,13 +72,13 @@ public class TicketAuxController {
     }
 
     @GetMapping("/qr")
-    @PreAuthorize("hasRole('admin')")
+    @PreAuthorize("hasAuthority('admin')")
     public ResponseEntity<?> getAllQR(){
         return new ResponseEntity<>(qrService.findAll(), HttpStatus.OK);
     }
 
     @PostMapping("/qr/ticket")
-    @PreAuthorize("hasRole('user')")
+    @PreAuthorize("hasAuthority('user')")
     public ResponseEntity<?> createTicketQR(@ModelAttribute("ticketId") UUID ticketId){
         try{
             Ticket ticket = ticketService.findById(ticketId);
@@ -98,7 +98,7 @@ public class TicketAuxController {
     }
 
     @PostMapping("/qr/transfer")
-    @PreAuthorize("hasRole('user')")
+    @PreAuthorize("hasAuthority('user')")
     public ResponseEntity<?> createTransferQR(@ModelAttribute("transferId") UUID transferId){
         try{
             Transfer transfer = transferService.findById(transferId);

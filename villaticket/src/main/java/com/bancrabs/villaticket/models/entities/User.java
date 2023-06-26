@@ -7,7 +7,6 @@ import java.util.UUID;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
@@ -49,7 +48,7 @@ public class User implements UserDetails {
     @Exclude
     private List<Token> tokens;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
     @JsonIgnore
     @Exclude
     private List<UserPrivilege> privileges;

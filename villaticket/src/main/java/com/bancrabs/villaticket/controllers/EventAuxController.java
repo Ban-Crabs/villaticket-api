@@ -38,7 +38,7 @@ public class EventAuxController {
     private CategoryService categoryService;
 
     @PostMapping("/type")
-    @PreAuthorize("hasRole('admin')")
+    @PreAuthorize("hasAuthority('admin')")
     public ResponseEntity<?> createType(@ModelAttribute @Valid SaveEventAuxDTO data, BindingResult result){
         try{
             if(result.hasErrors()){
@@ -58,7 +58,7 @@ public class EventAuxController {
     }
 
     @PostMapping("/location")
-    @PreAuthorize("hasRole('admin')")
+    @PreAuthorize("hasAuthority('admin')")
     public ResponseEntity<?> createLocation(@ModelAttribute @Valid SaveLocationDTO data, BindingResult result){
         try{
             if(result.hasErrors()){
@@ -78,7 +78,7 @@ public class EventAuxController {
     }
 
     @PostMapping("/image")
-    @PreAuthorize("hasRole('admin')")
+    @PreAuthorize("hasAuthority('admin')")
     public ResponseEntity<?> createImage(@ModelAttribute @Valid SaveImageDTO data, BindingResult result){
         try{
             if(result.hasErrors()){
@@ -103,7 +103,7 @@ public class EventAuxController {
     }
 
     @PostMapping("/category")
-    @PreAuthorize("hasRole('admin')")
+    @PreAuthorize("hasAuthority('admin')")
     public ResponseEntity<?> createCategory(@ModelAttribute @Valid SaveEventAuxDTO data, BindingResult result){
         try{
             if(result.hasErrors()){
@@ -128,7 +128,7 @@ public class EventAuxController {
     }
 
     @GetMapping("/type")
-    @PreAuthorize("hasRole('user')")
+    @PreAuthorize("hasAuthority('user')")
     public ResponseEntity<?> getAllTypes(){
         try{
             return new ResponseEntity<>(typeService.findAll(), HttpStatus.OK);
@@ -140,7 +140,7 @@ public class EventAuxController {
     }
 
     @GetMapping("/location")
-    @PreAuthorize("hasRole('user')")
+    @PreAuthorize("hasAuthority('user')")
     public ResponseEntity<?> getAllLocations(){
         try{
             return new ResponseEntity<>(locationService.findAll(), HttpStatus.OK);
@@ -152,7 +152,7 @@ public class EventAuxController {
     }
 
     @GetMapping("/image")
-    @PreAuthorize("hasRole('user')")
+    @PreAuthorize("hasAuthority('user')")
     public ResponseEntity<?> getAllImages(){
         try{
             return new ResponseEntity<>(imageService.findAll(), HttpStatus.OK);
@@ -164,7 +164,7 @@ public class EventAuxController {
     }
 
     @GetMapping("/category")
-    @PreAuthorize("hasRole('user')")
+    @PreAuthorize("hasAuthority('user')")
     public ResponseEntity<?> getAllCategories(){
         try{
             return new ResponseEntity<>(categoryService.findAll(), HttpStatus.OK);
